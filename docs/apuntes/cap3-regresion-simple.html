@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Capítulo 3: Regresión lineal simple – Estadística II</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-80108d5cb44f5b9fc79a3a6e84303618.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-249f407ffdbc08f6e4c3f777220c47f4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-80108d5cb44f5b9fc79a3a6e84303618.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Estadística II</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Buscar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Inicio</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../programa.html"> 
+<span class="menu-text">Programa</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apuntes" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Apuntes</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-apuntes">    
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap1-estimacion.html">
+ <span class="dropdown-text">1. Estimación</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap2-hipotesis.html">
+ <span class="dropdown-text">2. Pruebas de hipótesis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap3-regresion-simple.html">
+ <span class="dropdown-text">3. Regresión lineal simple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap4-regresion-multiple.html">
+ <span class="dropdown-text">4. Regresión lineal múltiple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap5-chi-cuadrado.html">
+ <span class="dropdown-text">5. Pruebas chi-cuadrado</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-diapositivas" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Diapositivas</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-diapositivas">    
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap1-estimacion.html">
+ <span class="dropdown-text">1. Estimación</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap2-hipotesis.html">
+ <span class="dropdown-text">2. Pruebas de hipótesis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap3-regresion-simple.html">
+ <span class="dropdown-text">3. Regresión lineal simple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap4-regresion-multiple.html">
+ <span class="dropdown-text">4. Regresión lineal múltiple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap5-chi-cuadrado.html">
+ <span class="dropdown-text">5. Pruebas chi-cuadrado</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fabiosepulveda/estadistica2"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo oscuro"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#qué-es-la-regresión" id="toc-qué-es-la-regresión" class="nav-link active" data-scroll-target="#qué-es-la-regresión"><span class="header-section-number">1</span> ¿Qué es la regresión?</a></li>
+  <li><a href="#el-análisis-de-regresión-paso-a-paso" id="toc-el-análisis-de-regresión-paso-a-paso" class="nav-link" data-scroll-target="#el-análisis-de-regresión-paso-a-paso"><span class="header-section-number">2</span> El análisis de regresión paso a paso</a></li>
+  <li><a href="#diagramas-de-dispersión" id="toc-diagramas-de-dispersión" class="nav-link" data-scroll-target="#diagramas-de-dispersión"><span class="header-section-number">3</span> Diagramas de dispersión</a></li>
+  <li><a href="#coeficiente-de-correlación" id="toc-coeficiente-de-correlación" class="nav-link" data-scroll-target="#coeficiente-de-correlación"><span class="header-section-number">4</span> Coeficiente de correlación</a></li>
+  <li><a href="#modelo-de-regresión-lineal-simple" id="toc-modelo-de-regresión-lineal-simple" class="nav-link" data-scroll-target="#modelo-de-regresión-lineal-simple"><span class="header-section-number">5</span> Modelo de regresión lineal simple</a>
+  <ul class="collapse">
+  <li><a href="#supuestos-del-modelo" id="toc-supuestos-del-modelo" class="nav-link" data-scroll-target="#supuestos-del-modelo"><span class="header-section-number">5.1</span> Supuestos del modelo</a></li>
+  <li><a href="#interpretación-de-los-coeficientes" id="toc-interpretación-de-los-coeficientes" class="nav-link" data-scroll-target="#interpretación-de-los-coeficientes"><span class="header-section-number">5.2</span> Interpretación de los coeficientes</a></li>
+  </ul></li>
+  <li><a href="#estimación-por-mínimos-cuadrados" id="toc-estimación-por-mínimos-cuadrados" class="nav-link" data-scroll-target="#estimación-por-mínimos-cuadrados"><span class="header-section-number">6</span> Estimación por mínimos cuadrados</a>
+  <ul class="collapse">
+  <li><a href="#propiedades-del-ajuste-por-mínimos-cuadrados" id="toc-propiedades-del-ajuste-por-mínimos-cuadrados" class="nav-link" data-scroll-target="#propiedades-del-ajuste-por-mínimos-cuadrados"><span class="header-section-number">6.1</span> Propiedades del ajuste por mínimos cuadrados</a></li>
+  </ul></li>
+  <li><a href="#descomposición-de-la-variabilidad-y-coeficiente-de-determinación" id="toc-descomposición-de-la-variabilidad-y-coeficiente-de-determinación" class="nav-link" data-scroll-target="#descomposición-de-la-variabilidad-y-coeficiente-de-determinación"><span class="header-section-number">7</span> Descomposición de la variabilidad y coeficiente de determinación</a></li>
+  <li><a href="#inferencia-sobre-los-coeficientes-de-regresión" id="toc-inferencia-sobre-los-coeficientes-de-regresión" class="nav-link" data-scroll-target="#inferencia-sobre-los-coeficientes-de-regresión"><span class="header-section-number">8</span> Inferencia sobre los coeficientes de regresión</a>
+  <ul class="collapse">
+  <li><a href="#estimación-de-la-varianza-del-error" id="toc-estimación-de-la-varianza-del-error" class="nav-link" data-scroll-target="#estimación-de-la-varianza-del-error"><span class="header-section-number">8.1</span> Estimación de la varianza del error</a></li>
+  <li><a href="#distribución-de-los-estimadores" id="toc-distribución-de-los-estimadores" class="nav-link" data-scroll-target="#distribución-de-los-estimadores"><span class="header-section-number">8.2</span> Distribución de los estimadores</a></li>
+  <li><a href="#intervalos-de-confianza-para-los-coeficientes" id="toc-intervalos-de-confianza-para-los-coeficientes" class="nav-link" data-scroll-target="#intervalos-de-confianza-para-los-coeficientes"><span class="header-section-number">8.3</span> Intervalos de confianza para los coeficientes</a></li>
+  <li><a href="#prueba-t-para-la-pendiente" id="toc-prueba-t-para-la-pendiente" class="nav-link" data-scroll-target="#prueba-t-para-la-pendiente"><span class="header-section-number">8.4</span> Prueba t para la pendiente</a></li>
+  <li><a href="#prueba-f-y-tabla-de-análisis-de-varianza" id="toc-prueba-f-y-tabla-de-análisis-de-varianza" class="nav-link" data-scroll-target="#prueba-f-y-tabla-de-análisis-de-varianza"><span class="header-section-number">8.5</span> Prueba F y tabla de análisis de varianza</a></li>
+  </ul></li>
+  <li><a href="#predicción" id="toc-predicción" class="nav-link" data-scroll-target="#predicción"><span class="header-section-number">9</span> Predicción</a></li>
+  <li><a href="#análisis-residual" id="toc-análisis-residual" class="nav-link" data-scroll-target="#análisis-residual"><span class="header-section-number">10</span> Análisis residual</a>
+  <ul class="collapse">
+  <li><a href="#gráficos-de-residuales" id="toc-gráficos-de-residuales" class="nav-link" data-scroll-target="#gráficos-de-residuales"><span class="header-section-number">10.1</span> Gráficos de residuales</a></li>
+  <li><a href="#pruebas-formales" id="toc-pruebas-formales" class="nav-link" data-scroll-target="#pruebas-formales"><span class="header-section-number">10.2</span> Pruebas formales</a></li>
+  </ul></li>
+  <li><a href="#aplicación-con-r-velocidad-y-consumo-de-combustible" id="toc-aplicación-con-r-velocidad-y-consumo-de-combustible" class="nav-link" data-scroll-target="#aplicación-con-r-velocidad-y-consumo-de-combustible"><span class="header-section-number">11</span> Aplicación con R: velocidad y consumo de combustible</a>
+  <ul class="collapse">
+  <li><a href="#resumen-de-funciones-de-r" id="toc-resumen-de-funciones-de-r" class="nav-link" data-scroll-target="#resumen-de-funciones-de-r"><span class="header-section-number">11.1</span> Resumen de funciones de R</a></li>
+  </ul></li>
+  <li><a href="#ejercicios-propuestos" id="toc-ejercicios-propuestos" class="nav-link" data-scroll-target="#ejercicios-propuestos"><span class="header-section-number">12</span> Ejercicios propuestos</a>
+  <ul class="collapse">
+  <li><a href="#correlación-y-mínimos-cuadrados" id="toc-correlación-y-mínimos-cuadrados" class="nav-link" data-scroll-target="#correlación-y-mínimos-cuadrados"><span class="header-section-number">12.1</span> Correlación y mínimos cuadrados</a></li>
+  <li><a href="#coeficiente-de-determinación" id="toc-coeficiente-de-determinación" class="nav-link" data-scroll-target="#coeficiente-de-determinación"><span class="header-section-number">12.2</span> Coeficiente de determinación</a></li>
+  <li><a href="#inferencia-predicción-y-análisis-residual" id="toc-inferencia-predicción-y-análisis-residual" class="nav-link" data-scroll-target="#inferencia-predicción-y-análisis-residual"><span class="header-section-number">12.3</span> Inferencia, predicción y análisis residual</a></li>
+  </ul></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Otros formatos</h2><ul><li><a href="cap3-regresion-simple.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Capítulo 3: Regresión lineal simple</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled" title="Objetivos del capítulo">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objetivos del capítulo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Al terminar este capítulo, usted estará en capacidad de:</p>
+<ul>
+<li>comprender el propósito de la regresión lineal como herramienta para analizar y predecir la relación entre variables cuantitativas;</li>
+<li>identificar situaciones reales en las que es apropiado un modelo de regresión;</li>
+<li>reconocer las etapas de un análisis de regresión: formulación del problema, recolección de los datos y análisis inicial;</li>
+<li>interpretar gráficamente la relación entre dos variables mediante diagramas de dispersión, y medir su asociación lineal con el coeficiente de correlación;</li>
+<li>estimar los coeficientes de un modelo de regresión lineal simple por mínimos cuadrados e interpretarlos;</li>
+<li>medir la bondad del ajuste con el coeficiente de determinación;</li>
+<li>hacer inferencia sobre los coeficientes y predicciones con el modelo;</li>
+<li>verificar los supuestos del modelo mediante el análisis de residuales;</li>
+<li>ajustar e interpretar un modelo de regresión con R.</li>
+</ul>
+</div>
+</div>
+<section id="qué-es-la-regresión" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="qué-es-la-regresión"><span class="header-section-number">1</span> ¿Qué es la regresión?</h2>
+<p>En los capítulos anteriores estudiamos una variable a la vez: estimamos su media o su varianza y probamos hipótesis sobre ellas. Pero muchas de las preguntas más interesantes involucran la <strong>relación</strong> entre variables: ¿cuánto aumentan las ventas por cada millón invertido en publicidad?, ¿cómo cambia el consumo de combustible de un vehículo con la velocidad?, ¿qué peso se espera en una persona de cierta estatura?</p>
+<div id="def-regresion" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 1 (Regresión)</strong></span> La <strong>regresión</strong> es una técnica estadística que permite modelar y analizar la relación entre una <strong>variable dependiente</strong> (o variable respuesta) y una o más <strong>variables independientes</strong> (o variables predictoras, explicativas o regresoras), con el fin de describir esa relación y de predecir la variable dependiente a partir de las demás.</p>
+</div>
+<p>Existen varios tipos de regresión, según la naturaleza de los datos y el objetivo del análisis: la <strong>regresión lineal</strong>, la más básica y común, que estudiaremos en este capítulo y el siguiente; la regresión polinómica, para relaciones curvas; la regresión logística, cuando la variable respuesta es binaria (sí o no); la regresión de Poisson, cuando es un conteo; y las regresiones no paramétricas, como las basadas en <em>splines</em>, que no imponen una forma a la relación <span class="citation" data-cites="montgomery2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, pp. 236, 421</a>)</span>.</p>
+<p>La regresión lineal tiene aplicaciones en prácticamente todas las áreas del conocimiento (<a href="#tbl-aplicaciones" class="quarto-xref">Tabla&nbsp;1</a>).</p>
+<div id="tbl-aplicaciones" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-aplicaciones-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;1: Algunas áreas de aplicación de la regresión lineal.
+</figcaption>
+<div aria-describedby="tbl-aplicaciones-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Área</th>
+<th style="text-align: left;">Ejemplos de relaciones que se modelan</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Economía</td>
+<td style="text-align: left;">Consumo de los hogares según el ingreso; inflación y desempleo</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Negocios y mercadeo</td>
+<td style="text-align: left;">Ventas según la inversión en publicidad; demanda según el precio</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ciencias sociales</td>
+<td style="text-align: left;">Nivel educativo y criminalidad; estrés y rendimiento cognitivo</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Salud y epidemiología</td>
+<td style="text-align: left;">Dosis de un fármaco y efecto clínico; pobreza y mortalidad infantil</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ingeniería</td>
+<td style="text-align: left;">Temperatura y resistencia de un material; desgaste de un equipo según sus ciclos de uso</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ciencias ambientales</td>
+<td style="text-align: left;">Lluvias y caudal de un río; concentración de contaminantes y enfermedades respiratorias</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Educación</td>
+<td style="text-align: left;">Horas de estudio y calificación</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="el-análisis-de-regresión-paso-a-paso" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="el-análisis-de-regresión-paso-a-paso"><span class="header-section-number">2</span> El análisis de regresión paso a paso</h2>
+<blockquote class="blockquote">
+<p>“La formulación de un problema es a menudo más importante que su solución, la cual puede ser simplemente una cuestión de habilidad matemática o experimental.” — Albert Einstein</p>
+</blockquote>
+<p>Un análisis de regresión no empieza ajustando un modelo. Es un error de principiante iniciar un análisis sin tener claros los objetivos, e incluso sin saber si los datos son apropiados para el análisis <span class="citation" data-cites="faraway2002">(<a href="#ref-faraway2002" role="doc-biblioref">Faraway, 2002, p. 8</a>)</span>. Antes de estimar cualquier coeficiente conviene recorrer tres etapas.</p>
+<p><strong>1. Formulación del problema.</strong> Para formular el problema correctamente hay que comprender el contexto del fenómeno que se estudia, entender el objetivo del análisis, asegurarse de saber qué quiere quien hizo la pregunta y, finalmente, plantear el problema en términos estadísticos: ¿cuál es la variable respuesta?, ¿cuáles las posibles explicativas?, ¿se busca explicar o predecir?</p>
+<p><strong>2. Recolección de los datos.</strong> Es importante saber cómo se obtuvieron los datos. ¿Son experimentales u observacionales? ¿La muestra es de conveniencia o se obtuvo con alguna técnica de muestreo probabilístico? ¿Hay valores perdidos? ¿Hay variables codificadas? ¿Cuáles son las unidades de medida? ¿Puede haber errores de registro? Los datos para una regresión se obtienen, básicamente, de tres formas: un <strong>estudio retrospectivo</strong>, que usa registros históricos ya existentes; un <strong>estudio observacional</strong>, en el que se observan las variables sin intervenir en ellas; y un <strong>experimento diseñado</strong>, en el que el investigador fija deliberadamente los valores de las variables independientes. Solo en el último se puede hablar con seguridad de relaciones causa-efecto.</p>
+<p><strong>3. Análisis inicial de los datos.</strong> Es un paso muy importante, y con frecuencia omitido: calcular las medidas descriptivas de Estadística I y hacer gráficos de cada variable y de cada par de variables, buscando algo inusual o inesperado, como valores atípicos o errores de digitación.</p>
+<div id="exm-pima" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 1</strong></span> El paquete <code>faraway</code> de R contiene el conjunto de datos <code>pima</code>, de un estudio sobre diabetes realizado a 768 mujeres adultas del pueblo indígena Pima, en Estados Unidos <span class="citation" data-cites="faraway2002">(<a href="#ref-faraway2002" role="doc-biblioref">Faraway, 2002, p. 9</a>)</span>. Entre sus variables están el número de embarazos (<code>pregnant</code>), la concentración de glucosa en la sangre dos horas después de ingerir una solución de glucosa (<code>glucose</code>), la presión arterial diastólica (<code>diastolic</code>, en mmHg), el índice de masa corporal (<code>bmi</code>), la edad (<code>age</code>) y el resultado de una prueba de diabetes (<code>test</code>, 0 = negativo, 1 = positivo).</p>
+<p>Al revisar el resumen descriptivo con <code>summary(pima)</code> aparecen cosas inesperadas. El máximo de embarazos es 17: grande, pero no imposible. En cambio, el mínimo de la presión diastólica es <strong>0</strong>, lo que no es posible en una persona viva. Al ordenar los valores con <code>sort(pima$diastolic)</code> se ve que hay varios ceros: el cero se usó para <strong>codificar los valores perdidos</strong>. Si no se detecta, cualquier análisis posterior quedaría distorsionado. La solución es reemplazarlos por <code>NA</code>, el código de R para los datos faltantes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(faraway)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(pima)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pima)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(pima<span class="sc">$</span>diastolic)                          <span class="co"># aparecen muchos ceros</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pima<span class="sc">$</span>diastolic[pima<span class="sc">$</span>diastolic <span class="sc">==</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span>     <span class="co"># los ceros son datos perdidos</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(pima<span class="sc">$</span>diastolic)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(pima<span class="sc">$</span>diastolic, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(diastolic <span class="sc">~</span> test, <span class="at">data =</span> pima)        <span class="co"># gráfico bivariado</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="diagramas-de-dispersión" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="diagramas-de-dispersión"><span class="header-section-number">3</span> Diagramas de dispersión</h2>
+<p>El primer paso para estudiar la relación entre dos variables cuantitativas es <strong>graficarla</strong>. En un <strong>diagrama de dispersión</strong>, cada unidad de observación se representa con un punto cuya coordenada horizontal es el valor de la variable independiente <span class="math inline">\(x\)</span> y cuya coordenada vertical es el valor de la variable dependiente <span class="math inline">\(y\)</span>. El diagrama permite ver la <strong>forma</strong> de la relación (lineal o curva), su <strong>dirección</strong> (creciente o decreciente), su <strong>fuerza</strong> (qué tan cerca de la curva están los puntos) y la presencia de valores atípicos.</p>
+<p>La <a href="#fig-tipos-relacion" class="quarto-xref">Figura&nbsp;1</a> muestra tres relaciones con datos simulados en R: una lineal, una cuadrática y una cúbica. La regresión lineal simple de este capítulo es adecuada para la primera; para las otras dos se necesitarían modelos polinómicos.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-tipos-relacion" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tipos-relacion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap3-regresion-simple_files/figure-html/fig-tipos-relacion-1.png" class="img-fluid figure-img" width="864">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tipos-relacion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Diagramas de dispersión de datos simulados con una relación lineal, una cuadrática y una cúbica, con la curva ajustada a cada una.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>El código para simular y graficar la relación lineal es:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">20</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"darkred"</span>) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Diagrama de dispersión"</span>, <span class="at">x =</span> <span class="st">"Variable X"</span>, <span class="at">y =</span> <span class="st">"Variable Y"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="coeficiente-de-correlación" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="coeficiente-de-correlación"><span class="header-section-number">4</span> Coeficiente de correlación</h2>
+<p>El diagrama de dispersión muestra la relación; para <strong>medir</strong> qué tan fuerte es una relación lineal se usa el coeficiente de correlación.</p>
+<div id="def-correlacion" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 2 (Coeficiente de correlación de Pearson)</strong></span> El <strong>coeficiente de correlación</strong> de Pearson de <span class="math inline">\(n\)</span> pares de datos <span class="math inline">\((x_1, y_1), \ldots, (x_n, y_n)\)</span> es <span class="math display">\[
+r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2}\ \sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}} = \frac{S_{xy}}{\sqrt{S_{xx}\,S_{yy}}} ,
+\]</span> donde, para abreviar, <span class="math display">\[
+S_{xx} = \sum_{i=1}^{n}(x_i - \bar{x})^2,
+\qquad
+S_{yy} = \sum_{i=1}^{n}(y_i - \bar{y})^2,
+\qquad
+S_{xy} = \sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y}) .
+\]</span></p>
+</div>
+<p>El coeficiente de correlación cumple las siguientes propiedades <span class="citation" data-cites="walpole2012 devore2008">(<a href="#ref-devore2008" role="doc-biblioref">Devore, 2008, p. 487</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, pp. 431-433</a>)</span>:</p>
+<ul>
+<li>siempre está entre <span class="math inline">\(-1\)</span> y <span class="math inline">\(1\)</span>;</li>
+<li>su <strong>signo</strong> indica la dirección de la relación: positivo si <span class="math inline">\(y\)</span> tiende a aumentar cuando <span class="math inline">\(x\)</span> aumenta, negativo si tiende a disminuir;</li>
+<li>su <strong>valor absoluto</strong> indica la fuerza de la relación <strong>lineal</strong>: <span class="math inline">\(r = \pm 1\)</span> si todos los puntos están exactamente sobre una recta, y valores cercanos a 0 indican que no hay relación lineal;</li>
+<li>no tiene unidades, y no cambia si se intercambian <span class="math inline">\(x\)</span> y <span class="math inline">\(y\)</span> o si se cambian las unidades de medida.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-correlaciones" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-correlaciones-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap3-regresion-simple_files/figure-html/fig-correlaciones-1.png" class="img-fluid figure-img" width="816">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-correlaciones-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Diagramas de dispersión de datos simulados con distintos coeficientes de correlación. En el último, r es cercano a 0, pero hay una fuerte relación no lineal.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Dos advertencias sobre la correlación">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dos advertencias sobre la correlación
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><strong>Mide solo relaciones lineales.</strong> Un coeficiente cercano a 0 no significa que no haya relación, sino que no hay relación <strong>lineal</strong>. En el último panel de la <a href="#fig-correlaciones" class="quarto-xref">Figura&nbsp;2</a>, <span class="math inline">\(y\)</span> depende fuertemente de <span class="math inline">\(x\)</span>, pero en forma de parábola, y <span class="math inline">\(r\)</span> es casi 0. Por eso siempre hay que mirar el diagrama de dispersión antes de calcular <span class="math inline">\(r\)</span>.</li>
+<li><strong>Correlación no implica causalidad.</strong> Que dos variables estén correlacionadas no significa que una cause la otra. Las ventas de helado y los ahogamientos en piscinas están correlacionados, pero no porque los helados causen ahogamientos: ambos aumentan en verano. Una tercera variable, la temperatura, explica la relación. En general, una correlación fuerte entre <span class="math inline">\(X\)</span> y <span class="math inline">\(Y\)</span> puede significar que <span class="math inline">\(X\)</span> causa <span class="math inline">\(Y\)</span>, que <span class="math inline">\(Y\)</span> causa <span class="math inline">\(X\)</span>, o que un tercer factor causa ambas <span class="citation" data-cites="daniel1987">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, p. 403</a>)</span>.</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="modelo-de-regresión-lineal-simple" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="modelo-de-regresión-lineal-simple"><span class="header-section-number">5</span> Modelo de regresión lineal simple</h2>
+<p>La <strong>regresión lineal simple</strong> modela la relación entre dos variables cuantitativas: una variable dependiente <span class="math inline">\(Y\)</span> y una variable independiente <span class="math inline">\(X\)</span>. El objetivo es encontrar la <strong>ecuación de la recta</strong> que mejor describe los datos, para describir cómo cambia <span class="math inline">\(Y\)</span> con <span class="math inline">\(X\)</span> y para <strong>predecir</strong> <span class="math inline">\(Y\)</span> a partir de <span class="math inline">\(X\)</span>.</p>
+<div id="def-modelo-rls" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 3 (Modelo de regresión lineal simple)</strong></span> El <strong>modelo de regresión lineal simple</strong> es <span class="math display">\[
+Y = \beta_0 + \beta_1 X + \varepsilon ,
+\]</span> donde:</p>
+<ul>
+<li><span class="math inline">\(Y\)</span> es la variable dependiente, la que se quiere explicar o predecir;</li>
+<li><span class="math inline">\(X\)</span> es la variable independiente, la que se usa para explicar o predecir;</li>
+<li><span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span> son los <strong>coeficientes de regresión</strong>, parámetros desconocidos del modelo;</li>
+<li><span class="math inline">\(\varepsilon\)</span> es el <strong>error aleatorio</strong>, que recoge la variación de <span class="math inline">\(Y\)</span> que no explica <span class="math inline">\(X\)</span>.</li>
+</ul>
+</div>
+<p>El modelo dice que <span class="math inline">\(Y\)</span> es la suma de una parte <strong>sistemática</strong>, <span class="math inline">\(\beta_0 + \beta_1 X\)</span>, que depende de <span class="math inline">\(X\)</span>, y una parte <strong>aleatoria</strong>, <span class="math inline">\(\varepsilon\)</span>, debida a todos los demás factores que influyen en <span class="math inline">\(Y\)</span> y que el modelo no incluye. No espera que los puntos estén exactamente sobre una recta, sino que se dispersen alrededor de ella.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="¿Por qué se llama lineal?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+¿Por qué se llama lineal?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El modelo se llama lineal porque es <strong>lineal en los parámetros</strong>: <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span> no aparecen como exponentes, ni multiplicados o divididos por otros parámetros. Por eso, un modelo como <span class="math inline">\(Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \varepsilon\)</span>, cuya gráfica es una parábola, también es un modelo de regresión <strong>lineal</strong> (múltiple), mientras que <span class="math inline">\(Y = \beta_0 e^{\beta_1 X} + \varepsilon\)</span> no lo es <span class="citation" data-cites="montgomery2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, pp. 4, 69</a>)</span>.</p>
+</div>
+</div>
+<section id="supuestos-del-modelo" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="supuestos-del-modelo"><span class="header-section-number">5.1</span> Supuestos del modelo</h3>
+<p>Para cada observación <span class="math inline">\(i = 1, \ldots, n\)</span>, el modelo se escribe <span class="math display">\[
+Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i ,
+\]</span> donde <span class="math inline">\(\varepsilon_i\)</span> es el error de la observación <span class="math inline">\(i\)</span>, que no es observable. Los valores <span class="math inline">\(x_i\)</span> se consideran fijos (no aleatorios). Las inferencias que haremos sobre el modelo son válidas bajo los siguientes supuestos sobre los errores <span class="citation" data-cites="montgomery2012 walpole2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, p. 12</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, pp. 390-394</a>)</span>:</p>
+<ol type="1">
+<li><strong>Media cero:</strong> <span class="math inline">\(E(\varepsilon_i) = 0\)</span>. En promedio, los errores se compensan, y la recta <span class="math inline">\(\beta_0 + \beta_1 x\)</span> describe el valor medio de <span class="math inline">\(Y\)</span> para cada <span class="math inline">\(x\)</span>: <span class="math inline">\(E(Y \mid x) = \beta_0 + \beta_1 x\)</span>.</li>
+<li><strong>Homocedasticidad:</strong> <span class="math inline">\(V(\varepsilon_i) = \sigma^2\)</span>. Todos los errores tienen la misma varianza, cualquiera que sea el valor de <span class="math inline">\(x\)</span>.</li>
+<li><strong>Normalidad:</strong> los <span class="math inline">\(\varepsilon_i\)</span> tienen distribución normal.</li>
+<li><strong>Independencia:</strong> los <span class="math inline">\(\varepsilon_i\)</span> son independientes entre sí.</li>
+</ol>
+<p>En resumen, <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span> independientes, o, lo que es lo mismo, para cada <span class="math inline">\(x_i\)</span>, <span class="math inline">\(Y_i \sim N(\beta_0 + \beta_1 x_i,\ \sigma^2)\)</span>. En la sección de análisis residual veremos cómo verificar estos supuestos con los datos.</p>
+</section>
+<section id="interpretación-de-los-coeficientes" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="interpretación-de-los-coeficientes"><span class="header-section-number">5.2</span> Interpretación de los coeficientes</h3>
+<ul>
+<li>La <strong>pendiente</strong> <span class="math inline">\(\beta_1\)</span> es el cambio promedio en <span class="math inline">\(Y\)</span> por cada aumento de una unidad en <span class="math inline">\(X\)</span>. Si <span class="math inline">\(\beta_1 &gt; 0\)</span>, <span class="math inline">\(Y\)</span> tiende a aumentar con <span class="math inline">\(X\)</span>; si <span class="math inline">\(\beta_1 &lt; 0\)</span>, a disminuir; si <span class="math inline">\(\beta_1 = 0\)</span>, <span class="math inline">\(X\)</span> no tiene relación lineal con <span class="math inline">\(Y\)</span>.</li>
+<li>El <strong>intercepto</strong> <span class="math inline">\(\beta_0\)</span> es el valor promedio de <span class="math inline">\(Y\)</span> cuando <span class="math inline">\(X = 0\)</span>. Solo tiene una interpretación práctica si <span class="math inline">\(X = 0\)</span> es un valor posible y está dentro del rango de los datos; en muchos problemas, como el de la estatura y el peso, no la tiene.</li>
+</ul>
+</section>
+</section>
+<section id="estimación-por-mínimos-cuadrados" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="estimación-por-mínimos-cuadrados"><span class="header-section-number">6</span> Estimación por mínimos cuadrados</h2>
+<p>Los coeficientes <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span> son desconocidos, y se estiman con una muestra de <span class="math inline">\(n\)</span> pares de datos <span class="math inline">\((x_1, y_1), \ldots, (x_n, y_n)\)</span>. Entre todas las rectas posibles, ¿cuál es la que “mejor” se ajusta a los datos? El criterio más usado es el de <strong>mínimos cuadrados</strong>: elegir la recta que minimiza la suma de los cuadrados de las distancias <strong>verticales</strong> entre cada punto y la recta (<a href="#fig-minimos-cuadrados" class="quarto-xref">Figura&nbsp;3</a>).</p>
+<div id="def-minimos-cuadrados" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 4 (Estimadores de mínimos cuadrados)</strong></span> Los <strong>estimadores de mínimos cuadrados</strong> <span class="math inline">\(\hat{\beta}_0\)</span> y <span class="math inline">\(\hat{\beta}_1\)</span> son los valores de <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span> que minimizan la función <span class="math display">\[
+S(\beta_0, \beta_1) = \sum_{i=1}^{n}\big[y_i - (\beta_0 + \beta_1 x_i)\big]^2 .
+\]</span></p>
+</div>
+<p>Para encontrarlos, se deriva <span class="math inline">\(S\)</span> con respecto a <span class="math inline">\(\beta_0\)</span> y a <span class="math inline">\(\beta_1\)</span> y se igualan las derivadas a cero: <span class="math display">\[
+\frac{\partial S}{\partial \beta_0} = -2\sum_{i=1}^{n}(y_i - \beta_0 - \beta_1 x_i) = 0,
+\qquad
+\frac{\partial S}{\partial \beta_1} = -2\sum_{i=1}^{n}(y_i - \beta_0 - \beta_1 x_i)\,x_i = 0 .
+\]</span> Estas dos ecuaciones se conocen como <strong>ecuaciones normales</strong>. Resolviendo el sistema se obtiene el siguiente resultado.</p>
+<div id="thm-estimadores-mc" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 1 (Estimadores de mínimos cuadrados)</strong></span> Los estimadores de mínimos cuadrados de la pendiente y del intercepto son <span class="math display">\[
+\hat{\beta}_1 = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2} = \frac{S_{xy}}{S_{xx}},
+\qquad
+\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\,\bar{x} .
+\]</span> La <strong>ecuación de regresión estimada</strong> (o recta ajustada) es <span class="math display">\[
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x .
+\]</span></p>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="Notación">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notación
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Para los coeficientes de regresión seguimos la costumbre de todos los textos: <span class="math inline">\(\hat{\beta}_0\)</span> y <span class="math inline">\(\hat{\beta}_1\)</span> denotan tanto los estimadores como las estimaciones, igual que <span class="math inline">\(\hat{p}\)</span> en los capítulos anteriores; el contexto indica de cuál se trata. Además, <span class="math inline">\(\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i\)</span> es el <strong>valor ajustado</strong> (o predicho) para la observación <span class="math inline">\(i\)</span>, y <span class="math display">\[
+e_i = y_i - \hat{y}_i
+\]</span> es su <strong>residual</strong>: la diferencia entre el valor observado y el ajustado. Los residuales son la versión observable de los errores <span class="math inline">\(\varepsilon_i\)</span>.</p>
+</div>
+</div>
+<p>Cuando se trabaja a mano, conviene calcular <span class="math inline">\(S_{xx}\)</span> y <span class="math inline">\(S_{xy}\)</span> con las fórmulas equivalentes <span class="math display">\[
+S_{xx} = \sum x_i^2 - n\bar{x}^2,
+\qquad
+S_{xy} = \sum x_i y_i - n\bar{x}\bar{y},
+\qquad
+S_{yy} = \sum y_i^2 - n\bar{y}^2 .
+\]</span></p>
+<section id="propiedades-del-ajuste-por-mínimos-cuadrados" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="propiedades-del-ajuste-por-mínimos-cuadrados"><span class="header-section-number">6.1</span> Propiedades del ajuste por mínimos cuadrados</h3>
+<p>La recta de mínimos cuadrados cumple tres propiedades útiles <span class="citation" data-cites="montgomery2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, pp. 19-20</a>)</span>:</p>
+<ol type="1">
+<li>La <strong>suma de los residuales es cero</strong>: <span class="math inline">\(\sum_{i=1}^{n}(y_i - \hat{y}_i) = 0\)</span>. Es la primera ecuación normal.</li>
+<li>La suma de los valores observados es igual a la suma de los valores ajustados: <span class="math inline">\(\sum y_i = \sum \hat{y}_i\)</span>.</li>
+<li>La recta de regresión <strong>pasa por el punto de las medias</strong> <span class="math inline">\((\bar{x}, \bar{y})\)</span>, porque <span class="math inline">\(\hat{\beta}_0 + \hat{\beta}_1\bar{x} = \bar{y}\)</span>.</li>
+</ol>
+<div id="exm-nadadoras" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 2</strong></span> Los siguientes datos son las estaturas, en pulgadas, y los pesos, en libras, de cinco nadadoras:</p>
+<div id="tbl-nadadoras" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-nadadoras-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;2: Estatura y peso de cinco nadadoras.
+</figcaption>
+<div aria-describedby="tbl-nadadoras-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estatura (<span class="math inline">\(x\)</span>)</th>
+<th style="text-align: center;">68</th>
+<th style="text-align: center;">64</th>
+<th style="text-align: center;">62</th>
+<th style="text-align: center;">65</th>
+<th style="text-align: center;">66</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Peso (<span class="math inline">\(y\)</span>)</td>
+<td style="text-align: center;">132</td>
+<td style="text-align: center;">108</td>
+<td style="text-align: center;">102</td>
+<td style="text-align: center;">115</td>
+<td style="text-align: center;">128</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<ol type="a">
+<li><p><strong>Diagrama de dispersión.</strong> La <a href="#fig-minimos-cuadrados" class="quarto-xref">Figura&nbsp;3</a> muestra que el peso tiende a aumentar con la estatura, y que los puntos se disponen aproximadamente alrededor de una recta: hay una relación lineal positiva.</p></li>
+<li><p><strong>Ecuación de regresión.</strong> Con <span class="math inline">\(\bar{x} = 65\)</span> y <span class="math inline">\(\bar{y} = 117\)</span>, los cálculos se organizan en la <a href="#tbl-nadadoras-calculos" class="quarto-xref">Tabla&nbsp;3</a>.</p>
+<div id="tbl-nadadoras-calculos" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-nadadoras-calculos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;3: Cálculos para la recta de mínimos cuadrados.
+</figcaption>
+<div aria-describedby="tbl-nadadoras-calculos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(x_i\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(y_i\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(x_i - \bar{x}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(y_i - \bar{y}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\((x_i - \bar{x})^2\)</span></th>
+<th style="text-align: center;"><span class="math inline">\((x_i - \bar{x})(y_i - \bar{y})\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">68</td>
+<td style="text-align: center;">132</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">45</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">64</td>
+<td style="text-align: center;">108</td>
+<td style="text-align: center;">−1</td>
+<td style="text-align: center;">−9</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">62</td>
+<td style="text-align: center;">102</td>
+<td style="text-align: center;">−3</td>
+<td style="text-align: center;">−15</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">45</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">65</td>
+<td style="text-align: center;">115</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">−2</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">66</td>
+<td style="text-align: center;">128</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>Suma</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">110</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Entonces <span class="math inline">\(\hat{\beta}_1 = 110/20 = 5{,}5\)</span> y <span class="math inline">\(\hat{\beta}_0 = 117 - 5{,}5 \times 65 = -240{,}5\)</span>, y la ecuación de regresión estimada es <span class="math display">\[
+\hat{y} = -240{,}5 + 5{,}5\,x .
+\]</span></p></li>
+<li><p><strong>Interpretación de la pendiente.</strong> Por cada pulgada adicional de estatura, el peso de las nadadoras aumenta en promedio 5,5 libras. El intercepto, <span class="math inline">\(-240{,}5\)</span>, no tiene interpretación práctica: sería el peso de una nadadora de estatura cero.</p></li>
+<li><p><strong>Predicción.</strong> Para una nadadora de 63 pulgadas, el peso estimado es <span class="math inline">\(\hat{y} = -240{,}5 + 5{,}5 \times 63 = 106\)</span> libras.</p></li>
+<li><p><strong>Correlación.</strong> Con <span class="math inline">\(S_{yy} = 656\)</span>, <span class="math inline">\(r = 110/\sqrt{20 \times 656} = 0{,}960\)</span>: una relación lineal positiva muy fuerte.</p></li>
+</ol>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-minimos-cuadrados" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-minimos-cuadrados-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap3-regresion-simple_files/figure-html/fig-minimos-cuadrados-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-minimos-cuadrados-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3: Estatura y peso de las nadadoras con la recta de mínimos cuadrados. Los segmentos verticales son los residuales; la recta minimiza la suma de sus cuadrados.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Cuidado con extrapolar">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cuidado con extrapolar
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La ecuación de regresión solo debe usarse para predecir dentro del rango de valores de <span class="math inline">\(x\)</span> observados (aquí, de 62 a 68 pulgadas). Fuera de ese rango no hay datos que muestren que la relación siga siendo lineal, y las predicciones pueden ser absurdas: la ecuación “predice” un peso negativo para una estatura de 40 pulgadas <span class="citation" data-cites="daniel1987 montgomery2012">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, p. 403</a>; <a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, p. 4</a>)</span>.</p>
+</div>
+</div>
+<div id="exm-planta-potencia" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 3</strong></span> Un estudio investigó la relación entre la potencia eléctrica consumida al mes por una planta química (<span class="math inline">\(y\)</span>) y la temperatura ambiente promedio (<span class="math inline">\(x\)</span>, en grados Fahrenheit). Con <span class="math inline">\(n = 15\)</span> meses se obtuvieron las siguientes sumas: <span class="math display">\[
+\sum x_i = 1425,\quad \sum y_i = 10{,}68,\quad \sum x_i^2 = 139\,037{,}25,\quad \sum x_i y_i = 987{,}645 .
+\]</span> Con las fórmulas de cálculo, <span class="math inline">\(\bar{x} = 95\)</span>, <span class="math inline">\(\bar{y} = 0{,}712\)</span>, <span class="math display">\[
+S_{xx} = 139\,037{,}25 - 15 \times 95^2 = 3662{,}25,
+\qquad
+S_{xy} = 987{,}645 - 15 \times 95 \times 0{,}712 = -26{,}955,
+\]</span> de modo que <span class="math inline">\(\hat{\beta}_1 = -26{,}955/3662{,}25 = -0{,}00736\)</span> y <span class="math inline">\(\hat{\beta}_0 = 0{,}712 + 0{,}00736 \times 95 = 1{,}411\)</span>. La ecuación estimada es <span class="math inline">\(\hat{y} = 1{,}411 - 0{,}00736\,x\)</span>: por cada grado Fahrenheit adicional de temperatura promedio, la potencia consumida disminuye en promedio 0,00736 unidades.</p>
+</div>
+<p>En R, el modelo se ajusta con la función <code>lm()</code> (de <em>linear model</em>), indicando la fórmula <code>y ~ x</code> <span class="citation" data-cites="rcore2024">(<a href="#ref-rcore2024" role="doc-biblioref">R Core Team, 2024</a>)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(peso <span class="sc">~</span> estatura)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(modelo)                                   <span class="co"># estimaciones de beta0 y beta1</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)    estatura 
+     -240.5         5.5 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(modelo, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">estatura =</span> <span class="dv">63</span>))   <span class="co"># peso estimado</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  1 
+106 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(estatura, peso)                            <span class="co"># coeficiente de correlación</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9603417</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="descomposición-de-la-variabilidad-y-coeficiente-de-determinación" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="descomposición-de-la-variabilidad-y-coeficiente-de-determinación"><span class="header-section-number">7</span> Descomposición de la variabilidad y coeficiente de determinación</h2>
+<p>Una vez ajustada la recta, interesa saber <strong>qué tan bien</strong> explica los datos. Para ello se descompone la variabilidad de <span class="math inline">\(Y\)</span>.</p>
+<p>La variabilidad total de <span class="math inline">\(Y\)</span> respecto a su media se mide con la <strong>suma total de cuadrados</strong>: <span class="math display">\[
+STC = \sum_{i=1}^{n}(y_i - \bar{y})^2 = S_{yy} .
+\]</span> Cada desviación <span class="math inline">\(y_i - \bar{y}\)</span> se puede escribir como la suma de dos partes: <span class="math display">\[
+\underbrace{y_i - \bar{y}}_{\text{total}} = \underbrace{\hat{y}_i - \bar{y}}_{\text{explicada por la recta}} + \underbrace{y_i - \hat{y}_i}_{\text{residual}} ,
+\]</span> y, aunque no es inmediato, se puede demostrar que la misma descomposición se cumple para las sumas de cuadrados <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 414</a>)</span>:</p>
+<div id="thm-descomposicion" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 2 (Descomposición de la variabilidad)</strong></span> <span class="math display">\[
+STC = SCR + SCE,
+\]</span> donde <span class="math display">\[
+SCR = \sum_{i=1}^{n}(\hat{y}_i - \bar{y})^2
+\qquad \text{y} \qquad
+SCE = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2 = \sum_{i=1}^{n} e_i^2 .
+\]</span></p>
+</div>
+<ul>
+<li>La <strong>suma de cuadrados debida a la regresión</strong>, <span class="math inline">\(SCR\)</span>, mide la parte de la variabilidad de <span class="math inline">\(Y\)</span> que <strong>explica</strong> la recta de regresión.</li>
+<li>La <strong>suma de cuadrados debida al error</strong>, <span class="math inline">\(SCE\)</span>, mide la parte que <strong>no explica</strong>: es la suma de los cuadrados de los residuales, la misma cantidad que minimiza el método de mínimos cuadrados.</li>
+</ul>
+<div id="def-r2" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 5 (Coeficiente de determinación)</strong></span> El <strong>coeficiente de determinación</strong> es la proporción de la variabilidad total de <span class="math inline">\(Y\)</span> que explica el modelo de regresión: <span class="math display">\[
+R^2 = \frac{SCR}{STC} = 1 - \frac{SCE}{STC}, \qquad 0 \le R^2 \le 1 .
+\]</span></p>
+</div>
+<p>Un <span class="math inline">\(R^2\)</span> cercano a 1 indica que la mayor parte de la variabilidad de <span class="math inline">\(Y\)</span> está explicada por <span class="math inline">\(X\)</span>; uno cercano a 0, que la recta explica muy poco. En la regresión lineal simple, el coeficiente de determinación es el cuadrado del coeficiente de correlación: <span class="math inline">\(R^2 = r^2\)</span>.</p>
+<div id="exm-nadadoras-r2" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 4</strong></span> Para las nadadoras, los valores ajustados son 133,5; 111,5; 100,5; 117,0 y 122,5, y los residuales, <span class="math inline">\(-1{,}5\)</span>; <span class="math inline">\(-3{,}5\)</span>; <span class="math inline">\(1{,}5\)</span>; <span class="math inline">\(-2{,}0\)</span> y <span class="math inline">\(5{,}5\)</span>, que suman cero. Entonces <span class="math display">\[
+SCE = 1{,}5^2 + 3{,}5^2 + 1{,}5^2 + 2^2 + 5{,}5^2 = 51,
+\qquad STC = 656,
+\qquad SCR = 656 - 51 = 605,
+\]</span> y <span class="math display">\[
+R^2 = \frac{605}{656} = 0{,}922 .
+\]</span> El 92,2 % de la variabilidad del peso de las nadadoras se explica por su estatura. Observe que <span class="math inline">\(r^2 = 0{,}960^2 = 0{,}922\)</span>.</p>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="¿Qué tan grande debe ser el R²?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+¿Qué tan grande debe ser el R²?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>No hay un valor universal: depende del área de aplicación. En biología y en ciencias sociales, donde las variables tienden a estar más débilmente correlacionadas y hay mucho ruido, se esperan valores de <span class="math inline">\(R^2\)</span> más bajos, y uno de 0,6 puede considerarse bueno. En física e ingeniería, donde la mayoría de los datos provienen de experimentos controlados, se esperan valores mucho más altos, y uno de 0,6 se consideraría bajo <span class="citation" data-cites="faraway2002">(<a href="#ref-faraway2002" role="doc-biblioref">Faraway, 2002, p. 22</a>)</span>. Además, un <span class="math inline">\(R^2\)</span> alto no garantiza que el modelo sea adecuado: hay que verificar los supuestos con el análisis de residuales <span class="citation" data-cites="montgomery2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, pp. 36, 129</a>)</span>.</p>
+</div>
+</div>
+</section>
+<section id="inferencia-sobre-los-coeficientes-de-regresión" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="inferencia-sobre-los-coeficientes-de-regresión"><span class="header-section-number">8</span> Inferencia sobre los coeficientes de regresión</h2>
+<p>Una vez ajustado el modelo, es esencial determinar si los coeficientes obtenidos son <strong>estadísticamente significativos</strong>: ¿la variable <span class="math inline">\(X\)</span> realmente influye en <span class="math inline">\(Y\)</span>, o la pendiente estimada podría haberse obtenido por azar, aun si en la población no hubiera relación? Para responder se usan las herramientas de los capítulos 1 y 2: intervalos de confianza y pruebas de hipótesis <span class="citation" data-cites="montgomery2012 walpole2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, Sección 2.3</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 404</a>)</span>.</p>
+<section id="estimación-de-la-varianza-del-error" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="estimación-de-la-varianza-del-error"><span class="header-section-number">8.1</span> Estimación de la varianza del error</h3>
+<p>Según el modelo, <span class="math inline">\(\sigma^2\)</span>, la varianza de los errores, es también la varianza de los valores de <span class="math inline">\(Y\)</span> alrededor de la recta de regresión. Su estimación natural se basa en los residuales.</p>
+<div id="def-cme" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 6 (Cuadrado medio del error)</strong></span> El <strong>cuadrado medio del error</strong> (o varianza residual) es <span class="math display">\[
+s^2 = CME = \frac{SCE}{n - 2} = \frac{\sum_{i=1}^{n} e_i^2}{n - 2} ,
+\]</span> y es un estimador insesgado de <span class="math inline">\(\sigma^2\)</span>. Su raíz cuadrada, <span class="math inline">\(s\)</span>, se llama <strong>desviación estándar residual</strong> o error estándar de la estimación.</p>
+</div>
+<p>Se divide entre <span class="math inline">\(n - 2\)</span> porque para calcular los residuales se estimaron dos parámetros, <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span>: es la misma idea de los grados de libertad de la varianza muestral, que se divide entre <span class="math inline">\(n - 1\)</span> porque se estimó la media. La desviación estándar residual se expresa en las unidades de <span class="math inline">\(Y\)</span> y mide qué tanto se alejan, típicamente, los datos de la recta: cuanto menor sea, mejor se ajusta el modelo.</p>
+</section>
+<section id="distribución-de-los-estimadores" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="distribución-de-los-estimadores"><span class="header-section-number">8.2</span> Distribución de los estimadores</h3>
+<p>Se puede demostrar que <span class="math inline">\(\hat{\beta}_0\)</span> y <span class="math inline">\(\hat{\beta}_1\)</span> son combinaciones lineales de las observaciones <span class="math inline">\(Y_i\)</span>, y que, bajo los supuestos del modelo, son estimadores <strong>insesgados</strong> con varianzas <span class="math display">\[
+V(\hat{\beta}_1) = \frac{\sigma^2}{S_{xx}},
+\qquad
+V(\hat{\beta}_0) = \sigma^2\left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right) .
+\]</span> Como <span class="math inline">\(\sigma^2\)</span> es desconocida, se reemplaza por <span class="math inline">\(s^2\)</span>, lo que da los <strong>errores estándar</strong> de los estimadores: <span class="math display">\[
+s(\hat{\beta}_1) = \frac{s}{\sqrt{S_{xx}}},
+\qquad
+s(\hat{\beta}_0) = s\sqrt{\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}} .
+\]</span> Observe que la pendiente se estima con más precisión cuanto más dispersos estén los valores de <span class="math inline">\(x\)</span> (mayor <span class="math inline">\(S_{xx}\)</span>): para estimar bien una pendiente conviene observar valores de <span class="math inline">\(x\)</span> en un rango amplio <span class="citation" data-cites="montgomery2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, pp. 19, 120</a>)</span>.</p>
+<p>Además, bajo el supuesto de normalidad de los errores, se cumple que <span class="math display">\[
+T = \frac{\hat{\beta}_1 - \beta_1}{s(\hat{\beta}_1)} \sim t(n - 2),
+\]</span> y lo mismo para <span class="math inline">\(\hat{\beta}_0\)</span>. Esta es la cantidad pivotal para hacer inferencia sobre los coeficientes.</p>
+</section>
+<section id="intervalos-de-confianza-para-los-coeficientes" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="intervalos-de-confianza-para-los-coeficientes"><span class="header-section-number">8.3</span> Intervalos de confianza para los coeficientes</h3>
+<p>Con el método de la cantidad pivotal del capítulo 1:</p>
+<div id="thm-ic-beta" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 3 (Intervalos de confianza para los coeficientes)</strong></span> Bajo los supuestos del modelo, intervalos de confianza del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(\beta_1\)</span> y <span class="math inline">\(\beta_0\)</span> son <span class="math display">\[
+\hat{\beta}_1 \pm t_{1-\alpha/2;\,n-2}\; s(\hat{\beta}_1)
+\qquad \text{y} \qquad
+\hat{\beta}_0 \pm t_{1-\alpha/2;\,n-2}\; s(\hat{\beta}_0) .
+\]</span></p>
+</div>
+<p>Si el intervalo para <span class="math inline">\(\beta_1\)</span> no contiene el 0, es razonable concluir que las variables están relacionadas linealmente.</p>
+<div id="exm-nadadoras-ic" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 5</strong></span> Para las nadadoras, con <span class="math inline">\(SCE = 51\)</span> y <span class="math inline">\(n = 5\)</span>, <span class="math display">\[
+s^2 = CME = \frac{51}{3} = 17,
+\qquad s = 4{,}12 \text{ libras},
+\qquad s(\hat{\beta}_1) = \sqrt{\frac{17}{20}} = 0{,}922 .
+\]</span> Con <span class="math inline">\(t_{0{,}975;\,3} = 3{,}182\)</span>, el intervalo del 95 % para la pendiente es <span class="math display">\[
+5{,}5 \pm 3{,}182 \times 0{,}922 = 5{,}5 \pm 2{,}934 = (2{,}57;\ 8{,}43) .
+\]</span> Con una confianza del 95 %, por cada pulgada adicional de estatura el peso aumenta en promedio entre 2,57 y 8,43 libras. Como el intervalo no contiene el 0, la relación es significativa. El intervalo es ancho porque la muestra es muy pequeña.</p>
+</div>
+</section>
+<section id="prueba-t-para-la-pendiente" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="prueba-t-para-la-pendiente"><span class="header-section-number">8.4</span> Prueba t para la pendiente</h3>
+<p>La pregunta más importante en una regresión es si <span class="math inline">\(X\)</span> tiene relación lineal con <span class="math inline">\(Y\)</span>, es decir, si <span class="math inline">\(\beta_1 \neq 0\)</span>. Se plantea <span class="math display">\[
+H_0: \beta_1 = 0 \qquad \text{contra} \qquad H_1: \beta_1 \neq 0 ,
+\]</span> y, si <span class="math inline">\(H_0\)</span> es verdadera, el estadístico de prueba es <span class="math display">\[
+T = \frac{\hat{\beta}_1}{s(\hat{\beta}_1)} \sim t(n - 2) .
+\]</span> Como en el capítulo 2, se rechaza <span class="math inline">\(H_0\)</span> si <span class="math inline">\(\lvert t_{\text{obs}}\rvert &gt; t_{1-\alpha/2;\,n-2}\)</span>. Rechazar <span class="math inline">\(H_0\)</span> significa que hay evidencia de una relación lineal entre <span class="math inline">\(X\)</span> y <span class="math inline">\(Y\)</span>; no rechazarla significa que no hay evidencia de ella, lo que puede deberse a que no existe, a que la relación no es lineal o a que la muestra es pequeña.</p>
+<p>Para las nadadoras, <span class="math inline">\(t_{\text{obs}} = 5{,}5/0{,}922 = 5{,}97 &gt; 3{,}182\)</span>, de modo que se rechaza <span class="math inline">\(H_0\)</span> con <span class="math inline">\(\alpha = 0{,}05\)</span> (valor p <span class="math inline">\(= 0{,}009\)</span>).</p>
+</section>
+<section id="prueba-f-y-tabla-de-análisis-de-varianza" class="level3" data-number="8.5">
+<h3 data-number="8.5" class="anchored" data-anchor-id="prueba-f-y-tabla-de-análisis-de-varianza"><span class="header-section-number">8.5</span> Prueba F y tabla de análisis de varianza</h3>
+<p>La significancia de la regresión también puede evaluarse con una prueba basada en la descomposición <span class="math inline">\(STC = SCR + SCE\)</span>. Cada suma de cuadrados dividida entre sus grados de libertad es un <strong>cuadrado medio</strong>: el <strong>cuadrado medio de la regresión</strong>, <span class="math inline">\(CMR = SCR/1\)</span>, y el cuadrado medio del error, <span class="math inline">\(CME = SCE/(n-2)\)</span>. Si <span class="math inline">\(H_0: \beta_1 = 0\)</span> es verdadera, <span class="math display">\[
+F = \frac{CMR}{CME} = \frac{SCR/1}{SCE/(n - 2)} \sim F(1,\ n - 2),
+\]</span> y se rechaza <span class="math inline">\(H_0\)</span> si <span class="math inline">\(f_{\text{obs}} &gt; f_{1-\alpha;\,1,\,n-2}\)</span>. Si la recta explica mucha variabilidad en comparación con la que deja sin explicar, el cociente es grande. Los cálculos se organizan en la <strong>tabla de análisis de varianza</strong> (ANOVA) de la <a href="#tbl-anova" class="quarto-xref">Tabla&nbsp;4</a>.</p>
+<div id="tbl-anova" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anova-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;4: Tabla de análisis de varianza para la regresión lineal simple.
+</figcaption>
+<div aria-describedby="tbl-anova-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Fuente de variación</th>
+<th style="text-align: center;">Suma de cuadrados</th>
+<th style="text-align: center;">Grados de libertad</th>
+<th style="text-align: center;">Cuadrado medio</th>
+<th style="text-align: center;"><span class="math inline">\(F\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Regresión</td>
+<td style="text-align: center;"><span class="math inline">\(SCR\)</span></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"><span class="math inline">\(CMR = SCR/1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(CMR/CME\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Error</td>
+<td style="text-align: center;"><span class="math inline">\(SCE\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(n - 2\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(CME = SCE/(n-2)\)</span></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: center;"><span class="math inline">\(STC\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(n - 1\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Para las nadadoras, <span class="math inline">\(f_{\text{obs}} = 605/17 = 35{,}59\)</span>, con 1 y 3 grados de libertad, y valor p <span class="math inline">\(= 0{,}009\)</span>: la misma conclusión que la prueba t.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="¿Prueba t o prueba F?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+¿Prueba t o prueba F?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En la regresión lineal simple, las dos pruebas son equivalentes: el estadístico F es el cuadrado del estadístico t (<span class="math inline">\(5{,}97^2 = 35{,}6\)</span>) y ambas dan el mismo valor p.&nbsp;La prueba F cobrará importancia en el capítulo 4: cuando hay <strong>varias</strong> variables independientes, la prueba t evalúa cada coeficiente por separado, mientras que la prueba F evalúa si el modelo, <strong>en conjunto</strong>, tiene una relación significativa con <span class="math inline">\(Y\)</span>.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="predicción" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="predicción"><span class="header-section-number">9</span> Predicción</h2>
+<p>Una de las razones principales para ajustar un modelo de regresión es <strong>predecir</strong>. Para un valor <span class="math inline">\(x_0\)</span> de la variable independiente, la estimación puntual es <span class="math inline">\(\hat{y}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0\)</span>. Pero ese mismo número puede responder a dos preguntas distintas, que tienen intervalos distintos <span class="citation" data-cites="montgomery2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, pp. 31-33</a>)</span>:</p>
+<ol type="1">
+<li><strong>¿Cuál es el valor promedio de <span class="math inline">\(Y\)</span> para todas las unidades con <span class="math inline">\(X = x_0\)</span>?</strong> Por ejemplo, el peso promedio de <strong>todas</strong> las nadadoras de 63 pulgadas. Se responde con un <strong>intervalo de confianza para la respuesta media</strong> <span class="math inline">\(E(Y \mid x_0)\)</span>.</li>
+<li><strong>¿Cuál será el valor de <span class="math inline">\(Y\)</span> para una unidad particular con <span class="math inline">\(X = x_0\)</span>?</strong> Por ejemplo, el peso de <strong>una</strong> nadadora de 63 pulgadas. Se responde con un <strong>intervalo de predicción</strong>.</li>
+</ol>
+<div id="thm-intervalos-prediccion" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 4 (Intervalos para la respuesta media y para una nueva observación)</strong></span> Bajo los supuestos del modelo, un intervalo de confianza del <span class="math inline">\(100(1-\alpha)\)</span> % para la respuesta media en <span class="math inline">\(x_0\)</span> es <span class="math display">\[
+\hat{y}_0 \pm t_{1-\alpha/2;\,n-2}\; s\sqrt{\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}}},
+\]</span> y un intervalo de predicción del <span class="math inline">\(100(1-\alpha)\)</span> % para una nueva observación en <span class="math inline">\(x_0\)</span> es <span class="math display">\[
+\hat{y}_0 \pm t_{1-\alpha/2;\,n-2}\; s\sqrt{1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}}} .
+\]</span></p>
+</div>
+<p>El intervalo de predicción es <strong>siempre más ancho</strong>, por el 1 adicional dentro de la raíz: además de la incertidumbre al estimar la recta, incluye la variabilidad propia de cada observación alrededor de ella, que no desaparece aunque se tengan muchísimos datos. Ambos intervalos son más angostos cerca de <span class="math inline">\(\bar{x}\)</span> y se ensanchan al alejarse, porque el término <span class="math inline">\((x_0 - \bar{x})^2\)</span> crece: la recta se estima con más precisión en el centro de los datos <span class="citation" data-cites="montgomery2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, p. 31</a>)</span>.</p>
+<div id="exm-nadadoras-prediccion" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 6</strong></span> Para una estatura de 63 pulgadas, <span class="math inline">\(\hat{y}_0 = 106\)</span> libras. Con <span class="math inline">\(s = 4{,}12\)</span>, <span class="math inline">\(n = 5\)</span>, <span class="math inline">\(\bar{x} = 65\)</span> y <span class="math inline">\(S_{xx} = 20\)</span>:</p>
+<ul>
+<li><strong>Peso promedio</strong> de las nadadoras de 63 pulgadas, al 95 %: <span class="math inline">\(106 \pm 3{,}182 \times 4{,}12\sqrt{1/5 + 4/20} = 106 \pm 8{,}30 = (97{,}7;\ 114{,}3)\)</span> libras.</li>
+<li><strong>Peso de una nadadora</strong> de 63 pulgadas, al 95 %: <span class="math inline">\(106 \pm 3{,}182 \times 4{,}12\sqrt{1 + 1/5 + 4/20} = 106 \pm 15{,}52 = (90{,}5;\ 121{,}5)\)</span> libras.</li>
+</ul>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(peso <span class="sc">~</span> estatura)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>nueva <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">estatura =</span> <span class="dv">63</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(modelo, nueva, <span class="at">interval =</span> <span class="st">"confidence"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)  <span class="co"># respuesta media</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  fit     lwr      upr
+1 106 97.7012 114.2988</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(modelo, nueva, <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)  <span class="co"># nueva observación</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  fit      lwr      upr
+1 106 90.47436 121.5256</code></pre>
+</div>
+</div>
+</section>
+<section id="análisis-residual" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="análisis-residual"><span class="header-section-number">10</span> Análisis residual</h2>
+<p>Todas las inferencias anteriores (intervalos, pruebas t y F, predicciones) dependen de los supuestos sobre los errores. Si son dudosos, las conclusiones pueden ser incorrectas. El <strong>análisis residual</strong> es la herramienta principal para verificarlos, y se basa sobre todo en <strong>gráficos</strong> de los residuales <span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>, que son la versión observable de los errores <span class="citation" data-cites="montgomery2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, p. 129</a>)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Un R² alto no basta">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Un R² alto no basta
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En 1973, el estadístico F. J. Anscombe construyó cuatro conjuntos de datos que tienen <strong>prácticamente la misma</strong> media de <span class="math inline">\(x\)</span> y de <span class="math inline">\(y\)</span>, la misma recta de regresión (<span class="math inline">\(\hat{y} = 3 + 0{,}5\,x\)</span>), el mismo coeficiente de correlación (<span class="math inline">\(r = 0{,}82\)</span>) y el mismo <span class="math inline">\(R^2\)</span> <span class="citation" data-cites="anscombe1973">(<a href="#ref-anscombe1973" role="doc-biblioref">Anscombe, 1973</a>)</span>. Sin embargo, como muestra la <a href="#fig-anscombe" class="quarto-xref">Figura&nbsp;4</a>, solo en el primero es adecuado un modelo lineal: en el segundo la relación es curva, en el tercero un valor atípico distorsiona la recta y en el cuarto un solo punto determina la pendiente. La lección es clara: <strong>siempre hay que graficar los datos y los residuales</strong>, no basta con los números.</p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-anscombe" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-anscombe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap3-regresion-simple_files/figure-html/fig-anscombe-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-anscombe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4: El cuarteto de Anscombe: cuatro conjuntos de datos con la misma recta de regresión y el mismo R², pero muy diferentes.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="gráficos-de-residuales" class="level3" data-number="10.1">
+<h3 data-number="10.1" class="anchored" data-anchor-id="gráficos-de-residuales"><span class="header-section-number">10.1</span> Gráficos de residuales</h3>
+<p>Los gráficos más usados, y lo que se busca en cada uno, son:</p>
+<ol type="1">
+<li><strong>Residuales contra valores ajustados</strong> (<span class="math inline">\(e_i\)</span> contra <span class="math inline">\(\hat{y}_i\)</span>). Si los supuestos se cumplen, los puntos forman una <strong>banda horizontal</strong> sin patrón alrededor de 0. Una <strong>curva</strong> indica que la relación no es lineal; una forma de <strong>embudo</strong> (la dispersión crece o decrece con <span class="math inline">\(\hat{y}\)</span>) indica que la varianza no es constante (heterocedasticidad).</li>
+<li><strong>Gráfico de probabilidad normal</strong> (<em>Q-Q plot</em>) de los residuales. Si los errores son normales, los puntos siguen aproximadamente una línea recta. Las desviaciones sistemáticas en los extremos indican colas más pesadas o asimetría.</li>
+<li><strong>Residuales contra el orden de los datos</strong>, cuando las observaciones se tomaron en el tiempo. Una tendencia o ciclos indican que los errores no son independientes.</li>
+</ol>
+<p>Además, conviene revisar si hay <strong>valores atípicos</strong>: con los <strong>residuales estandarizados</strong>, <span class="math inline">\(e_i/s\)</span>, un valor mayor que 3 en valor absoluto indica un posible valor atípico <span class="citation" data-cites="montgomery2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, p. 131</a>)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-patrones-residuales" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-patrones-residuales-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap3-regresion-simple_files/figure-html/fig-patrones-residuales-1.png" class="img-fluid figure-img" width="864">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-patrones-residuales-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5: Patrones típicos en el gráfico de residuales contra valores ajustados (datos simulados).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="pruebas-formales" class="level3" data-number="10.2">
+<h3 data-number="10.2" class="anchored" data-anchor-id="pruebas-formales"><span class="header-section-number">10.2</span> Pruebas formales</h3>
+<p>Los gráficos pueden complementarse con pruebas de hipótesis. La más usada para la normalidad de los residuales es la <strong>prueba de Shapiro-Wilk</strong>, con <span class="math inline">\(H_0\)</span>: los errores son normales. En R se aplica con <code>shapiro.test(residuals(modelo))</code>; un valor p pequeño indica evidencia contra la normalidad. Existen también pruebas para la homocedasticidad (como la de Breusch-Pagan) y para la independencia (como la de Durbin-Watson), disponibles en paquetes como <code>lmtest</code> y <code>car</code> <span class="citation" data-cites="zeileis2002 fox2019">(<a href="#ref-fox2019" role="doc-biblioref">Fox &amp; Weisberg, 2019</a>; <a href="#ref-zeileis2002" role="doc-biblioref">Zeileis &amp; Hothorn, 2002</a>)</span>. Sin embargo, estas pruebas son menos flexibles que los gráficos, y su valor p no siempre indica qué hacer: con una muestra grande pueden detectar desviaciones leves de la normalidad que no tienen importancia práctica. Por eso los gráficos, en particular el gráfico Q-Q, siguen siendo la herramienta principal <span class="citation" data-cites="faraway2002">(<a href="#ref-faraway2002" role="doc-biblioref">Faraway, 2002, p. 90</a>)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="¿Qué hacer si los supuestos no se cumplen?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+¿Qué hacer si los supuestos no se cumplen?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Depende del problema. Si la relación no es lineal, se puede transformar alguna variable (por ejemplo, usar el logaritmo de <span class="math inline">\(X\)</span> o de <span class="math inline">\(Y\)</span>) o ajustar un modelo polinómico. Si la varianza no es constante, a menudo ayuda transformar <span class="math inline">\(Y\)</span>. Si hay valores atípicos, hay que investigar su origen antes de decidir qué hacer con ellos. Estas técnicas se estudian con más detalle en los textos de regresión <span class="citation" data-cites="montgomery2012">(<a href="#ref-montgomery2012" role="doc-biblioref">Montgomery et&nbsp;al., 2012, 5</a>)</span>.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="aplicación-con-r-velocidad-y-consumo-de-combustible" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="aplicación-con-r-velocidad-y-consumo-de-combustible"><span class="header-section-number">11</span> Aplicación con R: velocidad y consumo de combustible</h2>
+<p>Una empresa de logística quiere optimizar el consumo de combustible de su flota. Para ello analiza cómo la velocidad promedio a la que conducen sus empleados en las rutas de entrega afecta el consumo de gasolina. Durante varias semanas se registraron 50 trayectos realizados por diferentes conductores, midiendo dos variables:</p>
+<ul>
+<li><strong>Velocidad promedio</strong> (km/h), calculada con los registros del GPS del vehículo.</li>
+<li><strong>Consumo de combustible</strong> (L/100 km), obtenido del computador de a bordo.</li>
+</ul>
+<p>Los datos están en el archivo <a href="../datos/velocidad_consumo.csv">velocidad_consumo.csv</a>. Se quiere responder las siguientes preguntas.</p>
+<p><strong>a. Diagrama de dispersión.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>combustible <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datos/velocidad_consumo.csv"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combustible, <span class="fu">aes</span>(<span class="at">x =</span> velocidad, <span class="at">y =</span> consumo)) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"darkred"</span>) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Velocidad promedio (km/h)"</span>, <span class="at">y =</span> <span class="st">"Consumo (L/100 km)"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-velocidad-consumo" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-velocidad-consumo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap3-regresion-simple_files/figure-html/fig-velocidad-consumo-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-velocidad-consumo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;6: Velocidad promedio y consumo de combustible en 50 trayectos, con la recta de regresión y su banda de confianza del 95 % para la respuesta media.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>El consumo disminuye claramente a medida que aumenta la velocidad promedio, y los puntos se disponen alrededor de una recta. Es razonable pensar que en estos trayectos las velocidades bajas corresponden a recorridos urbanos, con frenadas y arranques frecuentes, que consumen más combustible.</p>
+<p><strong>b. ¿Existe una relación lineal significativa?</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(combustible<span class="sc">$</span>velocidad, combustible<span class="sc">$</span>consumo)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.9712078</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(combustible<span class="sc">$</span>velocidad, combustible<span class="sc">$</span>consumo)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  combustible$velocidad and combustible$consumo
+t = -28.244, df = 48, p-value &lt; 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.9836437 -0.9495572
+sample estimates:
+       cor 
+-0.9712078 </code></pre>
+</div>
+</div>
+<p>El coeficiente de correlación es <span class="math inline">\(r = -0{,}971\)</span>: una relación lineal negativa muy fuerte. La función <code>cor.test()</code> prueba <span class="math inline">\(H_0: \rho = 0\)</span>, donde <span class="math inline">\(\rho\)</span> es la correlación poblacional, y el valor p es prácticamente cero, de modo que la relación es significativa.</p>
+<p><strong>c.&nbsp;Ecuación de regresión estimada.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>modelo_comb <span class="ot">&lt;-</span> <span class="fu">lm</span>(consumo <span class="sc">~</span> velocidad, <span class="at">data =</span> combustible)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_comb)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = consumo ~ velocidad, data = combustible)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.86666 -0.28387 -0.06774  0.28936  0.96364 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 16.711709   0.233016   71.72   &lt;2e-16 ***
+velocidad   -0.071339   0.002526  -28.24   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.42 on 48 degrees of freedom
+Multiple R-squared:  0.9432,    Adjusted R-squared:  0.9421 
+F-statistic: 797.7 on 1 and 48 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>La salida de <code>summary()</code> reúne casi todo lo que hemos estudiado: en la tabla <code>Coefficients</code> aparecen las estimaciones (<code>Estimate</code>), sus errores estándar (<code>Std. Error</code>), los estadísticos t (<code>t value</code>) y los valores p (<code>Pr(&gt;|t|)</code>) de las pruebas <span class="math inline">\(H_0: \beta_j = 0\)</span>; debajo aparecen la desviación estándar residual (<code>Residual standard error</code>), el <span class="math inline">\(R^2\)</span> (<code>Multiple R-squared</code>) y la prueba F. La ecuación estimada es <span class="math display">\[
+\hat{y} = 16{,}712 - 0{,}0713\,x .
+\]</span></p>
+<p><strong>d.&nbsp;Interpretación de la pendiente.</strong> Por cada km/h adicional de velocidad promedio, el consumo disminuye en promedio 0,0713 L/100 km; es decir, por cada 10 km/h adicionales, el consumo baja en promedio 0,71 L/100 km. El intervalo del 95 % para la pendiente es <span class="math inline">\((-0{,}0764;\ -0{,}0663)\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(modelo_comb, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  2.5 %      97.5 %
+(Intercept) 16.24319903 17.18021952
+velocidad   -0.07641693 -0.06626011</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(modelo_comb)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: consumo
+          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+velocidad  1 140.745 140.745  797.74 &lt; 2.2e-16 ***
+Residuals 48   8.469   0.176                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>La tabla ANOVA muestra <span class="math inline">\(SCR = 140{,}74\)</span>, <span class="math inline">\(SCE = 8{,}47\)</span> y <span class="math inline">\(f_{\text{obs}} = 797{,}7\)</span>, que es el cuadrado del estadístico t de la pendiente (<span class="math inline">\(-28{,}24\)</span>).</p>
+<p><strong>e. Consumo estimado a 90 km/h.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>nueva <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">velocidad =</span> <span class="dv">90</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(modelo_comb, nueva, <span class="at">interval =</span> <span class="st">"confidence"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 10.29124 10.17174 10.41075</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(modelo_comb, nueva, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 10.29124 9.438291 11.14419</code></pre>
+</div>
+</div>
+<p>El consumo estimado es de 10,29 L/100 km. El consumo <strong>promedio</strong> de todos los trayectos a 90 km/h está, con una confianza del 95 %, entre 10,17 y 10,41 L/100 km, y el consumo de <strong>un</strong> trayecto particular a esa velocidad, entre 9,44 y 11,14 L/100 km.</p>
+<p><strong>f.&nbsp;¿Explica bien el modelo la variabilidad del consumo?</strong> El coeficiente de determinación es <span class="math inline">\(R^2 = 0{,}943\)</span>: el 94,3 % de la variabilidad del consumo se explica por la velocidad promedio. La desviación estándar residual es de 0,42 L/100 km.</p>
+<p><strong>g. Análisis residual.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">residuals</span>(modelo_comb)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>diag_df <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">fitted</span>(modelo_comb), <span class="at">y =</span> res,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">panel =</span> <span class="st">"Residuales contra ajustados"</span>),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">qnorm</span>(<span class="fu">ppoints</span>(<span class="fu">length</span>(res)))[<span class="fu">rank</span>(res)], <span class="at">y =</span> res,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">panel =</span> <span class="st">"Gráfico de probabilidad normal"</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>diag_df<span class="sc">$</span>panel <span class="ot">&lt;-</span> <span class="fu">factor</span>(diag_df<span class="sc">$</span>panel, <span class="at">levels =</span> <span class="fu">unique</span>(diag_df<span class="sc">$</span>panel))</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Recta de referencia del gráfico normal, por los cuartiles</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>q_y <span class="ot">&lt;-</span> <span class="fu">quantile</span>(res, <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)); q_x <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>pend <span class="ot">&lt;-</span> <span class="fu">diff</span>(q_y) <span class="sc">/</span> <span class="fu">diff</span>(q_x); interc <span class="ot">&lt;-</span> q_y[<span class="dv">1</span>] <span class="sc">-</span> pend <span class="sc">*</span> q_x[<span class="dv">1</span>]</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>lineas <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">panel =</span> <span class="fu">factor</span>(<span class="fu">levels</span>(diag_df<span class="sc">$</span>panel), <span class="at">levels =</span> <span class="fu">levels</span>(diag_df<span class="sc">$</span>panel)),</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">intercept =</span> <span class="fu">c</span>(<span class="dv">0</span>, interc), <span class="at">slope =</span> <span class="fu">c</span>(<span class="dv">0</span>, pend)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(diag_df, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">data =</span> lineas, <span class="fu">aes</span>(<span class="at">intercept =</span> intercept, <span class="at">slope =</span> slope),</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"firebrick"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> panel, <span class="at">scales =</span> <span class="st">"free_x"</span>) <span class="sc">+</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Valores ajustados (izquierda) y cuantiles teóricos (derecha)"</span>,</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Residuales"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-residuales-combustible" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-residuales-combustible-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap3-regresion-simple_files/figure-html/fig-residuales-combustible-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residuales-combustible-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;7: Gráficos de residuales del modelo de consumo de combustible: residuales contra valores ajustados (izquierda) y gráfico de probabilidad normal (derecha).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(modelo_comb))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  residuals(modelo_comb)
+W = 0.98671, p-value = 0.8419</code></pre>
+</div>
+</div>
+<p>En el gráfico de residuales contra valores ajustados los puntos forman una banda horizontal sin patrones claros, y en el gráfico de probabilidad normal siguen aproximadamente la recta. La prueba de Shapiro-Wilk no rechaza la normalidad (valor p <span class="math inline">\(= 0{,}84\)</span>). Los supuestos del modelo son razonables, y las conclusiones anteriores, confiables.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Los gráficos de diagnóstico de R base">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Los gráficos de diagnóstico de R base
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La instrucción <code>plot(modelo_comb)</code> produce, en R base, cuatro gráficos de diagnóstico estándar: residuales contra valores ajustados, gráfico de probabilidad normal, un gráfico para evaluar la homocedasticidad y otro para detectar observaciones influyentes <span class="citation" data-cites="rcore2024">(<a href="#ref-rcore2024" role="doc-biblioref">R Core Team, 2024</a>)</span>. Con <code>par(mfrow = c(2, 2))</code> antes de la instrucción, se ven los cuatro juntos.</p>
+</div>
+</div>
+<section id="resumen-de-funciones-de-r" class="level3" data-number="11.1">
+<h3 data-number="11.1" class="anchored" data-anchor-id="resumen-de-funciones-de-r"><span class="header-section-number">11.1</span> Resumen de funciones de R</h3>
+<div id="tbl-funciones-regresion" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-funciones-regresion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;5: Funciones de R para la regresión lineal simple.
+</figcaption>
+<div aria-describedby="tbl-funciones-regresion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tarea</th>
+<th style="text-align: left;">Función de R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Diagrama de dispersión con recta</td>
+<td style="text-align: left;"><code>ggplot() + geom_point() + geom_smooth(method = "lm")</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Correlación y su prueba</td>
+<td style="text-align: left;"><code>cor(x, y)</code>, <code>cor.test(x, y)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ajustar el modelo</td>
+<td style="text-align: left;"><code>modelo &lt;- lm(y ~ x, data = datos)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Coeficientes, pruebas t, <span class="math inline">\(R^2\)</span> y prueba F</td>
+<td style="text-align: left;"><code>summary(modelo)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Intervalos para los coeficientes</td>
+<td style="text-align: left;"><code>confint(modelo)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tabla ANOVA</td>
+<td style="text-align: left;"><code>anova(modelo)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Valores ajustados y residuales</td>
+<td style="text-align: left;"><code>fitted(modelo)</code>, <code>residuals(modelo)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Predicción</td>
+<td style="text-align: left;"><code>predict(modelo, nuevos, interval = "confidence")</code> o <code>"prediction"</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Diagnóstico</td>
+<td style="text-align: left;"><code>plot(modelo)</code>, <code>shapiro.test(residuals(modelo))</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+</section>
+<section id="ejercicios-propuestos" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="ejercicios-propuestos"><span class="header-section-number">12</span> Ejercicios propuestos</h2>
+<section id="correlación-y-mínimos-cuadrados" class="level3" data-number="12.1">
+<h3 data-number="12.1" class="anchored" data-anchor-id="correlación-y-mínimos-cuadrados"><span class="header-section-number">12.1</span> Correlación y mínimos cuadrados</h3>
+<ol type="1">
+<li><p>Para cada par de variables, indique si espera una correlación positiva, negativa o cercana a cero, y si cree que la relación es causal:</p>
+<ol type="a">
+<li>horas de estudio y calificación en un examen;</li>
+<li>precio de un producto y cantidad vendida;</li>
+<li>número de bomberos que atienden un incendio y daños causados por el incendio;</li>
+<li>estatura y coeficiente intelectual de adultos.</li>
+</ol></li>
+<li><p>Los siguientes datos corresponden a la inversión en publicidad (<span class="math inline">\(x\)</span>, en millones de pesos) y a las ventas (<span class="math inline">\(y\)</span>, en millones de pesos) de 6 meses:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"><span class="math inline">\(x\)</span></th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">6</th>
+<th style="text-align: center;">7</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(y\)</span></td>
+<td style="text-align: center;">30</td>
+<td style="text-align: center;">34</td>
+<td style="text-align: center;">45</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">52</td>
+<td style="text-align: center;">55</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li>Construya el diagrama de dispersión.</li>
+<li>Calcule el coeficiente de correlación.</li>
+<li>Obtenga la ecuación de regresión estimada a mano, organizando los cálculos en una tabla, y verifíquela con <code>lm()</code>.</li>
+<li>Interprete la pendiente y, si tiene sentido, el intercepto.</li>
+<li>Estime las ventas de un mes con una inversión de 4,5 millones.</li>
+<li>Verifique que la suma de los residuales es cero y que la recta pasa por <span class="math inline">\((\bar{x}, \bar{y})\)</span>.</li>
+</ol></li>
+<li><p>Demuestre, a partir de las ecuaciones normales, que la recta de mínimos cuadrados pasa por el punto <span class="math inline">\((\bar{x}, \bar{y})\)</span>.</p></li>
+<li><p>Para el <a href="#exm-planta-potencia" class="quarto-xref">Ejemplo&nbsp;3</a>, estime la potencia consumida en un mes con una temperatura promedio de 80 °F. ¿Tendría sentido usar la ecuación para una temperatura de 10 °F? Explique.</p></li>
+</ol>
+</section>
+<section id="coeficiente-de-determinación" class="level3" data-number="12.2">
+<h3 data-number="12.2" class="anchored" data-anchor-id="coeficiente-de-determinación"><span class="header-section-number">12.2</span> Coeficiente de determinación</h3>
+<ol start="5" type="1">
+<li><p>Para los datos del ejercicio 2, calcule <span class="math inline">\(STC\)</span>, <span class="math inline">\(SCR\)</span>, <span class="math inline">\(SCE\)</span> y <span class="math inline">\(R^2\)</span>, e interprete <span class="math inline">\(R^2\)</span>. Verifique que <span class="math inline">\(R^2 = r^2\)</span>.</p></li>
+<li><p>Un analista ajusta un modelo de regresión y obtiene <span class="math inline">\(R^2 = 0{,}35\)</span>. Concluye que “el modelo no sirve”. ¿Está de acuerdo? ¿Qué información adicional necesitaría para opinar?</p></li>
+</ol>
+</section>
+<section id="inferencia-predicción-y-análisis-residual" class="level3" data-number="12.3">
+<h3 data-number="12.3" class="anchored" data-anchor-id="inferencia-predicción-y-análisis-residual"><span class="header-section-number">12.3</span> Inferencia, predicción y análisis residual</h3>
+<ol start="7" type="1">
+<li><p>Para los datos de publicidad y ventas del ejercicio 2:</p>
+<ol type="a">
+<li>calcule <span class="math inline">\(s^2\)</span>, <span class="math inline">\(s(\hat{\beta}_1)\)</span> y un intervalo del 95 % para la pendiente;</li>
+<li>pruebe con <span class="math inline">\(\alpha = 0{,}05\)</span> si la inversión en publicidad tiene una relación lineal significativa con las ventas, con la prueba t y con la prueba F, y verifique que <span class="math inline">\(f_{\text{obs}} = t_{\text{obs}}^2\)</span>;</li>
+<li>construya la tabla ANOVA;</li>
+<li>construya un intervalo de confianza para las ventas promedio y un intervalo de predicción para las ventas de un mes, con una inversión de 4,5 millones. ¿Por qué el segundo es más ancho? Verifique todos sus resultados con <code>summary()</code>, <code>anova()</code> y <code>predict()</code>.</li>
+</ol></li>
+<li><p>Con la base <code>pizza_delivery.xlsx</code> de Estadística I, ajuste un modelo de regresión lineal simple para explicar la temperatura de la pizza al llegar (<span class="math inline">\(y\)</span>) a partir del tiempo de entrega (<span class="math inline">\(x\)</span>).</p>
+<ol type="a">
+<li>Construya el diagrama de dispersión.</li>
+<li>Estime e interprete la pendiente. ¿Es significativa?</li>
+<li>Interprete el <span class="math inline">\(R^2\)</span>. ¿Qué tanto explica el tiempo de entrega la temperatura?</li>
+<li>Realice el análisis residual y comente si los supuestos son razonables.</li>
+<li>Prediga la temperatura de una pizza que tarda 40 minutos, con un intervalo de predicción del 95 %. ¿Llegaría a 65 °C o más?</li>
+</ol></li>
+<li><p>Ajuste en R los cuatro modelos del cuarteto de Anscombe (el conjunto de datos <code>anscombe</code> viene incluido en R) y verifique que los coeficientes y el <span class="math inline">\(R^2\)</span> son casi iguales. Luego construya el gráfico de residuales contra valores ajustados de cada uno y explique qué problema revela cada gráfico.</p></li>
+<li><p>Explique, con sus palabras, la diferencia entre el intervalo de confianza para la respuesta media y el intervalo de predicción. Dé un ejemplo de una situación práctica en la que interese cada uno.</p></li>
+</ol>
+</section>
+</section>
+<section id="referencias" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referencias">Referencias</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-anscombe1973" class="csl-entry" role="listitem">
+Anscombe, F. J. (1973). Graphs in Statistical Analysis. <em>The American Statistician</em>, <em>27</em>(1), 17-21. <a href="https://doi.org/10.1080/00031305.1973.10478966">https://doi.org/10.1080/00031305.1973.10478966</a>
+</div>
+<div id="ref-daniel1987" class="csl-entry" role="listitem">
+Daniel, W. W. (1987). <em>Bioestadística: Base para el análisis de las ciencias de la salud</em> (M. Guzmán Ortiz &amp; A. L. Babinsky Epstein, Trads.; 3.ª ed.). Limusa.
+</div>
+<div id="ref-devore2008" class="csl-entry" role="listitem">
+Devore, J. L. (2008). <em>Probabilidad y estadística para ingeniería y ciencias</em> (7.ª ed.). Cengage Learning.
+</div>
+<div id="ref-faraway2002" class="csl-entry" role="listitem">
+Faraway, J. J. (2002). <em>Practical Regression and <span>ANOVA</span> Using <span>R</span></em>. <a href="https://cran.r-project.org/doc/contrib/Faraway-PRA.pdf">https://cran.r-project.org/doc/contrib/Faraway-PRA.pdf</a>
+</div>
+<div id="ref-fox2019" class="csl-entry" role="listitem">
+Fox, J., &amp; Weisberg, S. (2019). <em>An R Companion to Applied Regression</em> (3.ª ed.). Sage.
+</div>
+<div id="ref-montgomery2012" class="csl-entry" role="listitem">
+Montgomery, D. C., Peck, E. A., &amp; Vining, G. G. (2012). <em>Introduction to Linear Regression Analysis</em> (5.ª ed.). Wiley.
+</div>
+<div id="ref-rcore2024" class="csl-entry" role="listitem">
+R Core Team. (2024). <em>R: A Language and Environment for Statistical Computing</em>. R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+</div>
+<div id="ref-walpole2012" class="csl-entry" role="listitem">
+Walpole, R. E., Myers, R. H., Myers, S. L., &amp; Ye, K. (2012). <em>Probabilidad y estadística para ingeniería y ciencias</em> (9.ª ed.). Pearson Educación.
+</div>
+<div id="ref-zeileis2002" class="csl-entry" role="listitem">
+Zeileis, A., &amp; Hothorn, T. (2002). Diagnostic Checking in Regression Relationships. <em>R News</em>, <em>2</em>(3), 7-10.
+</div>
+</div>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/fabiosepulveda\.github\.io\/estadistica2\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Estadística II · Escuela de Matemáticas · Universidad Industrial de Santander</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

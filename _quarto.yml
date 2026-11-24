@@ -1,0 +1,72 @@
+project:
+  type: website
+  output-dir: docs
+  execute-dir: project
+  resources:
+    - "datos/*"
+
+execute:
+  freeze: auto      # solo re-ejecuta el código R de los archivos modificados
+  warning: false
+  message: false
+
+lang: es
+bibliography: referencias.bib
+csl: apa.csl
+link-citations: true
+
+website:
+  title: "Estadística II"
+  site-url: "https://fabiosepulveda.github.io/estadistica2/"
+  repo-url: "https://github.com/fabiosepulveda/estadistica2"
+  search: true
+  page-navigation: true
+  back-to-top-navigation: true
+  navbar:
+    background: primary
+    left:
+      - href: index.qmd
+        text: Inicio
+      - href: programa.qmd
+        text: Programa
+      - text: Apuntes
+        menu:
+          - href: apuntes/cap1-estimacion.qmd
+            text: "1. Estimación"
+          - href: apuntes/cap2-hipotesis.qmd
+            text: "2. Pruebas de hipótesis"
+          - href: apuntes/cap3-regresion-simple.qmd
+            text: "3. Regresión lineal simple"
+          - href: apuntes/cap4-regresion-multiple.qmd
+            text: "4. Regresión lineal múltiple"
+          - href: apuntes/cap5-chi-cuadrado.qmd
+            text: "5. Pruebas chi-cuadrado"
+      - text: Diapositivas
+        menu:
+          - href: diapositivas/cap1-estimacion.qmd
+            text: "1. Estimación"
+          - href: diapositivas/cap2-hipotesis.qmd
+            text: "2. Pruebas de hipótesis"
+          - href: diapositivas/cap3-regresion-simple.qmd
+            text: "3. Regresión lineal simple"
+          - href: diapositivas/cap4-regresion-multiple.qmd
+            text: "4. Regresión lineal múltiple"
+          - href: diapositivas/cap5-chi-cuadrado.qmd
+            text: "5. Pruebas chi-cuadrado"
+    right:
+      - icon: github
+        href: "https://github.com/fabiosepulveda/estadistica2"
+  page-footer:
+    center: "Estadística II · Escuela de Matemáticas · Universidad Industrial de Santander"
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly     # el estudiante puede alternar modo claro/oscuro
+    css: styles.css
+    toc: true
+    toc-title: "En esta página"
+    code-copy: true
+    code-overflow: wrap
+    fig-align: center

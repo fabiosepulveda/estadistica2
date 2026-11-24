@@ -1,0 +1,529 @@
+---
+title: "Capítulo 1: Estimación"
+subtitle: "Estadística II"
+author: "Fabio Humberto Sepúlveda Murillo"
+institute: "Escuela de Matemáticas · Universidad Industrial de Santander"
+format:
+  revealjs:
+    menu:
+      side: left
+    transition: fade
+    code-overflow: wrap
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(ggplot2)
+
+
+# Dibuja una densidad con el área central 1 - alfa sombreada entre dos cuantiles
+grafica_area <- function(f, desde, hasta, li, ls, etq_li, etq_ls, eje,
+                         simetrica = FALSE, colas = FALSE) {
+  x <- seq(desde, hasta, length.out = 600)
+  d <- data.frame(x = x, y = f(x))
+  ymax <- max(d$y)
+  # Posición de la etiqueta 1 - alfa: centro de gravedad del área sombreada
+  dc <- subset(d, x >= li & x <= ls)
+  x_c <- if (simetrica) 0 else sum(dc$x * dc$y) / sum(dc$y)
+  y_c <- if (simetrica) 0.5 * ymax else 0.45 * f(x_c)
+  p <- ggplot(d, aes(x = x, y = y)) +
+    geom_area(data = subset(d, x >= li & x <= ls), fill = "#d4ecf9") +
+    geom_line(color = "#29a8e0", linewidth = 1.1) +
+    annotate("segment", x = li, xend = li, y = 0, yend = f(li), color = "#29a8e0") +
+    annotate("segment", x = ls, xend = ls, y = 0, yend = f(ls), color = "#29a8e0") +
+    annotate("segment", x = desde, xend = hasta, y = 0, yend = 0) +
+    annotate("text", x = x_c, y = y_c, label = "1 - alpha",
+             parse = TRUE, size = 6) +
+    annotate("text", x = li, y = -0.08 * ymax, label = etq_li, parse = TRUE, size = 5) +
+    annotate("text", x = ls, y = -0.08 * ymax, label = etq_ls, parse = TRUE, size = 5) +
+    annotate("text", x = hasta, y = 0.04 * ymax, label = eje, parse = TRUE,
+             size = 5, hjust = 1) +
+    coord_cartesian(ylim = c(-0.13 * ymax, 1.02 * ymax), clip = "off") +
+    theme_void()
+  if (simetrica) {
+    p <- p +
+      annotate("segment", x = 0, xend = 0, y = 0, yend = f(0),
+               linetype = "dashed", linewidth = 0.9) +
+      annotate("text", x = 0, y = -0.08 * ymax, label = "0", size = 5)
+  }
+  if (colas && simetrica) {
+    p <- p +
+      annotate("text", x = c(li, ls) + c(-1, 1) * 0.08 * (hasta - desde),
+               y = 0.13 * ymax, label = "alpha/2", parse = TRUE, size = 4.5)
+  } else if (colas) {
+    p <- p +
+      annotate("text", x = li - 0.05 * (hasta - desde), y = 0.30 * ymax,
+               label = "alpha/2", parse = TRUE, size = 4.5) +
+      annotate("segment", x = li - 0.05 * (hasta - desde), xend = 0.75 * li,
+               y = 0.24 * ymax, yend = 0.35 * f(0.75 * li), linewidth = 0.3) +
+      annotate("text", x = ls + 0.08 * (hasta - desde), y = 0.12 * ymax,
+               label = "alpha/2", parse = TRUE, size = 4.5)
+  }
+  p
+}
+theme_set(theme_minimal(base_size = 18))
+```
+
+## Contenido
+
+:::: {.columns}
+::: {.column width="50%"}
+1. Inferencia estadística
+2. Estimación puntual
+3. Propiedades de los estimadores
+4. Intervalos de confianza
+5. Intervalo para la media
+6. Intervalo para una proporción
+:::
+::: {.column width="50%"}
+7. Intervalo para la varianza
+8. Diferencia de dos medias
+9. Diferencia de dos proporciones
+10. Cociente de dos varianzas
+11. Estimación con R
+:::
+::::
+
+## Inferencia estadística
+
+Obtener conclusiones sobre una **población** a partir de una **muestra**,
+cuantificando la incertidumbre.
+
+:::: {.columns}
+::: {.column width="50%"}
+**Estimación**
+
+¿Cuál es el consumo promedio de combustible de la flota?
+
+→ Conocer el valor de un parámetro.
+:::
+::: {.column width="50%"}
+**Pruebas de hipótesis**
+
+¿Frenan en menos distancia las llantas de la marca A?
+
+→ Decidir sobre una afirmación.
+:::
+::::
+
+La inferencia se divide en estas dos áreas [@walpole2012, p. 266].
+
+# Estimación puntual {background-color="#2c5d8f"}
+
+## Estimador y estimación
+
+| Símbolo | Se lee | Qué es | ¿Aleatorio? |
+|:--:|:--|:--|:--:|
+| $\theta$ | "theta" | **Parámetro**: fijo, desconocido | No |
+| $\hat{\Theta}$ | "theta mayúscula gorro" | **Estimador**: la regla | Sí |
+| $\hat{\theta}$ | "theta gorro" | **Estimación**: el número | No |
+
+. . .
+
+Para la media: $\theta = \mu$, $\quad \hat{\Theta} = \bar{X}$, $\quad \hat{\theta} = \bar{x}$.
+
+Excepción por costumbre: $\hat{p}$ para el estimador y para la estimación.
+
+## Estimadores más usados
+
+| Parámetro | Estimador |
+|:--|:--|
+| Media $\mu$ | $\bar{X}$ |
+| Varianza $\sigma^2$ | $S^2$ |
+| Proporción $p$ | $\hat{p} = X/n$ |
+| $\mu_X - \mu_Y$ | $\bar{X} - \bar{Y}$ |
+| $p_X - p_Y$ | $\hat{p}_X - \hat{p}_Y$ |
+| $\sigma_X^2/\sigma_Y^2$ | $S_X^2/S_Y^2$ |
+
+# Propiedades de los estimadores {background-color="#2c5d8f"}
+
+## Un buen estimador...
+
+... tiene una distribución muestral **centrada** en el parámetro y
+**concentrada** alrededor de él [@devore2008, pp. 231, 235].
+
+. . .
+
+| Propiedad | Pregunta | Ejemplo |
+|:--|:--|:--|
+| Insesgamiento | ¿$E(\hat{\Theta}) = \theta$? | $E(S^2) = \sigma^2$ |
+| Consistencia | ¿Se acerca a $\theta$ al crecer $n$? | $V(\bar{X}) = \sigma^2/n \to 0$ |
+| Eficiencia | ¿Tiene la menor varianza? | Media frente a mediana |
+| Suficiencia | ¿Usa toda la información? | Número de éxitos para $p$ |
+
+## ¿Por qué se divide entre $n - 1$?
+
+$$
+\sum (X_i - \bar{X})^2 = \sum (X_i - \mu)^2 - n(\bar{X} - \mu)^2
+$$
+
+. . .
+
+$$
+E\left[\sum (X_i - \bar{X})^2\right] = n\sigma^2 - n\,\frac{\sigma^2}{n} = (n - 1)\,\sigma^2
+$$
+
+. . .
+
+$$
+\Rightarrow\ E(S^2) = \sigma^2 \qquad \text{(insesgado)}
+$$
+
+Dividiendo entre $n$, se subestimaría la varianza.
+
+## Eficiencia: media o mediana
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4
+#| fig-align: center
+set.seed(5)
+muestras <- replicate(10000, rnorm(25, mean = 50, sd = 10))
+estim <- rbind(data.frame(valor = colMeans(muestras), estimador = "Media muestral"),
+               data.frame(valor = apply(muestras, 2, median), estimador = "Mediana muestral"))
+ggplot(estim, aes(x = valor, fill = estimador)) +
+  geom_density(alpha = 0.45, color = NA) +
+  geom_vline(xintercept = 50, linetype = "dashed") +
+  scale_fill_manual(values = c("steelblue", "darkorange")) +
+  labs(x = "Valor del estimador", y = "Densidad", fill = NULL) +
+  theme(legend.position = "bottom")
+```
+
+En la normal, ambas son insesgadas, pero la mediana tiene varianza
+$\approx 1{,}57\,\sigma^2/n$: eficiencia relativa $2/\pi \approx 0{,}64$ [@hodges1970].
+
+# Intervalos de confianza {background-color="#2c5d8f"}
+
+## Definición
+
+$$
+P\big(\hat{\Theta}_L < \theta < \hat{\Theta}_U\big) = 1 - \alpha
+$$
+
+- $\hat{\Theta}_L$, $\hat{\Theta}_U$: **variables aleatorias** (cambian con la muestra).
+- $\theta$: **fijo**, desconocido.
+- Niveles usuales: 90 %, 95 % y 99 % [@daniel1987, p. 178].
+
+. . .
+
+**Interpretación:** si se repitiera el muestreo muchas veces, cerca del 95 %
+de los intervalos contendría a $\theta$ [@walpole2012, p. 271].
+
+## 100 intervalos del 95 %
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 5.6
+#| fig-align: center
+set.seed(2027)
+n_ic <- 20; mu_ic <- 50; sigma_ic <- 10
+ics <- t(replicate(100, {
+  x <- rnorm(n_ic, mu_ic, sigma_ic)
+  m <- mean(x); e <- qt(0.975, n_ic - 1) * sd(x) / sqrt(n_ic)
+  c(m - e, m + e)
+}))
+ics <- data.frame(muestra = 1:100, inf = ics[, 1], sup = ics[, 2])
+n_fallan <- sum(ics$inf > mu_ic | ics$sup < mu_ic)
+ics$contiene <- ifelse(ics$inf < mu_ic & ics$sup > mu_ic, "Contiene la media", "No contiene la media")
+ggplot(ics, aes(y = muestra, xmin = inf, xmax = sup, color = contiene)) +
+  geom_linerange() +
+  geom_vline(xintercept = mu_ic, linetype = "dashed") +
+  scale_color_manual(values = c("grey45", "firebrick")) +
+  labs(x = "Intervalo de confianza del 95 %", y = "Muestra", color = NULL) +
+  theme(legend.position = "bottom")
+```
+
+## ¿Qué significa "95 % de confianza"?
+
+Intervalo calculado: $(4{,}24;\ 5{,}21)$.
+
+. . .
+
+✘ "Hay una probabilidad de 0,95 de que $\mu$ esté entre 4,24 y 5,21."
+
+. . .
+
+✔ "Tenemos una confianza del 95 % en que el intervalo contiene a $\mu$":
+el **procedimiento** acierta el 95 % de las veces.
+
+. . .
+
+En un estudio, 120 investigadores y 442 estudiantes aceptaron en promedio
+más de tres de seis interpretaciones incorrectas [@hoekstra2014].
+
+## Cómo se encuentran los límites
+
+**Método de la cantidad pivotal** [@devore2008, p. 260]:
+
+::: {.incremental}
+1. Parámetro $\theta$ y estimador $\hat{\Theta}$.
+2. Cantidad pivotal $Q$: depende de $\hat{\Theta}$ y $\theta$; su distribución **no** depende de $\theta$.
+3. Cuantiles $a$ y $b$: $P(a < Q < b) = 1 - \alpha$.
+4. Despejar $\theta$: $P(\hat{\Theta}_L < \theta < \hat{\Theta}_U) = 1 - \alpha$.
+5. Reemplazar los valores de la muestra.
+:::
+
+# Intervalo para la media {background-color="#2c5d8f"}
+
+## Caso 1: varianza conocida
+
+::: {.callout-note title="Supuestos"}
+Muestra aleatoria de una población **normal**; $\mu$ desconocida; $\sigma^2$
+**conocida** [@canavos1988, p. 274].
+:::
+
+Cantidad pivotal: $\quad Z = \dfrac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0, 1)$
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_area(dnorm, -3.6, 3.6, qnorm(0.025), qnorm(0.975),
+             "-z[1 - alpha/2]", "z[1 - alpha/2]", "z", simetrica = TRUE, colas = TRUE)
+```
+
+## Despejar $\mu$
+
+$$
+-z_{1-\alpha/2} < \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} < z_{1-\alpha/2}
+$$
+
+::: {.incremental}
+- Multiplicar por $\sigma/\sqrt{n}$: $\quad -z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}} < \bar{X} - \mu < z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}$
+- Restar $\bar{X}$ y multiplicar por $-1$ (**se invierten** las desigualdades)
+- Resultado: $\quad \bar{x} \pm z_{1-\alpha/2}\,\dfrac{\sigma}{\sqrt{n}}$
+:::
+
+. . .
+
+**Margen de error:** $E = z_{1-\alpha/2}\,\sigma/\sqrt{n}$. Tamaño de muestra:
+$n = \left(z_{1-\alpha/2}\,\sigma/E\right)^2$, redondeado hacia arriba.
+
+## Ejemplo: consumo de combustible
+
+25 vehículos, $\bar{x} = 12{,}632$ km/L, $\sigma = 1{,}2$ km/L.
+
+| Confianza | $z_{1-\alpha/2}$ | Margen | Intervalo |
+|:--|:--:|:--:|:--:|
+| 90 % | 1,645 | 0,395 | $(12{,}24;\ 13{,}03)$ |
+| 95 % | 1,960 | 0,470 | $(12{,}16;\ 13{,}10)$ |
+| 99 % | 2,576 | 0,618 | $(12{,}01;\ 13{,}25)$ |
+
+. . .
+
+Más confianza → intervalo más ancho [@walpole2012, p. 269].
+
+Para un margen de 0,3 km/L al 95 %: $n = (1{,}96 \times 1{,}2/0{,}3)^2 = 61{,}46$ → **62** vehículos.
+
+## Caso 2: varianza desconocida
+
+Población normal, $\sigma^2$ desconocida: $\quad T = \dfrac{\bar{X} - \mu}{S/\sqrt{n}} \sim t(n - 1)$
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.2
+#| fig-align: center
+grafica_area(function(x) dt(x, df = 5), -4.2, 4.2, qt(0.025, 5), qt(0.975, 5),
+             "-t[1 - alpha/2]", "t[1 - alpha/2]", "t", simetrica = TRUE, colas = TRUE)
+```
+
+$$
+\bar{x} \pm t_{1-\alpha/2;\,n-1}\,\frac{s}{\sqrt{n}}
+$$
+
+## Ejemplo: peso de las mochilas
+
+20 estudiantes: $\bar{x} = 4{,}725$ kg, $s = 1{,}035$ kg, $t_{0{,}975;\,19} = 2{,}093$.
+
+$$
+4{,}725 \pm 2{,}093 \times \frac{1{,}035}{\sqrt{20}} = (4{,}24;\ 5{,}21) \text{ kg}
+$$
+
+```{r}
+#| echo: true
+mochilas <- c(3.2, 4.1, 5.5, 3.8, 4.9, 6.2, 3.5, 5.1, 4.4, 3.9,
+              5.7, 6.5, 3.3, 4.7, 5.3, 4.0, 3.6, 4.8, 5.9, 6.1)
+t.test(mochilas, conf.level = 0.95)$conf.int
+```
+
+# Intervalo para una proporción {background-color="#2c5d8f"}
+
+## Fórmula y ejemplo
+
+$$
+\hat{p} \pm z_{1-\alpha/2}\sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}
+\qquad (n\hat{p} \ge 5,\ n(1-\hat{p}) \ge 5)
+$$
+
+. . .
+
+**Transporte público en Bucaramanga:** 200 de 500 lo usan al menos tres veces por semana.
+
+$$
+0{,}40 \pm 1{,}96\sqrt{\frac{0{,}40 \times 0{,}60}{500}} = (0{,}357;\ 0{,}443)
+$$
+
+. . .
+
+`prop.test()` calcula el intervalo de **Wilson**, más preciso con muestras
+pequeñas [@montgomery2018, p. 188; @rcore2024].
+
+## Tamaño de muestra para una proporción
+
+$$
+n = \frac{z_{1-\alpha/2}^2\; p(1 - p)}{E^2}
+$$
+
+. . .
+
+¿Sin información sobre $p$? Se usa $p = 0{,}5$: da el $n$ **más grande**
+posible, pero también el más costoso [@daniel1987, pp. 202--203; @walpole2012, p. 299].
+
+. . .
+
+**Ejemplo:** margen de 3 puntos, 90 % de confianza:
+$n = 1{,}645^2 \times 0{,}25/0{,}03^2 = 751{,}5$ → **752** personas.
+
+# Intervalo para la varianza {background-color="#2c5d8f"}
+
+## La chi-cuadrado no es simétrica
+
+$\dfrac{(n-1)S^2}{\sigma^2} \sim \chi^2(n - 1)$, con población **normal**.
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_area(function(x) dchisq(x, df = 8), 0, 24, qchisq(0.025, 8), qchisq(0.975, 8),
+             "chi[alpha/2]^2", "chi[1 - alpha/2]^2", "chi^2", colas = TRUE)
+```
+
+$$
+\left(\frac{(n - 1)s^2}{\chi^2_{1-\alpha/2;\,n-1}},\ \frac{(n - 1)s^2}{\chi^2_{\alpha/2;\,n-1}}\right)
+$$
+
+El cuantil **mayor** va en el límite **inferior**: al tomar recíprocos se
+invierten las desigualdades.
+
+## Ejemplo: cojinetes de bola
+
+12 diámetros, $s^2 = 0{,}000545$ cm², 99 % de confianza [@canavos1988, p. 281]:
+
+$$
+\left(\frac{11 \times 0{,}000545}{26{,}757},\ \frac{11 \times 0{,}000545}{2{,}603}\right) = (0{,}000224;\ 0{,}002305)
+$$
+
+Para $\sigma$: $(0{,}015;\ 0{,}048)$ cm.
+
+. . .
+
+::: {.callout-warning title="La normalidad es indispensable"}
+Este intervalo es poco robusto a la falta de normalidad [@montgomery2018, p. 184].
+:::
+
+# Diferencia de dos medias {background-color="#2c5d8f"}
+
+## Tres casos con muestras independientes
+
+| Caso | Intervalo para $\mu_X - \mu_Y$ |
+|:--|:--|
+| $\sigma^2$ conocidas | $(\bar{x} - \bar{y}) \pm z_{1-\alpha/2}\sqrt{\sigma_X^2/n_X + \sigma_Y^2/n_Y}$ |
+| $\sigma^2$ iguales | $(\bar{x} - \bar{y}) \pm t_{1-\alpha/2;\,n_X+n_Y-2}\; s_p\sqrt{1/n_X + 1/n_Y}$ |
+| $\sigma^2$ diferentes (Welch) | $(\bar{x} - \bar{y}) \pm t_{1-\alpha/2;\,\nu}\sqrt{s_X^2/n_X + s_Y^2/n_Y}$ |
+
+. . .
+
+::: {.callout-tip title="¿Cómo se interpreta?"}
+Todo positivo: $\mu_X > \mu_Y$. Todo negativo: $\mu_X < \mu_Y$. Contiene el 0:
+no hay evidencia de diferencia.
+:::
+
+## Ejemplos
+
+::: {.incremental}
+- **Llantas** ($\sigma^2$ conocidas): $(-3{,}96;\ -1{,}67)$ m → la marca A frena en menos distancia.
+- **Sueldos** (varianzas iguales): $(318{,}63;\ 724{,}71)$ dólares → la ciudad A paga más.
+- **Pizzería** (Welch, $\nu = 807$): $(-4{,}97;\ -3{,}28)$ min → East entrega más rápido.
+:::
+
+. . .
+
+En la práctica, si hay dudas sobre la igualdad de las varianzas, conviene
+usar Welch, que es la opción por defecto de `t.test()` [@delacre2017].
+
+## Muestras pareadas
+
+Precios de **los mismos** 8 productos en dos supermercados: se trabaja con
+las diferencias $d_i$.
+
+$$
+\bar{d} \pm t_{1-\alpha/2;\,n-1}\,\frac{s_d}{\sqrt{n}} = (0{,}167;\ 0{,}608) \text{ miles de pesos}
+$$
+
+. . .
+
+::: {.callout-warning title="¡Cuidado!"}
+Tratadas por error como independientes: $(-3{,}32;\ 4{,}09)$, que contiene el 0.
+La variabilidad entre productos "tapa" la diferencia entre supermercados.
+:::
+
+# Dos proporciones y dos varianzas {background-color="#2c5d8f"}
+
+## Diferencia de proporciones
+
+$$
+(\hat{p}_X - \hat{p}_Y) \pm z_{1-\alpha/2}\sqrt{\frac{\hat{p}_X(1-\hat{p}_X)}{n_X} + \frac{\hat{p}_Y(1-\hat{p}_Y)}{n_Y}}
+$$
+
+::: {.incremental}
+- **Fumadores**: zurdos 190/400, diestros 300/800, al 98 %: $(0{,}030;\ 0{,}170)$ → más fumadores entre los zurdos.
+- **Aprobación**: universidad A 350/500, B 390/600, al 95 %: $(-0{,}005;\ 0{,}105)$ → contiene el 0.
+:::
+
+## Cociente de varianzas
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.2
+#| fig-align: center
+grafica_area(function(x) df(x, 9, 14), 0, 5, qf(0.025, 9, 14), qf(0.975, 9, 14),
+             "f[alpha/2]", "f[1 - alpha/2]", "f", colas = TRUE)
+```
+
+$$
+\left(\frac{s_X^2/s_Y^2}{f_{1-\alpha/2;\,n_X-1,\,n_Y-1}},\ \frac{s_X^2/s_Y^2}{f_{\alpha/2;\,n_X-1,\,n_Y-1}}\right)
+$$
+
+Valor de referencia: **1**. Tiempos de reacción: $(0{,}599;\ 7{,}301)$ →
+contiene el 1. Exige normalidad [@montgomery2018, pp. 268, 273].
+
+# Estimación con R {background-color="#2c5d8f"}
+
+## Resumen
+
+| Parámetro | En R |
+|:--|:--|
+| $\mu$ ($\sigma^2$ desconocida) | `t.test(x)$conf.int` |
+| $p$ | `prop.test(x, n)$conf.int` |
+| $\sigma^2$ | `(n - 1) * var(x) / qchisq(c(1 - a/2, a/2), n - 1)` |
+| $\mu_X - \mu_Y$ | `t.test(x, y)` (Welch) o `t.test(x, y, var.equal = TRUE)` |
+| $\mu_D$ | `t.test(x, y, paired = TRUE)` |
+| $p_X - p_Y$ | `prop.test(c(x, y), c(nx, ny))` |
+| $\sigma_X^2/\sigma_Y^2$ | `var.test(x, y)$conf.int` |
+
+## Para practicar
+
+- Los **17 ejercicios** del capítulo están en los apuntes.
+- Todos los ejemplos se pueden reproducir con el código R de los apuntes.
+
+## Referencias {.smaller .scrollable}
+
+::: {#refs}
+:::

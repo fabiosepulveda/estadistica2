@@ -1,0 +1,2175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Capítulo 5: Pruebas chi-cuadrado de bondad de ajuste e independencia – Estadística II</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-80108d5cb44f5b9fc79a3a6e84303618.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-249f407ffdbc08f6e4c3f777220c47f4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-80108d5cb44f5b9fc79a3a6e84303618.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Estadística II</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Buscar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Inicio</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../programa.html"> 
+<span class="menu-text">Programa</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apuntes" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Apuntes</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-apuntes">    
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap1-estimacion.html">
+ <span class="dropdown-text">1. Estimación</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap2-hipotesis.html">
+ <span class="dropdown-text">2. Pruebas de hipótesis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap3-regresion-simple.html">
+ <span class="dropdown-text">3. Regresión lineal simple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap4-regresion-multiple.html">
+ <span class="dropdown-text">4. Regresión lineal múltiple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap5-chi-cuadrado.html">
+ <span class="dropdown-text">5. Pruebas chi-cuadrado</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-diapositivas" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Diapositivas</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-diapositivas">    
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap1-estimacion.html">
+ <span class="dropdown-text">1. Estimación</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap2-hipotesis.html">
+ <span class="dropdown-text">2. Pruebas de hipótesis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap3-regresion-simple.html">
+ <span class="dropdown-text">3. Regresión lineal simple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap4-regresion-multiple.html">
+ <span class="dropdown-text">4. Regresión lineal múltiple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap5-chi-cuadrado.html">
+ <span class="dropdown-text">5. Pruebas chi-cuadrado</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fabiosepulveda/estadistica2"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo oscuro"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#frecuencias-observadas-y-esperadas" id="toc-frecuencias-observadas-y-esperadas" class="nav-link active" data-scroll-target="#frecuencias-observadas-y-esperadas"><span class="header-section-number">1</span> Frecuencias observadas y esperadas</a></li>
+  <li><a href="#tablas-unidimensionales-la-prueba-de-bondad-de-ajuste" id="toc-tablas-unidimensionales-la-prueba-de-bondad-de-ajuste" class="nav-link" data-scroll-target="#tablas-unidimensionales-la-prueba-de-bondad-de-ajuste"><span class="header-section-number">2</span> Tablas unidimensionales: la prueba de bondad de ajuste</a>
+  <ul class="collapse">
+  <li><a href="#proporciones-especificadas" id="toc-proporciones-especificadas" class="nav-link" data-scroll-target="#proporciones-especificadas"><span class="header-section-number">2.1</span> Proporciones especificadas</a></li>
+  <li><a href="#ajuste-a-una-distribución-discreta" id="toc-ajuste-a-una-distribución-discreta" class="nav-link" data-scroll-target="#ajuste-a-una-distribución-discreta"><span class="header-section-number">2.2</span> Ajuste a una distribución discreta</a></li>
+  <li><a href="#ajuste-a-una-distribución-continua" id="toc-ajuste-a-una-distribución-continua" class="nav-link" data-scroll-target="#ajuste-a-una-distribución-continua"><span class="header-section-number">2.3</span> Ajuste a una distribución continua</a></li>
+  <li><a href="#otras-pruebas-para-variables-continuas" id="toc-otras-pruebas-para-variables-continuas" class="nav-link" data-scroll-target="#otras-pruebas-para-variables-continuas"><span class="header-section-number">2.4</span> Otras pruebas para variables continuas</a></li>
+  </ul></li>
+  <li><a href="#tablas-de-doble-entrada-la-prueba-de-independencia" id="toc-tablas-de-doble-entrada-la-prueba-de-independencia" class="nav-link" data-scroll-target="#tablas-de-doble-entrada-la-prueba-de-independencia"><span class="header-section-number">3</span> Tablas de doble entrada: la prueba de independencia</a>
+  <ul class="collapse">
+  <li><a href="#frecuencias-esperadas-y-grados-de-libertad" id="toc-frecuencias-esperadas-y-grados-de-libertad" class="nav-link" data-scroll-target="#frecuencias-esperadas-y-grados-de-libertad"><span class="header-section-number">3.1</span> Frecuencias esperadas y grados de libertad</a></li>
+  <li><a href="#son-independientes-el-hábito-de-fumar-y-el-género" id="toc-son-independientes-el-hábito-de-fumar-y-el-género" class="nav-link" data-scroll-target="#son-independientes-el-hábito-de-fumar-y-el-género"><span class="header-section-number">3.2</span> ¿Son independientes el hábito de fumar y el género?</a></li>
+  </ul></li>
+  <li><a href="#tablas-de-doble-entrada-la-prueba-de-homogeneidad" id="toc-tablas-de-doble-entrada-la-prueba-de-homogeneidad" class="nav-link" data-scroll-target="#tablas-de-doble-entrada-la-prueba-de-homogeneidad"><span class="header-section-number">4</span> Tablas de doble entrada: la prueba de homogeneidad</a></li>
+  <li><a href="#la-prueba-exacta-de-fisher" id="toc-la-prueba-exacta-de-fisher" class="nav-link" data-scroll-target="#la-prueba-exacta-de-fisher"><span class="header-section-number">5</span> La prueba exacta de Fisher</a></li>
+  <li><a href="#pruebas-chi-cuadrado-con-r" id="toc-pruebas-chi-cuadrado-con-r" class="nav-link" data-scroll-target="#pruebas-chi-cuadrado-con-r"><span class="header-section-number">6</span> Pruebas chi-cuadrado con R</a></li>
+  <li><a href="#ejercicios-propuestos" id="toc-ejercicios-propuestos" class="nav-link" data-scroll-target="#ejercicios-propuestos"><span class="header-section-number">7</span> Ejercicios propuestos</a>
+  <ul class="collapse">
+  <li><a href="#pruebas-de-bondad-de-ajuste" id="toc-pruebas-de-bondad-de-ajuste" class="nav-link" data-scroll-target="#pruebas-de-bondad-de-ajuste"><span class="header-section-number">7.1</span> Pruebas de bondad de ajuste</a></li>
+  <li><a href="#pruebas-de-independencia-y-de-homogeneidad" id="toc-pruebas-de-independencia-y-de-homogeneidad" class="nav-link" data-scroll-target="#pruebas-de-independencia-y-de-homogeneidad"><span class="header-section-number">7.2</span> Pruebas de independencia y de homogeneidad</a></li>
+  </ul></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Otros formatos</h2><ul><li><a href="cap5-chi-cuadrado.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Capítulo 5: Pruebas chi-cuadrado de bondad de ajuste e independencia</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled" title="Objetivos del capítulo">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objetivos del capítulo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Al terminar este capítulo, usted estará en capacidad de:</p>
+<ul>
+<li>comparar frecuencias observadas con frecuencias esperadas bajo una hipótesis, mediante el estadístico chi-cuadrado;</li>
+<li>probar si una variable cualitativa se distribuye según unas proporciones especificadas;</li>
+<li>probar si una variable cuantitativa, discreta o continua, sigue una distribución de probabilidad dada;</li>
+<li>probar si dos variables son independientes, a partir de una tabla de contingencia;</li>
+<li>probar si varias poblaciones tienen la misma distribución (homogeneidad);</li>
+<li>reconocer los supuestos de las pruebas chi-cuadrado y qué hacer cuando no se cumplen;</li>
+<li>realizar estas pruebas con R.</li>
+</ul>
+</div>
+</div>
+<p>En Estadística I resumimos datos en <strong>tablas de frecuencias</strong>: tablas unidimensionales, para una variable, y tablas de contingencia o de doble entrada, para dos variables. En este capítulo aprenderemos a hacer <strong>inferencia</strong> con esas tablas, para responder dos tipos de preguntas:</p>
+<ul>
+<li><strong>¿Se ajustan los datos a un modelo?</strong> ¿Es equilibrado un dado? ¿Sigue el número de llamadas por minuto una distribución de Poisson? ¿Son normales los tiempos de entrega de la pizzería? Son las <strong>pruebas de bondad de ajuste</strong>, que se aplican a tablas unidimensionales.</li>
+<li><strong>¿Están relacionadas dos variables?</strong> ¿Depende el hábito de fumar del género? ¿Es la preferencia por un medio de transporte la misma en todas las carreras? Son las <strong>pruebas de independencia y de homogeneidad</strong>, que se aplican a tablas de doble entrada.</li>
+</ul>
+<p>Todas se basan en la misma idea y en el mismo estadístico, el de Pearson, que tiene una distribución chi-cuadrado <span class="citation" data-cites="walpole2012 devore2008">(<a href="#ref-devore2008" role="doc-biblioref">Devore, 2008, p. 568</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 371</a>)</span>. Las variables pueden ser cualitativas o cuantitativas: lo que se analiza siempre son <strong>frecuencias</strong>, es decir, conteos de observaciones en categorías o en clases.</p>
+<section id="frecuencias-observadas-y-esperadas" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="frecuencias-observadas-y-esperadas"><span class="header-section-number">1</span> Frecuencias observadas y esperadas</h2>
+<p>Supongamos que las <span class="math inline">\(n\)</span> observaciones de una muestra se clasifican en <span class="math inline">\(k\)</span> categorías (o clases) mutuamente excluyentes. Para cada categoría <span class="math inline">\(i\)</span> se tienen dos números:</p>
+<ul>
+<li>la <strong>frecuencia observada</strong> <span class="math inline">\(o_i\)</span>: el número de observaciones de la muestra que cayeron en la categoría <span class="math inline">\(i\)</span>;</li>
+<li>la <strong>frecuencia esperada</strong> <span class="math inline">\(e_i\)</span>: el número de observaciones que se esperaría encontrar en la categoría <span class="math inline">\(i\)</span> si la hipótesis nula fuera verdadera. Si, según <span class="math inline">\(H_0\)</span>, la probabilidad de la categoría <span class="math inline">\(i\)</span> es <span class="math inline">\(p_i\)</span>, entonces <span class="math inline">\(e_i = n\,p_i\)</span>.</li>
+</ul>
+<p>Si <span class="math inline">\(H_0\)</span> es verdadera, las frecuencias observadas deberían parecerse a las esperadas, aunque no serán exactamente iguales, por el azar del muestreo. La pregunta es si las diferencias <span class="math inline">\(o_i - e_i\)</span> son lo bastante grandes como para dudar de <span class="math inline">\(H_0\)</span>. Para medirlas en conjunto, Karl Pearson propuso en 1900 el siguiente estadístico <span class="citation" data-cites="pearson1900 daniel1987">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, p. 461</a>; <a href="#ref-pearson1900" role="doc-biblioref">Pearson, 1900</a>)</span>.</p>
+<div id="def-chi-pearson" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 1 (Estadístico chi-cuadrado de Pearson)</strong></span> El <strong>estadístico chi-cuadrado de Pearson</strong> es <span class="math display">\[
+\chi^2 = \sum_{i=1}^{k} \frac{(o_i - e_i)^2}{e_i} .
+\]</span></p>
+</div>
+<p>Cada término compara lo observado con lo esperado en una categoría. Las diferencias se elevan al cuadrado para que las positivas y las negativas no se cancelen, y se dividen entre <span class="math inline">\(e_i\)</span> para ponerlas en una escala relativa: una diferencia de 10 es grande si se esperaban 20, pero pequeña si se esperaban 2000. Si los datos coinciden exactamente con lo esperado, <span class="math inline">\(\chi^2 = 0\)</span>; cuanto más se alejan, mayor es <span class="math inline">\(\chi^2\)</span>.</p>
+<div id="thm-chi-pearson" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 1 (Distribución del estadístico de Pearson)</strong></span> Si <span class="math inline">\(H_0\)</span> es verdadera y las frecuencias esperadas no son demasiado pequeñas, el estadístico <span class="math inline">\(\chi^2\)</span> tiene, aproximadamente, una distribución chi-cuadrado con <span class="math display">\[
+\nu = k - 1 - m
+\]</span> grados de libertad, donde <span class="math inline">\(k\)</span> es el número de categorías y <span class="math inline">\(m\)</span> el número de parámetros que se estimaron con los datos para calcular las frecuencias esperadas <span class="citation" data-cites="devore2008 walpole2012">(<a href="#ref-devore2008" role="doc-biblioref">Devore, 2008, p. 578</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 371</a>)</span>.</p>
+</div>
+<p>Se pierde un grado de libertad porque las frecuencias observadas deben sumar <span class="math inline">\(n\)</span>: conocidas <span class="math inline">\(k - 1\)</span> de ellas, la última queda determinada <span class="citation" data-cites="daniel1987">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, p. 470</a>)</span>. La resta de un grado de libertad adicional por cada parámetro estimado se debe a Fisher (1924), quien corrigió así el planteamiento original de Pearson <span class="citation" data-cites="fisher1924 stigler2008">(<a href="#ref-fisher1924" role="doc-biblioref">Fisher, 1924</a>; <a href="#ref-stigler2008" role="doc-biblioref">Stigler, 2008</a>)</span>. La intuición es la siguiente: cuando los parámetros se estiman con los mismos datos que luego se usan en la prueba, la distribución de <span class="math inline">\(H_0\)</span> queda “ajustada” a esos datos, de modo que las frecuencias esperadas resultan más cercanas a las observadas de lo que estarían si los parámetros fueran conocidos, y el estadístico tiende a ser menor. Restar grados de libertad compensa ese efecto.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Una precisión técnica">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Una precisión técnica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El resultado de Fisher es exacto, en muestras grandes, cuando los parámetros se estiman a partir de las <strong>frecuencias agrupadas</strong> (por máxima verosimilitud con los conteos de las categorías). En la práctica, lo usual es estimarlos con los <strong>datos individuales</strong>, por ejemplo con <span class="math inline">\(\bar{x}\)</span> y <span class="math inline">\(s\)</span>. Chernoff y Lehmann (1954) demostraron que, en ese caso, la distribución del estadístico queda <strong>entre</strong> una <span class="math inline">\(\chi^2(k - 1 - m)\)</span> y una <span class="math inline">\(\chi^2(k - 1)\)</span>, de modo que usar <span class="math inline">\(k - 1 - m\)</span> grados de libertad hace que la prueba rechace <span class="math inline">\(H_0\)</span> con una frecuencia ligeramente mayor que <span class="math inline">\(\alpha\)</span> <span class="citation" data-cites="chernoff1954 devore2008">(<a href="#ref-chernoff1954" role="doc-biblioref">Chernoff &amp; Lehmann, 1954</a>; <a href="#ref-devore2008" role="doc-biblioref">Devore, 2008, p. 581</a>)</span>. Es la práctica habitual en los textos, y una forma sencilla de verificar que la conclusión no depende de ese detalle es calcular el valor p con ambos grados de libertad: si los dos llevan a la misma decisión, la conclusión es confiable.</p>
+</div>
+</div>
+<p>Como valores grandes de <span class="math inline">\(\chi^2\)</span> indican desacuerdo con <span class="math inline">\(H_0\)</span>, la prueba es siempre de <strong>cola derecha</strong>: se rechaza <span class="math inline">\(H_0\)</span> si <span class="math inline">\(\chi^2_{\text{obs}} &gt; \chi^2_{1-\alpha;\,\nu}\)</span>, o si el valor p, <span class="math inline">\(P(\chi^2 &gt; \chi^2_{\text{obs}})\)</span>, es menor o igual que <span class="math inline">\(\alpha\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="El supuesto de las frecuencias esperadas">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+El supuesto de las frecuencias esperadas
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La distribución chi-cuadrado es solo una aproximación, y funciona bien cuando las frecuencias <strong>esperadas</strong> no son demasiado pequeñas. No hay consenso sobre cuán pequeñas pueden ser: los primeros autores sugerían un mínimo de 10, y otros, de 5. Las recomendaciones más seguidas son las de Cochran <span class="citation" data-cites="cochran1954 daniel1987">(<a href="#ref-cochran1954" role="doc-biblioref">Cochran, 1954</a>; <a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, pp. 468, 481-482</a>)</span>:</p>
+<ul>
+<li>en las <strong>pruebas de bondad de ajuste</strong> a distribuciones unimodales (como la normal o la de Poisson), la frecuencia esperada mínima puede ser tan pequeña como 1;</li>
+<li>en las <strong>tablas de contingencia</strong> con más de un grado de libertad, se admite un mínimo de 1 si <strong>no más del 20 %</strong> de las celdas tienen frecuencias esperadas menores que 5.</li>
+</ul>
+<p>Si no se cumplen, se <strong>agrupan</strong> categorías vecinas (lo que reduce los grados de libertad). Como criterio práctico, en este curso agruparemos las clases cuando alguna frecuencia esperada sea menor que 5, que es la opción más conservadora y la que recomiendan Walpole et al. <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">2012, p. 372</a>)</span>. Observe que las reglas se refieren a las frecuencias esperadas <span class="math inline">\(e_i\)</span>, no a las observadas.</p>
+</div>
+</div>
+</section>
+<section id="tablas-unidimensionales-la-prueba-de-bondad-de-ajuste" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="tablas-unidimensionales-la-prueba-de-bondad-de-ajuste"><span class="header-section-number">2</span> Tablas unidimensionales: la prueba de bondad de ajuste</h2>
+<p>Una <strong>prueba de bondad de ajuste</strong> evalúa si una muestra proviene de una población con una distribución de probabilidad especificada. Las hipótesis son:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: la variable sigue la distribución especificada;</li>
+<li><span class="math inline">\(H_1\)</span>: la variable no sigue la distribución especificada.</li>
+</ul>
+<p>Las grandes diferencias entre las situaciones están en cómo se calculan las probabilidades <span class="math inline">\(p_i\)</span> de <span class="math inline">\(H_0\)</span>.</p>
+<section id="proporciones-especificadas" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="proporciones-especificadas"><span class="header-section-number">2.1</span> Proporciones especificadas</h3>
+<p>El caso más sencillo es el de una variable cualitativa para la que <span class="math inline">\(H_0\)</span> especifica completamente la proporción de cada categoría.</p>
+<div id="exm-dado" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 1</strong></span> Para verificar si un dado está equilibrado, se lanza 120 veces y se obtienen los resultados de la <a href="#tbl-dado" class="quarto-xref">Tabla&nbsp;1</a>. Si el dado es equilibrado, cada cara tiene probabilidad <span class="math inline">\(1/6\)</span>, y la frecuencia esperada de cada una es <span class="math inline">\(e_i = 120 \times 1/6 = 20\)</span>.</p>
+<div id="tbl-dado" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;1: Resultados de 120 lanzamientos de un dado.
+</figcaption>
+<div aria-describedby="tbl-dado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Cara</th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">6</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Frecuencia observada <span class="math inline">\(o_i\)</span></td>
+<td style="text-align: center;">18</td>
+<td style="text-align: center;">22</td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">120</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Frecuencia esperada <span class="math inline">\(e_i\)</span></td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">120</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\((o_i - e_i)^2/e_i\)</span></td>
+<td style="text-align: center;">0,20</td>
+<td style="text-align: center;">0,20</td>
+<td style="text-align: center;">0,80</td>
+<td style="text-align: center;">1,25</td>
+<td style="text-align: center;">1,80</td>
+<td style="text-align: center;">1,25</td>
+<td style="text-align: center;">5,50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<ol type="1">
+<li><strong>Hipótesis:</strong> <span class="math inline">\(H_0\)</span>: el dado es equilibrado (<span class="math inline">\(p_1 = p_2 = \cdots = p_6 = 1/6\)</span>); <span class="math inline">\(H_1\)</span>: el dado no es equilibrado.</li>
+<li><strong>Nivel de significancia:</strong> <span class="math inline">\(\alpha = 0{,}05\)</span>.</li>
+<li><strong>Estadístico y grados de libertad:</strong> no se estimó ningún parámetro (<span class="math inline">\(m = 0\)</span>), así que <span class="math inline">\(\nu = 6 - 1 = 5\)</span>.</li>
+<li><strong>Región de rechazo:</strong> <span class="math inline">\(\chi^2_{\text{obs}} &gt; \chi^2_{0{,}95;\,5} = 11{,}07\)</span>.</li>
+<li><strong>Valor observado:</strong> <span class="math inline">\(\chi^2_{\text{obs}} = 5{,}50\)</span>.</li>
+<li><strong>Decisión:</strong> como <span class="math inline">\(5{,}50 &lt; 11{,}07\)</span>, no se rechaza <span class="math inline">\(H_0\)</span> (valor p <span class="math inline">\(= 0{,}358\)</span>).</li>
+<li><strong>Conclusión:</strong> las diferencias entre las frecuencias observadas y las esperadas pueden explicarse por el azar; no hay evidencia de que el dado esté cargado.</li>
+</ol>
+</div>
+<div id="exm-mendel" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 2</strong></span> En sus célebres experimentos con arvejas, publicados en 1866, Gregor Mendel cruzó plantas de semillas redondas y amarillas con plantas de semillas rugosas y verdes. Según su teoría de la herencia, en la segunda generación las semillas debían aparecer en la proporción <span class="math inline">\(9 : 3 : 3 : 1\)</span> <span class="citation" data-cites="mendel1866">(<a href="#ref-mendel1866" role="doc-biblioref">Mendel, 1866</a>)</span>. Sus resultados fueron los de la <a href="#tbl-mendel" class="quarto-xref">Tabla&nbsp;2</a>.</p>
+<div id="tbl-mendel" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mendel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;2: Resultados del experimento de Mendel.
+</figcaption>
+<div aria-describedby="tbl-mendel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tipo de semilla</th>
+<th style="text-align: center;">Redonda y amarilla</th>
+<th style="text-align: center;">Rugosa y amarilla</th>
+<th style="text-align: center;">Redonda y verde</th>
+<th style="text-align: center;">Rugosa y verde</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Observada <span class="math inline">\(o_i\)</span></td>
+<td style="text-align: center;">315</td>
+<td style="text-align: center;">101</td>
+<td style="text-align: center;">108</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: center;">556</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Proporción según la teoría</td>
+<td style="text-align: center;">9/16</td>
+<td style="text-align: center;">3/16</td>
+<td style="text-align: center;">3/16</td>
+<td style="text-align: center;">1/16</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Esperada <span class="math inline">\(e_i\)</span></td>
+<td style="text-align: center;">312,75</td>
+<td style="text-align: center;">104,25</td>
+<td style="text-align: center;">104,25</td>
+<td style="text-align: center;">34,75</td>
+<td style="text-align: center;">556</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Con <span class="math inline">\(\nu = 4 - 1 = 3\)</span> grados de libertad, <span class="math display">\[
+\chi^2_{\text{obs}} = \frac{(315 - 312{,}75)^2}{312{,}75} + \frac{(101 - 104{,}25)^2}{104{,}25} + \frac{(108 - 104{,}25)^2}{104{,}25} + \frac{(32 - 34{,}75)^2}{34{,}75} = 0{,}47,
+\]</span> muy por debajo de <span class="math inline">\(\chi^2_{0{,}95;\,3} = 7{,}81\)</span> (valor p <span class="math inline">\(= 0{,}93\)</span>). Los datos son totalmente compatibles con la teoría de Mendel.</p>
+</div>
+<p>En R, la prueba se hace con <code>chisq.test()</code>, indicando las frecuencias observadas y, con el argumento <code>p</code>, las probabilidades de <span class="math inline">\(H_0\)</span>. Si no se indica <code>p</code>, se supone que todas las categorías son igualmente probables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>dado <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">22</span>, <span class="dv">16</span>, <span class="dv">25</span>, <span class="dv">14</span>, <span class="dv">25</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(dado)                         <span class="co"># H0: todas las caras igualmente probables</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Chi-squared test for given probabilities
+
+data:  dado
+X-squared = 5.5, df = 5, p-value = 0.3579</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mendel <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">315</span>, <span class="dv">101</span>, <span class="dv">108</span>, <span class="dv">32</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>prueba_mendel <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(mendel, <span class="at">p =</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">16</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>prueba_mendel</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Chi-squared test for given probabilities
+
+data:  mendel
+X-squared = 0.47002, df = 3, p-value = 0.9254</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>prueba_mendel<span class="sc">$</span>expected                   <span class="co"># frecuencias esperadas</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 312.75 104.25 104.25  34.75</code></pre>
+</div>
+</div>
+</section>
+<section id="ajuste-a-una-distribución-discreta" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="ajuste-a-una-distribución-discreta"><span class="header-section-number">2.2</span> Ajuste a una distribución discreta</h3>
+<p>Para una variable cuantitativa discreta, las categorías son sus valores posibles (agrupando los extremos si hace falta), y las probabilidades <span class="math inline">\(p_i\)</span> se calculan con la distribución de <span class="math inline">\(H_0\)</span>: binomial, de Poisson, etc. Si los parámetros de esa distribución no se conocen, se estiman con los datos, y por cada parámetro estimado se resta un grado de libertad.</p>
+<div id="exm-analgesico-binomial" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 3</strong></span> En un estudio para determinar la aceptación de un nuevo analgésico, 100 médicos seleccionaron, cada uno, una muestra de 25 pacientes. Después de tomar el nuevo analgésico durante un período determinado, cada paciente indicó si lo prefería al que tomaba antes. Para cada médico se registró cuántos de sus 25 pacientes prefirieron el nuevo analgésico (<a href="#tbl-analgesico" class="quarto-xref">Tabla&nbsp;3</a>) <span class="citation" data-cites="daniel1987">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, pp. 468-470</a>)</span>. ¿Son compatibles estos datos con una distribución binomial?</p>
+<ul>
+<li><strong>Hipótesis:</strong> <span class="math inline">\(H_0\)</span>: el número de pacientes, de cada 25, que prefieren el nuevo analgésico sigue una distribución binomial con <span class="math inline">\(n = 25\)</span>; <span class="math inline">\(H_1\)</span>: no sigue esa distribución.</li>
+<li><strong>Estimación del parámetro.</strong> <span class="math inline">\(H_0\)</span> no especifica <span class="math inline">\(p\)</span>, así que se estima con los datos: en total, 500 de los 2500 pacientes prefirieron el nuevo analgésico, de modo que <span class="math inline">\(\hat{p} = 500/2500 = 0{,}20\)</span>.</li>
+<li><strong>Frecuencias esperadas.</strong> Con la distribución <span class="math inline">\(\text{Bin}(25;\ 0{,}20)\)</span> se calcula la probabilidad de cada valor, y la frecuencia esperada es <span class="math inline">\(e_i = 100\,p_i\)</span>. Por ejemplo, <span class="math inline">\(P(X = 0) = 0{,}8^{25} = 0{,}0038\)</span>, de modo que se esperarían <span class="math inline">\(0{,}38\)</span> médicos con ningún paciente a favor.</li>
+</ul>
+<div id="tbl-analgesico" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-analgesico-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;3: Número de pacientes, de 25, que prefieren el nuevo analgésico, según el médico.
+</figcaption>
+<div aria-describedby="tbl-analgesico-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pacientes que prefieren el nuevo analgésico</th>
+<th style="text-align: center;">0</th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">6</th>
+<th style="text-align: center;">7</th>
+<th style="text-align: center;">8</th>
+<th style="text-align: center;">9</th>
+<th style="text-align: center;">10 o más</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Médicos (observada <span class="math inline">\(o_i\)</span>)</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">17</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">100</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Esperada <span class="math inline">\(e_i\)</span></td>
+<td style="text-align: center;">0,38</td>
+<td style="text-align: center;">2,36</td>
+<td style="text-align: center;">7,08</td>
+<td style="text-align: center;">13,58</td>
+<td style="text-align: center;">18,67</td>
+<td style="text-align: center;">19,60</td>
+<td style="text-align: center;">16,33</td>
+<td style="text-align: center;">11,08</td>
+<td style="text-align: center;">6,23</td>
+<td style="text-align: center;">2,94</td>
+<td style="text-align: center;">1,73</td>
+<td style="text-align: center;">100</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Varias frecuencias esperadas son pequeñas. Daniel sigue la recomendación de Cochran (ninguna esperada menor que 1): agrupa solo las dos primeras clases, obtiene 10 clases y <span class="math inline">\(\nu = 10 - 1 - 1 = 8\)</span> grados de libertad, y un estadístico <span class="math inline">\(\chi^2_{\text{obs}} = 47{,}6\)</span>, muy significativo <span class="citation" data-cites="daniel1987">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, p. 470</a>)</span>. Con el criterio más conservador que adoptamos en este curso (ninguna esperada menor que 5), se agrupan los valores de 0 a 2 y los de 8 o más, lo que deja 7 clases:</p>
+<div id="tbl-analgesico-agrupado" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-analgesico-agrupado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;4: Ajuste a la binomial con las clases agrupadas.
+</figcaption>
+<div aria-describedby="tbl-analgesico-agrupado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pacientes</th>
+<th style="text-align: center;">0 a 2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">6</th>
+<th style="text-align: center;">7</th>
+<th style="text-align: center;">8 o más</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Observada <span class="math inline">\(o_i\)</span></td>
+<td style="text-align: center;">19</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">17</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">19</td>
+<td style="text-align: center;">100</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Esperada <span class="math inline">\(e_i\)</span></td>
+<td style="text-align: center;">9,82</td>
+<td style="text-align: center;">13,58</td>
+<td style="text-align: center;">18,67</td>
+<td style="text-align: center;">19,60</td>
+<td style="text-align: center;">16,33</td>
+<td style="text-align: center;">11,08</td>
+<td style="text-align: center;">10,91</td>
+<td style="text-align: center;">100</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\((o_i - e_i)^2/e_i\)</span></td>
+<td style="text-align: center;">8,575</td>
+<td style="text-align: center;">0,942</td>
+<td style="text-align: center;">4,025</td>
+<td style="text-align: center;">1,080</td>
+<td style="text-align: center;">0,027</td>
+<td style="text-align: center;">0,106</td>
+<td style="text-align: center;">5,994</td>
+<td style="text-align: center;">20,749</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Con <span class="math inline">\(\nu = 7 - 1 - 1 = 5\)</span> grados de libertad, <span class="math inline">\(\chi^2_{\text{obs}} = 20{,}75 &gt; \chi^2_{0{,}95;\,5} = 11{,}07\)</span> (valor p <span class="math inline">\(= 0{,}0009\)</span>; con <span class="math inline">\(\nu = k - 1 = 6\)</span>, sería 0,002). Con cualquiera de los dos criterios de agrupación <strong>se rechaza <span class="math inline">\(H_0\)</span></strong>: los datos no son compatibles con una distribución binomial.</p>
+<p>¿Por qué no se ajusta? La tabla lo sugiere: hay más médicos de lo esperado en los extremos (pocos o muchos pacientes a favor) y menos en el centro. En efecto, el número promedio de pacientes a favor por médico es 5, igual a <span class="math inline">\(25 \times 0{,}20\)</span>, pero su varianza es 6,40, mayor que la que predice la binomial, <span class="math inline">\(25 \times 0{,}20 \times 0{,}80 = 4\)</span>. Recuerde que la binomial supone que la probabilidad de éxito es la misma en todos los ensayos (capítulo 3 de Estadística I). Una explicación posible es que esa probabilidad no sea la misma para los pacientes de todos los médicos, por ejemplo porque atienden poblaciones distintas; los datos por sí solos no permiten confirmarlo.</p>
+</div>
+<p>Cuando se estiman parámetros, R no sabe cuántos grados de libertad restar, así que conviene calcular el valor p directamente:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>medicos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">17</span>, <span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">0</span>)    <span class="co"># para x = 0, 1, ..., 9, 10 o más</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>p_gorro <span class="ot">&lt;-</span> <span class="fu">sum</span>(x <span class="sc">*</span> medicos) <span class="sc">/</span> (<span class="dv">100</span> <span class="sc">*</span> <span class="dv">25</span>)              <span class="co"># 500 / 2500 = 0.20</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>probs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">25</span>, p_gorro), <span class="fu">pbinom</span>(<span class="dv">9</span>, <span class="dv">25</span>, p_gorro, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>esperadas <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> probs</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(esperadas, <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  0.38  2.36  7.08 13.58 18.67 19.60 16.33 11.08  6.23  2.94  1.73</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Agrupación del curso: 0 a 2, 3, 4, 5, 6, 7, 8 o más</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>obs_g <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(medicos[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]), medicos[<span class="dv">4</span><span class="sc">:</span><span class="dv">8</span>], <span class="fu">sum</span>(medicos[<span class="dv">9</span><span class="sc">:</span><span class="dv">11</span>]))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>esp_g <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(esperadas[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]), esperadas[<span class="dv">4</span><span class="sc">:</span><span class="dv">8</span>], <span class="fu">sum</span>(esperadas[<span class="dv">9</span><span class="sc">:</span><span class="dv">11</span>]))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>chi_obs <span class="ot">&lt;-</span> <span class="fu">sum</span>((obs_g <span class="sc">-</span> esp_g)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> esp_g)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>gl <span class="ot">&lt;-</span> <span class="fu">length</span>(obs_g) <span class="sc">-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="dv">1</span>                            <span class="co"># se estimó p</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">chi_obs =</span> chi_obs, <span class="at">gl =</span> gl, <span class="at">valor_p =</span> <span class="fu">pchisq</span>(chi_obs, gl, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     chi_obs           gl      valor_p 
+2.074958e+01 5.000000e+00 9.032098e-04 </code></pre>
+</div>
+</div>
+<div id="exm-llamadas-poisson" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 4</strong></span> En el ejercicio 8 del capítulo 1 de Estadística I se registró el número de llamadas recibidas por un centro de atención telefónica en cada uno de 40 minutos consecutivos. ¿Sigue el número de llamadas por minuto una distribución de Poisson?</p>
+<ul>
+<li><strong>Hipótesis:</strong> <span class="math inline">\(H_0\)</span>: el número de llamadas por minuto sigue una distribución de Poisson; <span class="math inline">\(H_1\)</span>: no la sigue.</li>
+<li><strong>Estimación del parámetro.</strong> <span class="math inline">\(H_0\)</span> no especifica el valor de <span class="math inline">\(\lambda\)</span>, así que se estima con la media muestral: <span class="math inline">\(\hat{\lambda} = \bar{x} = 89/40 = 2{,}225\)</span> llamadas por minuto.</li>
+<li><strong>Frecuencias esperadas.</strong> Con la distribución de Poisson(2,225) se calculan las probabilidades de cada valor y las frecuencias esperadas <span class="math inline">\(e_i = 40\,p_i\)</span>. La frecuencia esperada de 0 llamadas sería 4,32, menor que 5, de modo que se agrupan los valores 0 y 1. Del mismo modo, los valores de 4 o más se agrupan en una sola clase (<a href="#tbl-llamadas-poisson" class="quarto-xref">Tabla&nbsp;5</a>).</li>
+</ul>
+<div id="tbl-llamadas-poisson" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-llamadas-poisson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;5: Ajuste del número de llamadas por minuto a una distribución de Poisson.
+</figcaption>
+<div aria-describedby="tbl-llamadas-poisson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Llamadas por minuto</th>
+<th style="text-align: center;">0 o 1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4 o más</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Observada <span class="math inline">\(o_i\)</span></td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">40</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Probabilidad <span class="math inline">\(p_i\)</span> (Poisson)</td>
+<td style="text-align: center;">0,3485</td>
+<td style="text-align: center;">0,2675</td>
+<td style="text-align: center;">0,1984</td>
+<td style="text-align: center;">0,1856</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Esperada <span class="math inline">\(e_i\)</span></td>
+<td style="text-align: center;">13,94</td>
+<td style="text-align: center;">10,70</td>
+<td style="text-align: center;">7,94</td>
+<td style="text-align: center;">7,42</td>
+<td style="text-align: center;">40</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\((o_i - e_i)^2/e_i\)</span></td>
+<td style="text-align: center;">0,063</td>
+<td style="text-align: center;">0,158</td>
+<td style="text-align: center;">0,001</td>
+<td style="text-align: center;">0,024</td>
+<td style="text-align: center;">0,246</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<ul>
+<li><strong>Grados de libertad:</strong> hay <span class="math inline">\(k = 4\)</span> clases y se estimó <span class="math inline">\(m = 1\)</span> parámetro, así que <span class="math inline">\(\nu = 4 - 1 - 1 = 2\)</span>.</li>
+<li><strong>Decisión:</strong> <span class="math inline">\(\chi^2_{\text{obs}} = 0{,}246 &lt; \chi^2_{0{,}95;\,2} = 5{,}99\)</span> (valor p <span class="math inline">\(= 0{,}88\)</span>), de modo que no se rechaza <span class="math inline">\(H_0\)</span>. Con <span class="math inline">\(\nu = k - 1 = 3\)</span> grados de libertad, el valor p sería 0,97: la decisión es la misma. El modelo de Poisson describe bien el número de llamadas por minuto, como se había supuesto en el capítulo 3 de Estadística I.</li>
+</ul>
+</div>
+<p>En R, el cálculo es análogo al del ejemplo binomial:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>llamadas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>              <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">2</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fu">mean</span>(llamadas)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>observadas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(llamadas <span class="sc">&lt;=</span> <span class="dv">1</span>), <span class="fu">sum</span>(llamadas <span class="sc">==</span> <span class="dv">2</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">sum</span>(llamadas <span class="sc">==</span> <span class="dv">3</span>), <span class="fu">sum</span>(llamadas <span class="sc">&gt;=</span> <span class="dv">4</span>))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">ppois</span>(<span class="dv">1</span>, lambda), <span class="fu">dpois</span>(<span class="dv">2</span>, lambda), <span class="fu">dpois</span>(<span class="dv">3</span>, lambda),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ppois</span>(<span class="dv">3</span>, lambda, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>esperadas <span class="ot">&lt;-</span> <span class="fu">length</span>(llamadas) <span class="sc">*</span> p</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>chi_obs <span class="ot">&lt;-</span> <span class="fu">sum</span>((observadas <span class="sc">-</span> esperadas)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> esperadas)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>gl <span class="ot">&lt;-</span> <span class="fu">length</span>(observadas) <span class="sc">-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="dv">1</span>                    <span class="co"># se estimó lambda</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">chi_obs =</span> chi_obs, <span class="at">gl =</span> gl, <span class="at">valor_p =</span> <span class="fu">pchisq</span>(chi_obs, gl, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  chi_obs        gl   valor_p 
+0.2460846 2.0000000 0.8842263 </code></pre>
+</div>
+</div>
+</section>
+<section id="ajuste-a-una-distribución-continua" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="ajuste-a-una-distribución-continua"><span class="header-section-number">2.3</span> Ajuste a una distribución continua</h3>
+<p>Para una variable continua, los datos se agrupan primero en <strong>clases</strong>, como en la tabla de frecuencias agrupada del capítulo 1 de Estadística I, y se compara el número de observaciones de cada clase con el que predice la distribución de <span class="math inline">\(H_0\)</span>. La probabilidad de cada clase <span class="math inline">\([L_{i-1}, L_i)\)</span> se calcula como <span class="math inline">\(p_i = F(L_i) - F(L_{i-1})\)</span>, donde <span class="math inline">\(F\)</span> es la función de distribución acumulada de <span class="math inline">\(H_0\)</span>; la primera y la última clase se extienden hasta <span class="math inline">\(-\infty\)</span> y <span class="math inline">\(+\infty\)</span> para que las probabilidades sumen 1.</p>
+<div id="exm-pizza-normalidad" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 5</strong></span> En el capítulo 3 de Estadística I vimos que la distribución normal parecía describir bien los tiempos de entrega de la pizzería. Ahora podemos probarlo formalmente. Con las 1266 entregas, <span class="math inline">\(H_0\)</span>: el tiempo de entrega tiene distribución normal.</p>
+<p>Como <span class="math inline">\(H_0\)</span> no especifica la media ni la desviación estándar, se estiman con los datos: <span class="math inline">\(\bar{x} = 34{,}23\)</span> y <span class="math inline">\(s = 6{,}46\)</span> minutos (<span class="math inline">\(m = 2\)</span> parámetros). Los tiempos se agrupan en seis clases, y para cada una se calcula la probabilidad con la normal estimada. Por ejemplo, para la clase <span class="math inline">\([30, 35)\)</span>, <span class="math display">\[
+p_3 = \Phi\!\left(\frac{35 - 34{,}23}{6{,}46}\right) - \Phi\!\left(\frac{30 - 34{,}23}{6{,}46}\right) = 0{,}2911,
+\qquad e_3 = 1266 \times 0{,}2911 = 368{,}5 .
+\]</span></p>
+<div id="tbl-pizza-normal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pizza-normal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;6: Ajuste de los tiempos de entrega a una distribución normal.
+</figcaption>
+<div aria-describedby="tbl-pizza-normal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tiempo (minutos)</th>
+<th style="text-align: center;">Menos de 25</th>
+<th style="text-align: center;"><span class="math inline">\([25, 30)\)</span></th>
+<th style="text-align: center;"><span class="math inline">\([30, 35)\)</span></th>
+<th style="text-align: center;"><span class="math inline">\([35, 40)\)</span></th>
+<th style="text-align: center;"><span class="math inline">\([40, 45)\)</span></th>
+<th style="text-align: center;">45 o más</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Observada <span class="math inline">\(o_i\)</span></td>
+<td style="text-align: center;">98</td>
+<td style="text-align: center;">213</td>
+<td style="text-align: center;">371</td>
+<td style="text-align: center;">350</td>
+<td style="text-align: center;">175</td>
+<td style="text-align: center;">59</td>
+<td style="text-align: center;">1266</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Probabilidad <span class="math inline">\(p_i\)</span> (normal)</td>
+<td style="text-align: center;">0,0766</td>
+<td style="text-align: center;">0,1798</td>
+<td style="text-align: center;">0,2911</td>
+<td style="text-align: center;">0,2666</td>
+<td style="text-align: center;">0,1381</td>
+<td style="text-align: center;">0,0478</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Esperada <span class="math inline">\(e_i\)</span></td>
+<td style="text-align: center;">96,98</td>
+<td style="text-align: center;">227,62</td>
+<td style="text-align: center;">368,51</td>
+<td style="text-align: center;">337,54</td>
+<td style="text-align: center;">174,88</td>
+<td style="text-align: center;">60,48</td>
+<td style="text-align: center;">1266</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\((o_i - e_i)^2/e_i\)</span></td>
+<td style="text-align: center;">0,011</td>
+<td style="text-align: center;">0,939</td>
+<td style="text-align: center;">0,017</td>
+<td style="text-align: center;">0,460</td>
+<td style="text-align: center;">0,000</td>
+<td style="text-align: center;">0,036</td>
+<td style="text-align: center;">1,462</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Con <span class="math inline">\(\nu = 6 - 1 - 2 = 3\)</span> grados de libertad, <span class="math inline">\(\chi^2_{\text{obs}} = 1{,}46 &lt; \chi^2_{0{,}95;\,3} = 7{,}81\)</span> (valor p <span class="math inline">\(= 0{,}69\)</span>): no se rechaza <span class="math inline">\(H_0\)</span>; con <span class="math inline">\(\nu = k - 1 = 5\)</span>, el valor p sería 0,92, la misma decisión. La distribución normal es un buen modelo para los tiempos de entrega.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pizza <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"datos/pizza_delivery.xlsx"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>media <span class="ot">&lt;-</span> <span class="fu">mean</span>(pizza<span class="sc">$</span>time); desv <span class="ot">&lt;-</span> <span class="fu">sd</span>(pizza<span class="sc">$</span>time)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>limites <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">35</span>, <span class="dv">40</span>, <span class="dv">45</span>, <span class="cn">Inf</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>observadas <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="fu">cut</span>(pizza<span class="sc">$</span>time, <span class="at">breaks =</span> limites, <span class="at">right =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">pnorm</span>(limites, <span class="at">mean =</span> media, <span class="at">sd =</span> desv))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>esperadas <span class="ot">&lt;-</span> <span class="fu">nrow</span>(pizza) <span class="sc">*</span> p</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>chi_obs <span class="ot">&lt;-</span> <span class="fu">sum</span>((observadas <span class="sc">-</span> esperadas)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> esperadas)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>gl <span class="ot">&lt;-</span> <span class="fu">length</span>(observadas) <span class="sc">-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="dv">2</span>                   <span class="co"># se estimaron media y desviación</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">chi_obs =</span> chi_obs, <span class="at">gl =</span> gl, <span class="at">valor_p =</span> <span class="fu">pchisq</span>(chi_obs, gl, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  chi_obs        gl   valor_p 
+1.4624199 3.0000000 0.6909706 </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="La elección de las clases">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+La elección de las clases
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El resultado de la prueba chi-cuadrado para variables continuas depende de cuántas clases se usen y de dónde se ubiquen sus límites, y al agrupar se pierde información. Por eso, para variables continuas suelen preferirse las pruebas de la sección siguiente, que usan los datos individuales. La prueba chi-cuadrado sigue siendo útil cuando los datos solo están disponibles agrupados en una tabla de frecuencias. Daniel señala que, aunque en la literatura es frecuente usar la chi-cuadrado para probar la normalidad, no es la prueba más apropiada cuando la distribución de <span class="math inline">\(H_0\)</span> es continua, y recomienda la de Kolmogorov-Smirnov <span class="citation" data-cites="daniel1987">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, p. 468</a>)</span>.</p>
+</div>
+</div>
+</section>
+<section id="otras-pruebas-para-variables-continuas" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="otras-pruebas-para-variables-continuas"><span class="header-section-number">2.4</span> Otras pruebas para variables continuas</h3>
+<p>Para probar si una variable continua sigue una distribución dada hay pruebas que no requieren agrupar los datos <span class="citation" data-cites="devore2008">(<a href="#ref-devore2008" role="doc-biblioref">Devore, 2008, p. 584</a>)</span>:</p>
+<ul>
+<li><strong>La prueba de Shapiro-Wilk</strong>, específica para la <strong>normalidad</strong>, que ya usamos en los capítulos 3 y 4 para los residuales <span class="citation" data-cites="shapiro1965">(<a href="#ref-shapiro1965" role="doc-biblioref">Shapiro &amp; Wilk, 1965</a>)</span>. En estudios de simulación ha resultado ser una de las pruebas de normalidad con mayor potencia <span class="citation" data-cites="razali2011">(<a href="#ref-razali2011" role="doc-biblioref">Razali &amp; Wah, 2011</a>)</span>. En R, <code>shapiro.test(x)</code>, para muestras de 3 a 5000 observaciones.</li>
+<li><strong>La prueba de Kolmogorov-Smirnov</strong>, que compara la función de distribución acumulada <strong>empírica</strong> de los datos (la ojiva de Estadística
+<ol type="I">
+<li>con la acumulada de la distribución de <span class="math inline">\(H_0\)</span>. Su estadístico es la máxima distancia vertical entre las dos curvas. Sirve para cualquier distribución continua: en R, <code>ks.test(x, "pnorm", mean, sd)</code>, <code>ks.test(x, "pexp", rate)</code>, etc.</li>
+</ol></li>
+<li><strong>El gráfico Q-Q</strong>, que no es una prueba formal pero es la herramienta gráfica más útil: si los puntos siguen la recta, la distribución es adecuada.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Una precaución con Kolmogorov-Smirnov">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Una precaución con Kolmogorov-Smirnov
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La prueba de Kolmogorov-Smirnov supone que los parámetros de la distribución de <span class="math inline">\(H_0\)</span> se conocen. Si se estiman con los mismos datos, como la media y la desviación estándar en el ejemplo de la pizzería, la prueba se vuelve conservadora: tiende a no rechazar <span class="math inline">\(H_0\)</span>. Para la normalidad con parámetros estimados existe una corrección, la prueba de Lilliefors, disponible en el paquete <code>nortest</code> como <code>lillie.test()</code> <span class="citation" data-cites="lilliefors1967">(<a href="#ref-lilliefors1967" role="doc-biblioref">Lilliefors, 1967</a>)</span>.</p>
+</div>
+</div>
+<p>Para los tiempos de entrega, la prueba de Shapiro-Wilk da un valor p de 0,18 y la de Kolmogorov-Smirnov, de 0,77: ninguna rechaza la normalidad, en acuerdo con la prueba chi-cuadrado y con el gráfico Q-Q de la <a href="#fig-qq-pizza" class="quarto-xref">Figura&nbsp;1</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(pizza<span class="sc">$</span>time)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  pizza$time
+W = 0.99815, p-value = 0.1771</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ks.test</span>(pizza<span class="sc">$</span>time, <span class="st">"pnorm"</span>, <span class="at">mean =</span> media, <span class="at">sd =</span> desv)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Asymptotic one-sample Kolmogorov-Smirnov test
+
+data:  pizza$time
+D = 0.018592, p-value = 0.7739
+alternative hypothesis: two-sided</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pizza, <span class="fu">aes</span>(<span class="at">sample =</span> time)) <span class="sc">+</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>(<span class="at">color =</span> <span class="st">"firebrick"</span>) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Cuantiles teóricos de la normal"</span>, <span class="at">y =</span> <span class="st">"Tiempo de entrega (minutos)"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-qq-pizza" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-qq-pizza-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap5-chi-cuadrado_files/figure-html/fig-qq-pizza-1.png" class="img-fluid figure-img" width="528">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-qq-pizza-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Gráfico Q-Q de los tiempos de entrega de la pizzería frente a la distribución normal.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="tablas-de-doble-entrada-la-prueba-de-independencia" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="tablas-de-doble-entrada-la-prueba-de-independencia"><span class="header-section-number">3</span> Tablas de doble entrada: la prueba de independencia</h2>
+<p>En el capítulo 1 de Estadística I organizamos los datos de dos variables cualitativas en una <strong>tabla de contingencia</strong> de <span class="math inline">\(r\)</span> filas y <span class="math inline">\(c\)</span> columnas, y en el capítulo 2 definimos que dos eventos <span class="math inline">\(A\)</span> y <span class="math inline">\(B\)</span> son independientes si <span class="math inline">\(P(A \cap B) = P(A)\,P(B)\)</span>. La prueba de independencia combina las dos ideas: con una muestra de <span class="math inline">\(n\)</span> unidades, clasificadas según dos variables, permite decidir si las variables son independientes en la población <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 374</a>)</span>.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: las dos variables son independientes.</li>
+<li><span class="math inline">\(H_1\)</span>: las dos variables no son independientes (están asociadas).</li>
+</ul>
+<section id="frecuencias-esperadas-y-grados-de-libertad" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="frecuencias-esperadas-y-grados-de-libertad"><span class="header-section-number">3.1</span> Frecuencias esperadas y grados de libertad</h3>
+<p>Sea <span class="math inline">\(o_{ij}\)</span> la frecuencia observada en la fila <span class="math inline">\(i\)</span> y la columna <span class="math inline">\(j\)</span>. Si <span class="math inline">\(H_0\)</span> es verdadera, la probabilidad de que una unidad caiga en esa celda es el producto de las probabilidades marginales, que se estiman con los totales de la tabla. Multiplicando por <span class="math inline">\(n\)</span> se obtiene la frecuencia esperada <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 375</a>)</span>: <span class="math display">\[
+e_{ij} = n \cdot \frac{\text{total de la fila } i}{n} \cdot \frac{\text{total de la columna } j}{n} = \frac{(\text{total de la fila } i) \times (\text{total de la columna } j)}{n} .
+\]</span> El estadístico es el de Pearson, sumado sobre las <span class="math inline">\(rc\)</span> celdas de la tabla, <span class="math display">\[
+\chi^2 = \sum_{i=1}^{r}\sum_{j=1}^{c} \frac{(o_{ij} - e_{ij})^2}{e_{ij}},
+\]</span> y, si <span class="math inline">\(H_0\)</span> es verdadera, tiene aproximadamente una distribución chi-cuadrado con <span class="math display">\[
+\nu = (r - 1)(c - 1)
+\]</span> grados de libertad: es el número de celdas que se pueden llenar libremente cuando se conocen los totales de las filas y de las columnas <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, pp. 375-376</a>)</span>. Como en la bondad de ajuste, se rechaza <span class="math inline">\(H_0\)</span> si <span class="math inline">\(\chi^2_{\text{obs}} &gt; \chi^2_{1-\alpha;\,\nu}\)</span>.</p>
+<div id="exm-reforma-fiscal" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 6</strong></span> Para saber si la opinión de los votantes sobre una nueva reforma fiscal es independiente de su nivel de ingresos, se clasificó a una muestra aleatoria de 1000 votantes según su nivel de ingresos y según si estaban a favor de la reforma o en contra <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, pp. 374-376</a>)</span>. La <a href="#tbl-reforma" class="quarto-xref">Tabla&nbsp;7</a> muestra las frecuencias observadas y, entre paréntesis, las esperadas.</p>
+<div id="tbl-reforma" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-reforma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;7: Opinión sobre la reforma fiscal según el nivel de ingresos (frecuencias esperadas entre paréntesis).
+</figcaption>
+<div aria-describedby="tbl-reforma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Reforma fiscal</th>
+<th style="text-align: center;">Ingreso bajo</th>
+<th style="text-align: center;">Ingreso medio</th>
+<th style="text-align: center;">Ingreso alto</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A favor</td>
+<td style="text-align: center;">182 (200,9)</td>
+<td style="text-align: center;">213 (209,9)</td>
+<td style="text-align: center;">203 (187,2)</td>
+<td style="text-align: center;">598</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">En contra</td>
+<td style="text-align: center;">154 (135,1)</td>
+<td style="text-align: center;">138 (141,1)</td>
+<td style="text-align: center;">110 (125,8)</td>
+<td style="text-align: center;">402</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: center;">336</td>
+<td style="text-align: center;">351</td>
+<td style="text-align: center;">313</td>
+<td style="text-align: center;">1000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Por ejemplo, la frecuencia esperada de votantes de ingreso bajo a favor es <span class="math inline">\(e_{11} = (598)(336)/1000 = 200{,}9\)</span>. Con <span class="math inline">\(\nu = (2 - 1)(3 - 1) = 2\)</span>, <span class="math display">\[
+\chi^2_{\text{obs}} = \frac{(182 - 200{,}9)^2}{200{,}9} + \cdots + \frac{(110 - 125{,}8)^2}{125{,}8} = 7{,}88 &gt; \chi^2_{0{,}95;\,2} = 5{,}99,
+\]</span> con un valor p de 0,020: se rechaza <span class="math inline">\(H_0\)</span>. La opinión sobre la reforma fiscal y el nivel de ingresos no son independientes. (Walpole et al. obtienen 7,85, porque redondean las frecuencias esperadas a un decimal).</p>
+</div>
+</section>
+<section id="son-independientes-el-hábito-de-fumar-y-el-género" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="son-independientes-el-hábito-de-fumar-y-el-género"><span class="header-section-number">3.2</span> ¿Son independientes el hábito de fumar y el género?</h3>
+<p>En el capítulo 2 de Estadística I, con la tabla del hábito de fumar según el género de 233 personas, encontramos que la probabilidad de fumar no era la misma para hombres y mujeres en la muestra, y dejamos abierta una pregunta: ¿es esa diferencia lo bastante grande como para concluir que, en la población, las dos variables no son independientes? Ahora podemos responderla.</p>
+<div id="exm-fumar-genero" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 7</strong></span> &nbsp;</p>
+<div id="tbl-fumar-genero" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fumar-genero-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;8: Hábito de fumar según el género (frecuencias esperadas entre paréntesis).
+</figcaption>
+<div aria-describedby="tbl-fumar-genero-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Hábito de fumar</th>
+<th style="text-align: center;">Hombre</th>
+<th style="text-align: center;">Mujer</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sí</td>
+<td style="text-align: center;">65 (57,01)</td>
+<td style="text-align: center;">58 (65,99)</td>
+<td style="text-align: center;">123</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">No</td>
+<td style="text-align: center;">43 (50,99)</td>
+<td style="text-align: center;">67 (59,01)</td>
+<td style="text-align: center;">110</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: center;">108</td>
+<td style="text-align: center;">125</td>
+<td style="text-align: center;">233</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Con <span class="math inline">\(\nu = (2 - 1)(2 - 1) = 1\)</span>, <span class="math inline">\(\chi^2_{\text{obs}} = 4{,}42 &gt; \chi^2_{0{,}95;\,1} = 3{,}84\)</span> (valor p <span class="math inline">\(= 0{,}036\)</span>), de modo que, con <span class="math inline">\(\alpha = 0{,}05\)</span>, se rechaza la hipótesis de independencia: el hábito de fumar y el género están asociados. En la muestra, fuma el 60,2 % de los hombres y el 46,4 % de las mujeres.</p>
+<p>En una tabla de <span class="math inline">\(2 \times 2\)</span>, la prueba de independencia equivale a la prueba <span class="math inline">\(z\)</span> para la diferencia de dos proporciones del capítulo 2 <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 378</a>)</span>: con la proporción combinada, se obtiene <span class="math inline">\(z_{\text{obs}} = 2{,}10\)</span>, y <span class="math inline">\(2{,}10^2 = 4{,}42\)</span>, el mismo valor del estadístico chi-cuadrado, con el mismo valor p.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="La corrección de Yates en tablas de 2 × 2">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+La corrección de Yates en tablas de 2 × 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Con un solo grado de libertad, la aproximación chi-cuadrado puede ser deficiente. Por eso, en las tablas de <span class="math inline">\(2 \times 2\)</span> se suele aplicar la <strong>corrección de Yates por continuidad</strong>, <span class="math display">\[
+\chi^2_{\text{corregida}} = \sum \frac{(\lvert o_{ij} - e_{ij}\rvert - 0{,}5)^2}{e_{ij}} .
+\]</span> Si las frecuencias esperadas son grandes, los resultados con y sin corrección son casi iguales; Walpole et al.&nbsp;recomiendan aplicarla cuando las esperadas están entre 5 y 10, y usar la prueba exacta de Fisher cuando son menores que 5 <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 376</a>)</span>. La función <code>chisq.test()</code> de R aplica la corrección por defecto en las tablas de <span class="math inline">\(2 \times 2\)</span> <span class="citation" data-cites="rcore2024">(<a href="#ref-rcore2024" role="doc-biblioref">R Core Team, 2024</a>)</span>. Para la tabla del hábito de fumar, el estadístico corregido es 3,88 (valor p <span class="math inline">\(= 0{,}049\)</span>): la conclusión no cambia, aunque queda muy cerca del límite.</p>
+</div>
+</div>
+<div id="exm-pizza-independencia" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 8</strong></span> En la pizzería, ¿depende de la sucursal que una entrega tarde más de 30 minutos? Con las 1266 entregas se construye la tabla de contingencia de la sucursal y de si la entrega tardó más de 30 minutos, y se aplica la prueba con R:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>pizza <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"datos/pizza_delivery.xlsx"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>tabla <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">sucursal =</span> pizza<span class="sc">$</span>branch, <span class="at">demorada =</span> pizza<span class="sc">$</span>time <span class="sc">&gt;</span> <span class="dv">30</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>tabla</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        demorada
+sucursal FALSE TRUE
+  Centre    58  363
+  East     174  236
+  West      84  351</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">prop.table</span>(tabla, <span class="at">margin =</span> <span class="dv">1</span>), <span class="dv">3</span>)    <span class="co"># proporciones por sucursal</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        demorada
+sucursal FALSE  TRUE
+  Centre 0.138 0.862
+  East   0.424 0.576
+  West   0.193 0.807</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>prueba <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tabla)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>prueba</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  tabla
+X-squared = 102.4, df = 2, p-value &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>prueba<span class="sc">$</span>expected                           <span class="co"># frecuencias esperadas</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        demorada
+sucursal    FALSE     TRUE
+  Centre 105.0837 315.9163
+  East   102.3381 307.6619
+  West   108.5782 326.4218</code></pre>
+</div>
+</div>
+<p>El estadístico es <span class="math inline">\(\chi^2_{\text{obs}} = 102{,}4\)</span> con 2 grados de libertad, y el valor p es prácticamente cero: el porcentaje de entregas demoradas depende de la sucursal. Es de 86,2 % en Centre, 80,7 % en West y apenas 57,6 % en East, lo que concuerda con lo que vimos en los capítulos 1 y 2: la sucursal East entrega más rápido.</p>
+</div>
+</section>
+</section>
+<section id="tablas-de-doble-entrada-la-prueba-de-homogeneidad" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="tablas-de-doble-entrada-la-prueba-de-homogeneidad"><span class="header-section-number">4</span> Tablas de doble entrada: la prueba de homogeneidad</h2>
+<p>En la prueba de independencia se toma <strong>una sola muestra</strong> de una población, y cada unidad se clasifica según las dos variables: los totales de las filas y de las columnas son aleatorios, no los controla el investigador. Pero a veces el investigador <strong>fija de antemano</strong> los totales de una de las variables: toma muestras independientes, de tamaños determinados, de varias poblaciones, y clasifica cada unidad según la otra variable <span class="citation" data-cites="daniel1987 walpole2012">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, p. 487</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 376</a>)</span>. La pregunta ya no es si dos variables son independientes, sino si las poblaciones son <strong>homogéneas</strong>, es decir, si tienen la misma distribución:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: las <span class="math inline">\(c\)</span> poblaciones tienen la misma distribución (las mismas proporciones en cada categoría).</li>
+<li><span class="math inline">\(H_1\)</span>: al menos una población tiene una distribución diferente.</li>
+</ul>
+<p>Aunque la pregunta y el diseño son distintos, los cálculos son <strong>exactamente los mismos</strong> que en la prueba de independencia: las frecuencias esperadas se obtienen con los totales de filas y columnas, el estadístico es el de Pearson y los grados de libertad son <span class="math inline">\((r - 1)(c - 1)\)</span> <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, pp. 376-377</a>)</span>. Cuando la variable observada tiene solo dos categorías (éxito y fracaso), la prueba de homogeneidad es la prueba de que <span class="math inline">\(k\)</span> proporciones son iguales, <span class="math inline">\(H_0: p_1 = p_2 = \cdots = p_k\)</span>, que generaliza la comparación de dos proporciones del capítulo 2 <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 378</a>)</span>.</p>
+<div id="exm-turnos" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 9</strong></span> En un taller se quiere saber si la proporción de artículos defectuosos es la misma en los turnos matutino, vespertino y nocturno. Se registraron los artículos producidos en cada turno y cuántos fueron defectuosos <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 379</a>)</span>:</p>
+<div id="tbl-turnos" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-turnos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;9: Artículos defectuosos por turno (frecuencias esperadas entre paréntesis).
+</figcaption>
+<div aria-describedby="tbl-turnos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: center;">Matutino</th>
+<th style="text-align: center;">Vespertino</th>
+<th style="text-align: center;">Nocturno</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Defectuosos</td>
+<td style="text-align: center;">45 (56,97)</td>
+<td style="text-align: center;">55 (56,67)</td>
+<td style="text-align: center;">70 (56,37)</td>
+<td style="text-align: center;">170</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">No defectuosos</td>
+<td style="text-align: center;">905 (893,03)</td>
+<td style="text-align: center;">890 (888,33)</td>
+<td style="text-align: center;">870 (883,63)</td>
+<td style="text-align: center;">2665</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: center;">950</td>
+<td style="text-align: center;">945</td>
+<td style="text-align: center;">940</td>
+<td style="text-align: center;">2835</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Se plantea <span class="math inline">\(H_0: p_1 = p_2 = p_3\)</span> contra <span class="math inline">\(H_1\)</span>: las tres proporciones no son iguales, con <span class="math inline">\(\alpha = 0{,}025\)</span>. Con <span class="math inline">\(\nu = (2 - 1)(3 - 1) = 2\)</span>, el valor crítico es <span class="math inline">\(\chi^2_{0{,}975;\,2} = 7{,}38\)</span>, y <span class="math inline">\(\chi^2_{\text{obs}} = 6{,}23\)</span> (valor p <span class="math inline">\(= 0{,}044\)</span>). No se rechaza <span class="math inline">\(H_0\)</span> con <span class="math inline">\(\alpha = 0{,}025\)</span>, aunque, como advierten Walpole et al., con ese valor p sería riesgoso concluir que la proporción de defectuosos es la misma en los tres turnos: con <span class="math inline">\(\alpha = 0{,}05\)</span> se rechazaría. (Walpole et al.&nbsp;obtienen 6,29 porque redondean las frecuencias esperadas).</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>turnos <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">45</span>, <span class="dv">55</span>, <span class="dv">70</span>, <span class="dv">905</span>, <span class="dv">890</span>, <span class="dv">870</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"Defectuosos"</span>, <span class="st">"No defectuosos"</span>),</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">c</span>(<span class="st">"Matutino"</span>, <span class="st">"Vespertino"</span>, <span class="st">"Nocturno"</span>)))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(turnos)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  turnos
+X-squared = 6.2339, df = 2, p-value = 0.04429</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Equivalente, como prueba de igualdad de tres proporciones:</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="fu">c</span>(<span class="dv">45</span>, <span class="dv">55</span>, <span class="dv">70</span>), <span class="fu">c</span>(<span class="dv">950</span>, <span class="dv">945</span>, <span class="dv">940</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    3-sample test for equality of proportions without continuity correction
+
+data:  c(45, 55, 70) out of c(950, 945, 940)
+X-squared = 6.2339, df = 2, p-value = 0.04429
+alternative hypothesis: two.sided
+sample estimates:
+    prop 1     prop 2     prop 3 
+0.04736842 0.05820106 0.07446809 </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="¿Independencia u homogeneidad?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+¿Independencia u homogeneidad?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La diferencia está en <strong>cómo se obtuvieron los datos</strong>, no en los cálculos. Si se tomó una sola muestra y luego se clasificó cada unidad según dos variables, es una prueba de independencia. Si se tomaron muestras separadas, de tamaños fijados de antemano, de varias poblaciones, es una prueba de homogeneidad. La distinción importa para formular correctamente las hipótesis y las conclusiones <span class="citation" data-cites="daniel1987">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, pp. 487-488</a>)</span>.</p>
+</div>
+</div>
+</section>
+<section id="la-prueba-exacta-de-fisher" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="la-prueba-exacta-de-fisher"><span class="header-section-number">5</span> La prueba exacta de Fisher</h2>
+<p>Cuando las frecuencias esperadas de una tabla de <span class="math inline">\(2 \times 2\)</span> son pequeñas, la aproximación chi-cuadrado no es confiable. En ese caso se usa la <strong>prueba exacta de Fisher</strong> (o de Fisher-Irwin), que no usa ninguna aproximación: se basa en la distribución hipergeométrica <span class="citation" data-cites="devore2008 walpole2012">(<a href="#ref-devore2008" role="doc-biblioref">Devore, 2008, p. 358</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 376</a>)</span>.</p>
+<p>La idea es la siguiente. Si se fijan los totales de las filas y de las columnas, y <span class="math inline">\(H_0\)</span> es verdadera, el número de éxitos en el primer grupo tiene una distribución hipergeométrica, la <span class="math inline">\(\text{Hip}(N, K, n)\)</span> del capítulo 3 de Estadística I, con <span class="math inline">\(N\)</span> igual al total de unidades, <span class="math inline">\(K\)</span> al total de éxitos y <span class="math inline">\(n\)</span> al tamaño del primer grupo. Con ella se calcula exactamente la probabilidad de obtener una tabla tan extrema como la observada.</p>
+<div id="exm-fisher" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 10</strong></span> En un estudio piloto, 12 pacientes se asignan al azar a dos grupos de 6: uno recibe un tratamiento nuevo y el otro, un placebo. Mejoran 5 de los 6 que recibieron el tratamiento y 1 de los 6 que recibieron el placebo (<a href="#tbl-fisher" class="quarto-xref">Tabla&nbsp;10</a>). ¿Hay asociación entre el tratamiento y la mejoría?</p>
+<div id="tbl-fisher" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fisher-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;10: Resultados del estudio piloto.
+</figcaption>
+<div aria-describedby="tbl-fisher-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: center;">Mejoró</th>
+<th style="text-align: center;">No mejoró</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Tratamiento</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Todas las frecuencias esperadas son iguales a 3, menores que 5, así que la prueba chi-cuadrado no es adecuada. Si <span class="math inline">\(H_0\)</span> es verdadera (no hay asociación), el número <span class="math inline">\(X\)</span> de pacientes que mejoraron en el grupo del tratamiento tiene distribución <span class="math inline">\(\text{Hip}(12, 6, 6)\)</span>:</p>
+<div id="tbl-hip-fisher" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-hip-fisher-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;11: Distribución hipergeométrica Hip(12, 6, 6).
+</figcaption>
+<div aria-describedby="tbl-hip-fisher-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><span class="math inline">\(x\)</span></th>
+<th style="text-align: center;">0</th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">6</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(P(X = x)\)</span></td>
+<td style="text-align: center;">0,0011</td>
+<td style="text-align: center;">0,0390</td>
+<td style="text-align: center;">0,2435</td>
+<td style="text-align: center;">0,4329</td>
+<td style="text-align: center;">0,2435</td>
+<td style="text-align: center;">0,0390</td>
+<td style="text-align: center;">0,0011</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Se observó <span class="math inline">\(x = 5\)</span>, cuya probabilidad es 0,0390. El valor p bilateral suma las probabilidades de todas las tablas tan probables o menos que la observada, que son las de <span class="math inline">\(x = 0, 1, 5\)</span> y <span class="math inline">\(6\)</span> <span class="citation" data-cites="rcore2024">(<a href="#ref-rcore2024" role="doc-biblioref">R Core Team, 2024</a>)</span>: <span class="math display">\[
+\text{valor p} = 0{,}0011 + 0{,}0390 + 0{,}0390 + 0{,}0011 = 0{,}080 .
+\]</span> Con <span class="math inline">\(\alpha = 0{,}05\)</span> no se rechaza <span class="math inline">\(H_0\)</span>: con una muestra tan pequeña, la diferencia entre 5 de 6 y 1 de 6 no alcanza a ser significativa. Si se hubiera usado, indebidamente, la prueba chi-cuadrado, se habría obtenido un valor p de 0,021 y se habría rechazado <span class="math inline">\(H_0\)</span>: la aproximación chi-cuadrado falla justamente cuando las frecuencias esperadas son pequeñas.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>piloto <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">5</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"Tratamiento"</span>, <span class="st">"Placebo"</span>),</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">c</span>(<span class="st">"Mejoró"</span>, <span class="st">"No mejoró"</span>)))</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(piloto)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Fisher's Exact Test for Count Data
+
+data:  piloto
+p-value = 0.08009
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+    0.800351 1389.408380
+sample estimates:
+odds ratio 
+  16.60315 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">m =</span> <span class="dv">6</span>, <span class="at">n =</span> <span class="dv">6</span>, <span class="at">k =</span> <span class="dv">6</span>)     <span class="co"># distribución Hip(12, 6, 6)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.001082251 0.038961039 0.243506494 0.432900433 0.243506494 0.038961039
+[7] 0.001082251</code></pre>
+</div>
+</div>
+</section>
+<section id="pruebas-chi-cuadrado-con-r" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="pruebas-chi-cuadrado-con-r"><span class="header-section-number">6</span> Pruebas chi-cuadrado con R</h2>
+<div id="tbl-resumen-chi" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-resumen-chi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;12: Resumen de las pruebas del capítulo.
+</figcaption>
+<div aria-describedby="tbl-resumen-chi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 30%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Prueba</th>
+<th style="text-align: left;">Pregunta</th>
+<th style="text-align: center;">Grados de libertad</th>
+<th style="text-align: left;">En R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Bondad de ajuste con proporciones especificadas</td>
+<td style="text-align: left;">¿Siguen los datos las proporciones <span class="math inline">\(p_1, \ldots, p_k\)</span>?</td>
+<td style="text-align: center;"><span class="math inline">\(k - 1\)</span></td>
+<td style="text-align: left;"><code>chisq.test(x, p = ...)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bondad de ajuste con <span class="math inline">\(m\)</span> parámetros estimados</td>
+<td style="text-align: left;">¿Siguen los datos una distribución (binomial, Poisson, normal)?</td>
+<td style="text-align: center;"><span class="math inline">\(k - 1 - m\)</span></td>
+<td style="text-align: left;">Cálculo con <code>pchisq()</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Independencia</td>
+<td style="text-align: left;">¿Son independientes dos variables?</td>
+<td style="text-align: center;"><span class="math inline">\((r - 1)(c - 1)\)</span></td>
+<td style="text-align: left;"><code>chisq.test(tabla)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Homogeneidad</td>
+<td style="text-align: left;">¿Tienen varias poblaciones la misma distribución?</td>
+<td style="text-align: center;"><span class="math inline">\((r - 1)(c - 1)\)</span></td>
+<td style="text-align: left;"><code>chisq.test(tabla)</code>, <code>prop.test(x, n)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Exacta de Fisher</td>
+<td style="text-align: left;">Independencia en tablas <span class="math inline">\(2 \times 2\)</span> con esperadas pequeñas</td>
+<td style="text-align: center;">No aplica</td>
+<td style="text-align: left;"><code>fisher.test(tabla)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Normalidad</td>
+<td style="text-align: left;">¿Proviene una variable continua de una normal?</td>
+<td style="text-align: center;">No aplica</td>
+<td style="text-align: left;"><code>shapiro.test(x)</code>, <code>ks.test(x, "pnorm", ...)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>El objeto que devuelve <code>chisq.test()</code> contiene, además del estadístico y del valor p, las frecuencias esperadas (<code>$expected</code>), que conviene revisar siempre para verificar el supuesto de las frecuencias esperadas, y los residuales de Pearson (<code>$residuals</code>), <span class="math inline">\((o_{ij} - e_{ij})/\sqrt{e_{ij}}\)</span>, que indican qué celdas contribuyen más al estadístico <span class="citation" data-cites="rcore2024">(<a href="#ref-rcore2024" role="doc-biblioref">R Core Team, 2024</a>)</span>.</p>
+</section>
+<section id="ejercicios-propuestos" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="ejercicios-propuestos"><span class="header-section-number">7</span> Ejercicios propuestos</h2>
+<section id="pruebas-de-bondad-de-ajuste" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="pruebas-de-bondad-de-ajuste"><span class="header-section-number">7.1</span> Pruebas de bondad de ajuste</h3>
+<ol type="1">
+<li><p>Una empresa de mercadeo afirma que, en una ciudad, el 40 % de los consumidores prefiere la marca A de una gaseosa, el 35 % la marca B y el 25 % la marca C. En una muestra de 300 consumidores, 105 prefirieron la marca A, 120 la B y 75 la C. ¿Hay evidencia, con <span class="math inline">\(\alpha = 0{,}05\)</span>, de que las preferencias difieren de las afirmadas por la empresa?</p></li>
+<li><p>Un banco quiere saber si el número de clientes que llegan a una oficina es el mismo todos los días hábiles. En una semana llegaron 132 clientes el lunes, 105 el martes, 98 el miércoles, 110 el jueves y 155 el viernes. Pruebe la hipótesis con <span class="math inline">\(\alpha = 0{,}05\)</span>.</p></li>
+<li><p>Un ejemplo clásico de la distribución de Poisson es el del estadístico Ladislaus von Bortkiewicz, que registró el número de soldados del ejército prusiano muertos por coces de caballo en 200 registros anuales de cuerpos de caballería <span class="citation" data-cites="bortkiewicz1898">(<a href="#ref-bortkiewicz1898" role="doc-biblioref">Bortkiewicz, 1898</a>)</span>: en 109 registros no hubo muertes, en 65 hubo una, en 22 dos, en 3 tres y en 1 cuatro.</p>
+<ol type="a">
+<li>Estime <span class="math inline">\(\lambda\)</span> y calcule las frecuencias esperadas.</li>
+<li>Agrupe las clases necesarias para cumplir la regla de Cochran.</li>
+<li>Pruebe, con <span class="math inline">\(\alpha = 0{,}05\)</span>, si los datos siguen una distribución de Poisson.</li>
+</ol></li>
+<li><p>En un proceso se inspeccionan muestras de 4 piezas, y se registra el número de defectuosas. En 100 muestras se obtuvieron: 0 defectuosas en 52 muestras, 1 en 34, 2 en 11 y 3 o más en 3. Pruebe si el número de defectuosas sigue una distribución binomial con <span class="math inline">\(n = 4\)</span>, estimando <span class="math inline">\(p\)</span> con los datos. (Sugerencia: <span class="math inline">\(\hat{p}\)</span> es el número total de defectuosas dividido entre el número total de piezas inspeccionadas).</p></li>
+<li><p>Con la base <code>pizza_delivery.xlsx</code>:</p>
+<ol type="a">
+<li>pruebe, con la prueba chi-cuadrado, si la temperatura de las pizzas sigue una distribución normal, usando clases de 5 °C de amplitud;</li>
+<li>aplique las pruebas de Shapiro-Wilk y de Kolmogorov-Smirnov y construya el gráfico Q-Q. ¿Coinciden las conclusiones?</li>
+</ol></li>
+<li><p>Genere en R una muestra de 200 datos de una distribución exponencial con media 10 (<code>rexp(200, rate = 1/10)</code>), y pruebe con Kolmogorov-Smirnov si provienen de una exponencial con esa media y si provienen de una normal. ¿Qué concluye en cada caso?</p></li>
+</ol>
+</section>
+<section id="pruebas-de-independencia-y-de-homogeneidad" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="pruebas-de-independencia-y-de-homogeneidad"><span class="header-section-number">7.2</span> Pruebas de independencia y de homogeneidad</h3>
+<ol start="7" type="1">
+<li><p>En una muestra de 300 egresados se registró el área de formación y si consiguieron empleo en los seis meses siguientes al grado:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: center;">Ingeniería</th>
+<th style="text-align: center;">Economía</th>
+<th style="text-align: center;">Salud</th>
+<th style="text-align: center;">Ciencias</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Con empleo</td>
+<td style="text-align: center;">62</td>
+<td style="text-align: center;">55</td>
+<td style="text-align: center;">48</td>
+<td style="text-align: center;">35</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sin empleo</td>
+<td style="text-align: center;">18</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">22</td>
+<td style="text-align: center;">35</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li>Plantee las hipótesis y calcule las frecuencias esperadas.</li>
+<li>¿Es independiente la empleabilidad del área de formación, con <span class="math inline">\(\alpha = 0{,}05\)</span>? Resuelva a mano y con <code>chisq.test()</code>.</li>
+<li>Examine los residuales de Pearson. ¿Qué área contribuye más al estadístico?</li>
+</ol></li>
+<li><p>Con los datos de la encuesta de 40 estudiantes de Estadística I (<code>encuesta_estudiantes.xlsx</code>), pruebe si el medio de transporte es independiente de la carrera. Revise las frecuencias esperadas: ¿se cumple el supuesto? Si no, agrupe categorías de manera razonable y repita la prueba.</p></li>
+<li><p>Se seleccionaron muestras independientes de 150 clientes de cada una de tres sucursales de un banco, y se les preguntó por su nivel de satisfacción (alto, medio, bajo). Explique por qué se trata de una prueba de homogeneidad y no de independencia, y plantee las hipótesis.</p></li>
+<li><p>Con la base <code>pizza_delivery.xlsx</code>, pruebe si la proporción de clientes que recibieron vino gratis (<code>free_wine</code>) es la misma para los distintos conductores (<code>driver</code>). ¿Es una prueba de independencia o de homogeneidad? Justifique.</p></li>
+<li><p>En un ensayo con 10 pacientes, 4 de 5 mejoraron con el tratamiento A y 1 de 5 con el tratamiento B.</p>
+<ol type="a">
+<li>¿Por qué no es adecuada la prueba chi-cuadrado?</li>
+<li>Calcule, con la distribución hipergeométrica, el valor p de la prueba exacta de Fisher y verifíquelo con <code>fisher.test()</code>.</li>
+</ol></li>
+<li><p>Para la tabla del hábito de fumar según el género, verifique con <code>prop.test()</code> y con <code>chisq.test()</code> que la prueba de dos proporciones y la prueba de independencia dan el mismo valor p, con y sin la corrección de Yates.</p></li>
+</ol>
+</section>
+</section>
+<section id="referencias" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referencias">Referencias</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-bortkiewicz1898" class="csl-entry" role="listitem">
+Bortkiewicz, L. von. (1898). <em>Das Gesetz der kleinen Zahlen</em>. B. G. Teubner.
+</div>
+<div id="ref-chernoff1954" class="csl-entry" role="listitem">
+Chernoff, H., &amp; Lehmann, E. L. (1954). The Use of Maximum Likelihood Estimates in <span class="math inline">\(\chi^2\)</span> Tests for Goodness of Fit. <em>The Annals of Mathematical Statistics</em>, <em>25</em>(3), 579-586. <a href="https://doi.org/10.1214/aoms/1177728726">https://doi.org/10.1214/aoms/1177728726</a>
+</div>
+<div id="ref-cochran1954" class="csl-entry" role="listitem">
+Cochran, W. G. (1954). Some Methods for Strengthening the Common <span class="math inline">\(\chi^2\)</span> Tests. <em>Biometrics</em>, <em>10</em>(4), 417-451. <a href="https://doi.org/10.2307/3001616">https://doi.org/10.2307/3001616</a>
+</div>
+<div id="ref-daniel1987" class="csl-entry" role="listitem">
+Daniel, W. W. (1987). <em>Bioestadística: Base para el análisis de las ciencias de la salud</em> (M. Guzmán Ortiz &amp; A. L. Babinsky Epstein, Trads.; 3.ª ed.). Limusa.
+</div>
+<div id="ref-devore2008" class="csl-entry" role="listitem">
+Devore, J. L. (2008). <em>Probabilidad y estadística para ingeniería y ciencias</em> (7.ª ed.). Cengage Learning.
+</div>
+<div id="ref-fisher1924" class="csl-entry" role="listitem">
+Fisher, R. A. (1924). The Conditions Under Which <span class="math inline">\(\chi^2\)</span> Measures the Discrepancey Between Observation and Hypothesis. <em>Journal of the Royal Statistical Society</em>, <em>87</em>(3), 442-450. <a href="https://doi.org/10.2307/2341149">https://doi.org/10.2307/2341149</a>
+</div>
+<div id="ref-lilliefors1967" class="csl-entry" role="listitem">
+Lilliefors, H. W. (1967). On the <span>Kolmogorov-Smirnov</span> Test for Normality with Mean and Variance Unknown. <em>Journal of the American Statistical Association</em>, <em>62</em>(318), 399-402. <a href="https://doi.org/10.1080/01621459.1967.10482916">https://doi.org/10.1080/01621459.1967.10482916</a>
+</div>
+<div id="ref-mendel1866" class="csl-entry" role="listitem">
+Mendel, G. (1866). Versuche über <span>Pflanzen-Hybriden</span>. <em>Verhandlungen des naturforschenden Vereines in Brünn</em>, <em>4</em>, 3-47.
+</div>
+<div id="ref-pearson1900" class="csl-entry" role="listitem">
+Pearson, K. (1900). On the Criterion that a Given System of Deviations from the Probable in the Case of a Correlated System of Variables is Such that it Can be Reasonably Supposed to Have Arisen from Random Sampling. <em>The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science</em>, <em>50</em>(302), 157-175. <a href="https://doi.org/10.1080/14786440009463897">https://doi.org/10.1080/14786440009463897</a>
+</div>
+<div id="ref-rcore2024" class="csl-entry" role="listitem">
+R Core Team. (2024). <em>R: A Language and Environment for Statistical Computing</em>. R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+</div>
+<div id="ref-razali2011" class="csl-entry" role="listitem">
+Razali, N. M., &amp; Wah, Y. B. (2011). Power Comparisons of <span>Shapiro-Wilk</span>, <span>Kolmogorov-Smirnov</span>, <span>Lilliefors</span> and <span>Anderson-Darling</span> Tests. <em>Journal of Statistical Modeling and Analytics</em>, <em>2</em>(1), 21-33.
+</div>
+<div id="ref-shapiro1965" class="csl-entry" role="listitem">
+Shapiro, S. S., &amp; Wilk, M. B. (1965). An Analysis of Variance Test for Normality (Complete Samples). <em>Biometrika</em>, <em>52</em>(3–4), 591-611. <a href="https://doi.org/10.1093/biomet/52.3-4.591">https://doi.org/10.1093/biomet/52.3-4.591</a>
+</div>
+<div id="ref-stigler2008" class="csl-entry" role="listitem">
+Stigler, S. M. (2008). Karl <span>Pearson’s</span> Theoretical Errors and the Advances They Inspired. <em>Statistical Science</em>, <em>23</em>(2), 261-271. <a href="https://doi.org/10.1214/08-STS256">https://doi.org/10.1214/08-STS256</a>
+</div>
+<div id="ref-walpole2012" class="csl-entry" role="listitem">
+Walpole, R. E., Myers, R. H., Myers, S. L., &amp; Ye, K. (2012). <em>Probabilidad y estadística para ingeniería y ciencias</em> (9.ª ed.). Pearson Educación.
+</div>
+</div>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/fabiosepulveda\.github\.io\/estadistica2\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Estadística II · Escuela de Matemáticas · Universidad Industrial de Santander</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

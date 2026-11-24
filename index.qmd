@@ -1,0 +1,30 @@
+---
+title: "Estadística II"
+---
+
+Bienvenidos al sitio del curso **Estadística II**, semestre {{< var semestre >}}.
+
+**Docente:** {{< var docente >}} — {{< var escuela >}}, {{< var universidad >}}.  
+**Contacto:** {{< var correo >}}
+
+Este curso continúa el de [Estadística I](https://fabiosepulveda.github.io/estadistica1/),
+cuyos temas (estadística descriptiva, probabilidad, distribuciones de
+probabilidad y distribuciones muestrales) son la base de todo lo que veremos.
+
+## ¿Cómo usar este sitio?
+
+En el menú **Apuntes** encontrará las notas de cada capítulo; cada página
+tiene un enlace para descargarla en **PDF**. En **Diapositivas** están las
+presentaciones de clase (dentro de una presentación, presione `F` para pantalla
+completa). Todo el código R de los apuntes se puede copiar con el botón que
+aparece en cada bloque.
+
+## Contenido
+
+| Capítulo | Tema |
+|:--:|:--|
+| 1 | [Estimación](apuntes/cap1-estimacion.qmd) |
+| 2 | [Pruebas de hipótesis](apuntes/cap2-hipotesis.qmd) |
+| 3 | [Regresión lineal simple](apuntes/cap3-regresion-simple.qmd) |
+| 4 | [Regresión lineal múltiple](apuntes/cap4-regresion-multiple.qmd) |
+| 5 | [Pruebas chi-cuadrado de bondad de ajuste e independencia](apuntes/cap5-chi-cuadrado.qmd) |

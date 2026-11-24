@@ -1,0 +1,473 @@
+---
+title: "Capítulo 2: Pruebas de hipótesis"
+subtitle: "Estadística II"
+author: "Fabio Humberto Sepúlveda Murillo"
+institute: "Escuela de Matemáticas · Universidad Industrial de Santander"
+format:
+  revealjs:
+    menu:
+      side: left
+    transition: fade
+    code-overflow: wrap
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(ggplot2)
+
+
+# Densidad normal estándar con las regiones de rechazo sombreadas
+regiones_rechazo <- function(alfa = 0.05) {
+  z <- seq(-3.6, 3.6, length.out = 700)
+  tipos <- c("Prueba bilateral (dos colas)", "Prueba unilateral izquierda",
+             "Prueba unilateral derecha")
+  d <- do.call(rbind, lapply(tipos, function(tp) data.frame(z = z, f = dnorm(z), tipo = tp)))
+  d$rechazo <- with(d, ifelse(tipo == tipos[1], abs(z) >= qnorm(1 - alfa / 2),
+                       ifelse(tipo == tipos[2], z <= qnorm(alfa), z >= qnorm(1 - alfa))))
+  d$tipo <- factor(d$tipo, levels = tipos)
+  etiquetas <- data.frame(
+    tipo = factor(c(tipos[1], tipos[1], tipos[1], tipos[2], tipos[2], tipos[3], tipos[3]),
+                  levels = tipos),
+    z = c(-2.9, 2.9, 0, -2.9, 0.3, 2.9, -0.3),
+    f = c(0.13, 0.13, 0.17, 0.13, 0.17, 0.13, 0.17),
+    lab = c('atop("Rechazo", alpha/2)', 'atop("Rechazo", alpha/2)',
+            'atop("No rechazo", 1 - alpha)',
+            'atop("Rechazo", alpha)', 'atop("No rechazo", 1 - alpha)',
+            'atop("Rechazo", alpha)', 'atop("No rechazo", 1 - alpha)'))
+  ggplot(d, aes(x = z, y = f)) +
+    geom_area(data = subset(d, rechazo), aes(group = interaction(tipo, z > 0)),
+              fill = "firebrick", alpha = 0.6) +
+    geom_line(color = "#29a8e0", linewidth = 1) +
+    geom_hline(yintercept = 0) +
+    geom_text(data = etiquetas, aes(label = lab), parse = TRUE, size = 3.6) +
+    facet_wrap(~ tipo, ncol = 1) +
+    labs(x = NULL, y = NULL) +
+    theme_void() +
+    theme(strip.text = element_text(size = 12, face = "bold", margin = margin(b = 4)))
+}
+# Distribución del estadístico bajo H0, con la región de rechazo (rojo),
+# el o los valores críticos y el valor observado del estadístico (verde)
+grafica_prueba <- function(f, desde, hasta, criticos, cola, obs,
+                           etq_crit, etq_obs, eje = "z") {
+  ancho <- hasta - desde
+  desde <- min(desde, obs - 0.08 * ancho)
+  hasta <- max(hasta, obs + 0.08 * ancho)
+  x <- seq(desde, hasta, length.out = 800)
+  d <- data.frame(x = x, y = f(x))
+  ymax <- max(d$y)
+  d$rechazo <- switch(cola,
+                      derecha   = d$x >= criticos[1],
+                      izquierda = d$x <= criticos[1],
+                      ambas     = d$x <= criticos[1] | d$x >= criticos[2])
+  d$lado <- d$x > mean(criticos)
+  ggplot(d, aes(x = x, y = y)) +
+    geom_area(data = subset(d, rechazo), aes(group = lado),
+              fill = "firebrick", alpha = 0.55) +
+    geom_line(color = "#29a8e0", linewidth = 1.1) +
+    annotate("segment", x = desde, xend = hasta, y = 0, yend = 0) +
+    annotate("segment", x = criticos, xend = criticos, y = -0.05 * ymax,
+             yend = f(criticos), color = "firebrick", linetype = "dashed") +
+    annotate("text", x = criticos, y = -0.12 * ymax, label = etq_crit,
+             parse = TRUE, color = "firebrick", size = 4) +
+    annotate("segment", x = obs, xend = obs, y = -0.19 * ymax, yend = 0.85 * ymax,
+             color = "darkgreen", linewidth = 1) +
+    annotate("text", x = obs, y = -0.27 * ymax, label = etq_obs,
+             parse = TRUE, color = "darkgreen", size = 4) +
+    annotate("text", x = hasta, y = 0.06 * ymax, label = eje, parse = TRUE,
+             hjust = 1, size = 4.5) +
+    coord_cartesian(ylim = c(-0.32 * ymax, 1.02 * ymax), clip = "off") +
+    theme_void()
+}
+theme_set(theme_minimal(base_size = 18))
+```
+
+## Contenido
+
+:::: {.columns}
+::: {.column width="50%"}
+1. Hipótesis estadística
+2. Errores tipo I y tipo II
+3. Pruebas de una y dos colas
+4. El valor p
+5. Pruebas para una media
+6. Prueba para una proporción
+:::
+::: {.column width="50%"}
+7. Prueba para una varianza
+8. Dos medias
+9. Dos proporciones
+10. Dos varianzas
+11. Pruebas con R
+:::
+::::
+
+## Una afirmación y unos datos
+
+El gerente de la pizzería afirma que el tiempo promedio de entrega es de
+**30 minutos**. Un cliente cree que es **mayor**.
+
+. . .
+
+- Promedio de la muestra: **30,4 min** → la diferencia puede deberse al azar.
+- Promedio de la muestra: **34 min** → difícil de explicar por el azar.
+
+. . .
+
+Las pruebas de hipótesis precisan qué significa "difícil de explicar por el
+azar" [@walpole2012, p. 319].
+
+# Hipótesis estadística {background-color="#2c5d8f"}
+
+## Hipótesis nula y alternativa
+
+- **$H_0$:** el estado actual, lo afirmado, "no hay diferencia".
+- **$H_1$:** lo que se quiere demostrar: el cambio, la diferencia.
+
+. . .
+
+La hipótesis nula se plantea para ser rechazada: es el complemento de la
+conclusión que se busca [@daniel1987, p. 223].
+
+Pizzería: $\quad H_0: \mu = 30 \quad$ contra $\quad H_1: \mu > 30$
+
+## La analogía del juicio
+
+:::: {.columns}
+::: {.column width="50%"}
+**Juicio**
+
+- $H_0$: el acusado es inocente.
+- $H_1$: es culpable.
+- Sin pruebas suficientes, se le **absuelve**.
+:::
+::: {.column width="50%"}
+**Prueba de hipótesis**
+
+- Se **rechaza** $H_0$, o
+- **no se rechaza** $H_0$.
+- Nunca "se acepta" ni "se demuestra" $H_0$.
+:::
+::::
+
+[@walpole2012, p. 321; @daniel1987, p. 223]
+
+## ¿Dónde va la igualdad?
+
+**Siempre en $H_0$** [@montgomery2018, p. 195; @devore2008, p. 286].
+
+| En el enunciado | ¿Dónde va? |
+|:--|:--|
+| "es igual a", "no ha cambiado" | $H_0$ ($=$) |
+| "al menos", "como mínimo" | $H_0$; $H_1$ con $<$ |
+| "como máximo", "no supera" | $H_0$; $H_1$ con $>$ |
+| "es diferente de", "ha cambiado" | $H_1$ ($\neq$) |
+| "es mayor que", "supera", "aumentó" | $H_1$ ($>$) |
+| "es menor que", "disminuyó" | $H_1$ ($<$) |
+
+# Errores tipo I y tipo II {background-color="#2c5d8f"}
+
+## Dos formas de equivocarse
+
+| | $H_0$ verdadera | $H_0$ falsa |
+|:--|:--:|:--:|
+| **Se rechaza $H_0$** | Error tipo I ($\alpha$) | ✔ |
+| **No se rechaza $H_0$** | ✔ | Error tipo II ($\beta$) |
+
+. . .
+
+- $\alpha$: **nivel de significancia**; por costumbre, 0,05 o 0,01 [@walpole2012, p. 332].
+- $1 - \beta$: **potencia** de la prueba.
+- Al bajar $\alpha$ sube $\beta$; para reducir ambos hay que aumentar $n$.
+- $\beta$ depende del valor verdadero del parámetro [@walpole2012, p. 323].
+
+# Pruebas de una y dos colas {background-color="#2c5d8f"}
+
+## Regiones de rechazo
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 6
+#| fig-align: center
+regiones_rechazo()
+```
+
+## Procedimiento general
+
+::: {.incremental}
+1. Plantear $H_0$ y $H_1$.
+2. Fijar $\alpha$.
+3. Elegir el estadístico de prueba y su distribución bajo $H_0$.
+4. Determinar la región de rechazo.
+5. Calcular el valor observado del estadístico.
+6. Decidir: ¿cae en la región de rechazo?
+7. Concluir **en el contexto** del problema.
+:::
+
+# El valor p {background-color="#2c5d8f"}
+
+## Definición y regla
+
+Probabilidad, **suponiendo $H_0$ verdadera**, de obtener un estadístico igual
+o más extremo que el observado [@daniel1987, p. 231; @devore2008, p. 313].
+
+. . .
+
+> Se rechaza $H_0$ si **valor p $\le \alpha$**.
+
+. . .
+
+::: {.callout-warning title="Lo que el valor p no es"}
+No es la probabilidad de que $H_0$ sea verdadera, ni mide la importancia
+práctica de un efecto. Conviene acompañarlo de un intervalo de confianza
+[@wasserstein2016].
+:::
+
+. . .
+
+**Relación con los intervalos:** se rechaza $H_0: \theta = \theta_0$ (bilateral)
+si y solo si $\theta_0$ no está en el intervalo [@montgomery2018, p. 206].
+
+# Pruebas para una media {background-color="#2c5d8f"}
+
+## Estadísticos y criterios
+
+| Caso | Estadístico | Distribución |
+|:--|:--:|:--:|
+| $\sigma^2$ conocida | $Z = \dfrac{\bar{X} - \mu_0}{\sigma/\sqrt{n}}$ | $N(0,1)$ |
+| $\sigma^2$ desconocida | $T = \dfrac{\bar{X} - \mu_0}{S/\sqrt{n}}$ | $t(n-1)$ |
+
+. . .
+
+| $H_1$ | Se rechaza $H_0$ si |
+|:--|:--|
+| $\mu \neq \mu_0$ | $\lvert z_{\text{obs}}\rvert > z_{1-\alpha/2}$ |
+| $\mu > \mu_0$ | $z_{\text{obs}} > z_{1-\alpha}$ |
+| $\mu < \mu_0$ | $z_{\text{obs}} < -z_{1-\alpha}$ |
+
+## Tiempo de armado: ¿más de 10 minutos?
+
+20 unidades, $\bar{x} = 10{,}2$, $\sigma = 0{,}6$. $\quad H_0: \mu = 10$ contra $H_1: \mu > 10$.
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_prueba(dnorm, -3.6, 3.6, 1.645, "derecha", 1.49,
+               'z["0,95"] == "1,645"', 'z[obs] == "1,49"')
+```
+
+$z_{\text{obs}} = 1{,}49 < 1{,}645$ → **no se rechaza** $H_0$ (valor p $= 0{,}068$).
+
+## Colesterol: ¿mayor de 200?
+
+15 pacientes, $\bar{x} = 209{,}73$, $\sigma = 10$.
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_prueba(dnorm, -3.6, 3.6, 1.645, "derecha", 3.77,
+               'z["0,95"] == "1,645"', 'z[obs] == "3,77"')
+```
+
+$z_{\text{obs}} = 3{,}77$ → **se rechaza** $H_0$ (valor p $\approx 0{,}0001$).
+
+## Maestría: ¿al menos 75 puntos?
+
+12 estudiantes, $\bar{x} = 72{,}08$, $s = 3{,}03$. $\quad H_0: \mu = 75$ contra $H_1: \mu < 75$.
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_prueba(function(x) dt(x, 11), -4, 4, -1.796, "izquierda", -3.34,
+               '-t["0,95;11"] == "-1,796"', 't[obs] == "-3,34"', eje = "t")
+```
+
+$t_{\text{obs}} = -3{,}34 < -1{,}796$ → **se rechaza** $H_0$ (valor p $= 0{,}003$).
+
+## En R
+
+```{r}
+#| echo: true
+puntajes <- c(72, 74, 78, 69, 71, 73, 70, 76, 68, 74, 71, 69)
+t.test(puntajes, mu = 75, alternative = "less")
+```
+
+# Prueba para una proporción {background-color="#2c5d8f"}
+
+## El estadístico usa $p_0$
+
+$$
+Z = \frac{\hat{p} - p_0}{\sqrt{p_0(1 - p_0)/n}}
+$$
+
+Bajo $H_0$, el error estándar es conocido [@daniel1987, pp. 261--262; @walpole2012, p. 362].
+
+. . .
+
+**Fármaco nuevo:** 70 de 100 sienten alivio; el usual, 60 % [@walpole2012, p. 363].
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.2
+#| fig-align: center
+grafica_prueba(dnorm, -3.6, 3.6, 1.645, "derecha", 2.04,
+               'z["0,95"] == "1,645"', 'z[obs] == "2,04"')
+```
+
+$z_{\text{obs}} = 2{,}04 > 1{,}645$ → **se rechaza** $H_0$: el nuevo es superior.
+
+## Pedidos a tiempo: prueba bilateral
+
+110 de 150 a tiempo; la empresa afirma 80 %. $\quad H_1: p \neq 0{,}8$.
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_prueba(dnorm, -3.6, 3.6, c(-1.96, 1.96), "ambas", -2.04,
+               c('-z["0,975"] == "-1,96"', 'z["0,975"] == "1,96"'), 'z[obs] == "-2,04"')
+```
+
+$\lvert z_{\text{obs}}\rvert = 2{,}04 > 1{,}96$ → **se rechaza** $H_0$ (valor p $= 0{,}041$).
+
+# Prueba para una varianza {background-color="#2c5d8f"}
+
+## Llenado de botellas
+
+$\chi^2 = \dfrac{(n-1)S^2}{\sigma_0^2} \sim \chi^2(n-1)$, población **normal** [@montgomery2018, p. 224].
+
+$H_0: \sigma^2 = 0{,}0004$ contra $H_1: \sigma^2 > 0{,}0004$, con 10 botellas.
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_prueba(function(x) dchisq(x, 9), 0, 26, 16.92, "derecha", 17.22,
+               'chi["0,95;9"]^2 == "16,92"', 'chi[obs]^2 == "17,22"', eje = "chi^2")
+```
+
+$\chi^2_{\text{obs}} = 17{,}22 > 16{,}92$ → **se rechaza** $H_0$ (valor p $= 0{,}045$).
+
+## Call center: prueba bilateral
+
+$H_0: \sigma^2 = 36$ contra $H_1: \sigma^2 \neq 36$, con 15 llamadas.
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_prueba(function(x) dchisq(x, 14), 0, 35, c(5.63, 26.12), "ambas", 6.16,
+               c('chi["0,025;14"]^2 == "5,63"', 'chi["0,975;14"]^2 == "26,12"'),
+               'chi[obs]^2 == "6,16"', eje = "chi^2")
+```
+
+$\chi^2_{\text{obs}} = 6{,}16$ está entre 5,63 y 26,12 → **no se rechaza** $H_0$.
+
+Con distribuciones asimétricas, el valor p bilateral no tiene una única
+definición [@daniel1987, p. 268].
+
+# Pruebas para dos poblaciones {background-color="#2c5d8f"}
+
+## Dos medias: el ruido
+
+¿Tarda la tarea **más de 2 minutos** más con ruido severo? $\quad H_0: \mu_2 - \mu_1 = 2$ contra $H_1: \mu_2 - \mu_1 > 2$.
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_prueba(function(x) dt(x, 30), -3.8, 3.8, 2.457, "derecha", 2.54,
+               't["0,99;30"] == "2,457"', 't[obs] == "2,54"', eje = "t")
+```
+
+Varianzas iguales, 30 gl: $t_{\text{obs}} = 2{,}54 > 2{,}457$ → **se rechaza** $H_0$ con $\alpha = 0{,}01$.
+
+## Muestras pareadas: supermercados
+
+¿Es más caro el supermercado B? Diferencias por producto: $H_0: \mu_D = 0$ contra $H_1: \mu_D > 0$.
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_prueba(function(x) dt(x, 7), -4, 4.6, 1.895, "derecha", 4.15,
+               't["0,95;7"] == "1,895"', 't[obs] == "4,15"', eje = "t")
+```
+
+$t_{\text{obs}} = 4{,}15$ → **se rechaza** $H_0$ (valor p $= 0{,}002$).
+
+## Dos proporciones: la planta química
+
+Bajo $H_0: p_X = p_Y$, se usa la **proporción combinada** $\hat{p} = \frac{X + Y}{n_X + n_Y}$ [@walpole2012, p. 364].
+
+Pueblo 120/200, condado 240/500: $\hat{p} = 0{,}514$.
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.2
+#| fig-align: center
+grafica_prueba(dnorm, -3.6, 3.6, 1.645, "derecha", 2.87,
+               'z["0,95"] == "1,645"', 'z[obs] == "2,87"')
+```
+
+$z_{\text{obs}} = 2{,}87$ → **se rechaza** $H_0$: más apoyo en el pueblo.
+
+## Dos varianzas: ¿supuesto razonable?
+
+En el ejemplo del ruido, ¿son iguales las varianzas? ($\alpha = 0{,}10$)
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+grafica_prueba(function(x) df(x, 15, 15), 0, 3.6, c(0.416, 2.403), "ambas", 0.864,
+               c('f["0,05;15,15"] == "0,416"', 'f["0,95;15,15"] == "2,403"'),
+               'f[obs] == "0,864"', eje = "f")
+```
+
+$f_{\text{obs}} = 0{,}864$ → **no se rechaza** $H_0$: el supuesto es razonable.
+
+. . .
+
+La prueba F es sensible a la falta de normalidad [@montgomery2018, pp. 268, 271];
+ante dudas, mejor usar Welch directamente [@delacre2017].
+
+# Pruebas con R {background-color="#2c5d8f"}
+
+## Resumen
+
+| Prueba | En R |
+|:--|:--|
+| Una media | `t.test(x, mu = , alternative = )` |
+| Una proporción | `prop.test(x, n, p = , correct = FALSE)` |
+| Dos medias | `t.test(x, y)` o `var.equal = TRUE` |
+| Pareadas | `t.test(x, y, paired = TRUE)` |
+| Dos proporciones | `prop.test(c(x, y), c(nx, ny))` |
+| Dos varianzas | `var.test(x, y)` |
+
+`alternative`: `"two.sided"`, `"greater"` o `"less"`. En la salida: `t`, `df`, `p-value`.
+
+## Para practicar
+
+- Los **16 ejercicios** del capítulo están en los apuntes.
+- Las 14 gráficas de regiones de rechazo están en los apuntes, una por ejemplo.
+
+## Referencias {.smaller .scrollable}
+
+::: {#refs}
+:::

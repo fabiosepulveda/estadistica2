@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Capítulo 1: Estimación – Estadística II</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-80108d5cb44f5b9fc79a3a6e84303618.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-249f407ffdbc08f6e4c3f777220c47f4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-80108d5cb44f5b9fc79a3a6e84303618.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Estadística II</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Buscar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Inicio</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../programa.html"> 
+<span class="menu-text">Programa</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apuntes" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Apuntes</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-apuntes">    
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap1-estimacion.html">
+ <span class="dropdown-text">1. Estimación</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap2-hipotesis.html">
+ <span class="dropdown-text">2. Pruebas de hipótesis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap3-regresion-simple.html">
+ <span class="dropdown-text">3. Regresión lineal simple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap4-regresion-multiple.html">
+ <span class="dropdown-text">4. Regresión lineal múltiple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../apuntes/cap5-chi-cuadrado.html">
+ <span class="dropdown-text">5. Pruebas chi-cuadrado</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-diapositivas" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Diapositivas</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-diapositivas">    
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap1-estimacion.html">
+ <span class="dropdown-text">1. Estimación</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap2-hipotesis.html">
+ <span class="dropdown-text">2. Pruebas de hipótesis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap3-regresion-simple.html">
+ <span class="dropdown-text">3. Regresión lineal simple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap4-regresion-multiple.html">
+ <span class="dropdown-text">4. Regresión lineal múltiple</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../diapositivas/cap5-chi-cuadrado.html">
+ <span class="dropdown-text">5. Pruebas chi-cuadrado</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fabiosepulveda/estadistica2"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo oscuro"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#inferencia-estadística" id="toc-inferencia-estadística" class="nav-link active" data-scroll-target="#inferencia-estadística"><span class="header-section-number">1</span> Inferencia estadística</a></li>
+  <li><a href="#estimación-puntual" id="toc-estimación-puntual" class="nav-link" data-scroll-target="#estimación-puntual"><span class="header-section-number">2</span> Estimación puntual</a></li>
+  <li><a href="#propiedades-de-los-estimadores" id="toc-propiedades-de-los-estimadores" class="nav-link" data-scroll-target="#propiedades-de-los-estimadores"><span class="header-section-number">3</span> Propiedades de los estimadores</a>
+  <ul class="collapse">
+  <li><a href="#insesgamiento" id="toc-insesgamiento" class="nav-link" data-scroll-target="#insesgamiento"><span class="header-section-number">3.1</span> Insesgamiento</a></li>
+  <li><a href="#consistencia" id="toc-consistencia" class="nav-link" data-scroll-target="#consistencia"><span class="header-section-number">3.2</span> Consistencia</a></li>
+  <li><a href="#eficiencia" id="toc-eficiencia" class="nav-link" data-scroll-target="#eficiencia"><span class="header-section-number">3.3</span> Eficiencia</a></li>
+  <li><a href="#suficiencia" id="toc-suficiencia" class="nav-link" data-scroll-target="#suficiencia"><span class="header-section-number">3.4</span> Suficiencia</a></li>
+  </ul></li>
+  <li><a href="#intervalos-de-confianza" id="toc-intervalos-de-confianza" class="nav-link" data-scroll-target="#intervalos-de-confianza"><span class="header-section-number">4</span> Intervalos de confianza</a>
+  <ul class="collapse">
+  <li><a href="#cómo-se-interpreta-un-intervalo-de-confianza" id="toc-cómo-se-interpreta-un-intervalo-de-confianza" class="nav-link" data-scroll-target="#cómo-se-interpreta-un-intervalo-de-confianza"><span class="header-section-number">4.1</span> Cómo se interpreta un intervalo de confianza</a></li>
+  <li><a href="#cómo-se-encuentran-los-límites-de-confianza" id="toc-cómo-se-encuentran-los-límites-de-confianza" class="nav-link" data-scroll-target="#cómo-se-encuentran-los-límites-de-confianza"><span class="header-section-number">4.2</span> Cómo se encuentran los límites de confianza</a></li>
+  </ul></li>
+  <li><a href="#intervalo-de-confianza-para-la-media" id="toc-intervalo-de-confianza-para-la-media" class="nav-link" data-scroll-target="#intervalo-de-confianza-para-la-media"><span class="header-section-number">5</span> Intervalo de confianza para la media</a>
+  <ul class="collapse">
+  <li><a href="#caso-1-varianza-conocida" id="toc-caso-1-varianza-conocida" class="nav-link" data-scroll-target="#caso-1-varianza-conocida"><span class="header-section-number">5.1</span> Caso 1: varianza conocida</a></li>
+  <li><a href="#tamaño-de-muestra-para-estimar-una-media" id="toc-tamaño-de-muestra-para-estimar-una-media" class="nav-link" data-scroll-target="#tamaño-de-muestra-para-estimar-una-media"><span class="header-section-number">5.2</span> Tamaño de muestra para estimar una media</a></li>
+  <li><a href="#caso-2-varianza-desconocida" id="toc-caso-2-varianza-desconocida" class="nav-link" data-scroll-target="#caso-2-varianza-desconocida"><span class="header-section-number">5.3</span> Caso 2: varianza desconocida</a></li>
+  </ul></li>
+  <li><a href="#intervalo-de-confianza-para-una-proporción" id="toc-intervalo-de-confianza-para-una-proporción" class="nav-link" data-scroll-target="#intervalo-de-confianza-para-una-proporción"><span class="header-section-number">6</span> Intervalo de confianza para una proporción</a>
+  <ul class="collapse">
+  <li><a href="#tamaño-de-muestra-para-estimar-una-proporción" id="toc-tamaño-de-muestra-para-estimar-una-proporción" class="nav-link" data-scroll-target="#tamaño-de-muestra-para-estimar-una-proporción"><span class="header-section-number">6.1</span> Tamaño de muestra para estimar una proporción</a></li>
+  </ul></li>
+  <li><a href="#intervalo-de-confianza-para-la-varianza" id="toc-intervalo-de-confianza-para-la-varianza" class="nav-link" data-scroll-target="#intervalo-de-confianza-para-la-varianza"><span class="header-section-number">7</span> Intervalo de confianza para la varianza</a></li>
+  <li><a href="#intervalos-para-la-diferencia-de-dos-medias" id="toc-intervalos-para-la-diferencia-de-dos-medias" class="nav-link" data-scroll-target="#intervalos-para-la-diferencia-de-dos-medias"><span class="header-section-number">8</span> Intervalos para la diferencia de dos medias</a>
+  <ul class="collapse">
+  <li><a href="#caso-1-varianzas-conocidas" id="toc-caso-1-varianzas-conocidas" class="nav-link" data-scroll-target="#caso-1-varianzas-conocidas"><span class="header-section-number">8.1</span> Caso 1: varianzas conocidas</a></li>
+  <li><a href="#caso-2-varianzas-desconocidas-pero-iguales" id="toc-caso-2-varianzas-desconocidas-pero-iguales" class="nav-link" data-scroll-target="#caso-2-varianzas-desconocidas-pero-iguales"><span class="header-section-number">8.2</span> Caso 2: varianzas desconocidas pero iguales</a></li>
+  <li><a href="#caso-3-varianzas-desconocidas-y-diferentes" id="toc-caso-3-varianzas-desconocidas-y-diferentes" class="nav-link" data-scroll-target="#caso-3-varianzas-desconocidas-y-diferentes"><span class="header-section-number">8.3</span> Caso 3: varianzas desconocidas y diferentes</a></li>
+  <li><a href="#muestras-pareadas" id="toc-muestras-pareadas" class="nav-link" data-scroll-target="#muestras-pareadas"><span class="header-section-number">8.4</span> Muestras pareadas</a></li>
+  </ul></li>
+  <li><a href="#intervalo-para-la-diferencia-de-dos-proporciones" id="toc-intervalo-para-la-diferencia-de-dos-proporciones" class="nav-link" data-scroll-target="#intervalo-para-la-diferencia-de-dos-proporciones"><span class="header-section-number">9</span> Intervalo para la diferencia de dos proporciones</a></li>
+  <li><a href="#intervalo-para-el-cociente-de-dos-varianzas" id="toc-intervalo-para-el-cociente-de-dos-varianzas" class="nav-link" data-scroll-target="#intervalo-para-el-cociente-de-dos-varianzas"><span class="header-section-number">10</span> Intervalo para el cociente de dos varianzas</a></li>
+  <li><a href="#estimación-con-r" id="toc-estimación-con-r" class="nav-link" data-scroll-target="#estimación-con-r"><span class="header-section-number">11</span> Estimación con R</a>
+  <ul class="collapse">
+  <li><a href="#funciones-para-intervalos-de-confianza" id="toc-funciones-para-intervalos-de-confianza" class="nav-link" data-scroll-target="#funciones-para-intervalos-de-confianza"><span class="header-section-number">11.1</span> Funciones para intervalos de confianza</a></li>
+  <li><a href="#resumen-del-capítulo" id="toc-resumen-del-capítulo" class="nav-link" data-scroll-target="#resumen-del-capítulo"><span class="header-section-number">11.2</span> Resumen del capítulo</a></li>
+  </ul></li>
+  <li><a href="#ejercicios-propuestos" id="toc-ejercicios-propuestos" class="nav-link" data-scroll-target="#ejercicios-propuestos"><span class="header-section-number">12</span> Ejercicios propuestos</a>
+  <ul class="collapse">
+  <li><a href="#estimación-puntual-y-propiedades" id="toc-estimación-puntual-y-propiedades" class="nav-link" data-scroll-target="#estimación-puntual-y-propiedades"><span class="header-section-number">12.1</span> Estimación puntual y propiedades</a></li>
+  <li><a href="#intervalos-para-una-media" id="toc-intervalos-para-una-media" class="nav-link" data-scroll-target="#intervalos-para-una-media"><span class="header-section-number">12.2</span> Intervalos para una media</a></li>
+  <li><a href="#intervalos-para-una-proporción" id="toc-intervalos-para-una-proporción" class="nav-link" data-scroll-target="#intervalos-para-una-proporción"><span class="header-section-number">12.3</span> Intervalos para una proporción</a></li>
+  <li><a href="#intervalos-para-una-varianza" id="toc-intervalos-para-una-varianza" class="nav-link" data-scroll-target="#intervalos-para-una-varianza"><span class="header-section-number">12.4</span> Intervalos para una varianza</a></li>
+  <li><a href="#intervalos-para-dos-poblaciones" id="toc-intervalos-para-dos-poblaciones" class="nav-link" data-scroll-target="#intervalos-para-dos-poblaciones"><span class="header-section-number">12.5</span> Intervalos para dos poblaciones</a></li>
+  </ul></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Otros formatos</h2><ul><li><a href="cap1-estimacion.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Capítulo 1: Estimación</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled" title="Objetivos del capítulo">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objetivos del capítulo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Al terminar este capítulo, usted estará en capacidad de:</p>
+<ul>
+<li>distinguir entre estimación puntual y estimación por intervalo;</li>
+<li>reconocer las propiedades deseables de un estimador: insesgamiento, consistencia, eficiencia y suficiencia;</li>
+<li>interpretar correctamente un intervalo de confianza;</li>
+<li>construir intervalos de confianza para una media, una proporción y una varianza, y para la diferencia de dos medias, la diferencia de dos proporciones y el cociente de dos varianzas;</li>
+<li>determinar el tamaño de muestra necesario para estimar una media o una proporción con un margen de error dado;</li>
+<li>calcular intervalos de confianza con R.</li>
+</ul>
+</div>
+</div>
+<section id="inferencia-estadística" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="inferencia-estadística"><span class="header-section-number">1</span> Inferencia estadística</h2>
+<p>En el capítulo 1 de Estadística I definimos los <strong>parámetros</strong>, medidas que describen a la población y que casi nunca se conocen, y los <strong>estadísticos</strong>, medidas que se calculan con la muestra. En el capítulo 4 de Estadística I estudiamos cómo varían los estadísticos de una muestra a otra. Ahora damos el paso decisivo: usar los estadísticos para sacar conclusiones sobre los parámetros.</p>
+<div id="def-inferencia" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 1 (Inferencia estadística)</strong></span> La <strong>inferencia estadística</strong> comprende los métodos que permiten obtener conclusiones o generalizaciones sobre una población a partir de la información de una muestra, cuantificando la incertidumbre de esas conclusiones.</p>
+</div>
+<p>La inferencia se divide en dos grandes áreas, que se distinguen por el tipo de pregunta que responden <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 266</a>)</span>:</p>
+<ul>
+<li><strong>Estimación.</strong> Una empresa de transporte quiere conocer el consumo promedio de combustible de su flota. Mide el consumo de una muestra de vehículos y usa el promedio de la muestra para <strong>estimar</strong> el promedio de toda la flota. Conocer la distribución muestral de la media le permite, además, saber qué tan precisa es esa estimación. Aquí no hay una afirmación previa que poner a prueba: se quiere conocer el valor de un parámetro.</li>
+<li><strong>Pruebas de hipótesis.</strong> Un fabricante afirma que sus llantas de la marca A frenan en menos distancia que las de la marca B. Un laboratorio realiza pruebas con ambas marcas para decidir si la evidencia apoya o no esa afirmación. Aquí no se busca estimar un parámetro, sino tomar una <strong>decisión</strong> sobre una hipótesis planteada de antemano.</li>
+</ul>
+<p>Este capítulo se ocupa de la estimación, y el capítulo 2 de las pruebas de hipótesis. Como veremos, las dos áreas están estrechamente relacionadas.</p>
+</section>
+<section id="estimación-puntual" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="estimación-puntual"><span class="header-section-number">2</span> Estimación puntual</h2>
+<p>La estimación de un parámetro se puede hacer de dos formas: dando un solo número, que es la <strong>estimación puntual</strong>, o dando un rango de valores, que es la <strong>estimación por intervalo</strong>.</p>
+<div id="def-estimador" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 2 (Estimador y estimación)</strong></span> Un <strong>estimador puntual</strong> de un parámetro <span class="math inline">\(\theta\)</span> es un estadístico <span class="math inline">\(\hat{\Theta} = h(X_1, \ldots, X_n)\)</span>, es decir, una función de la muestra, que se usa para aproximar el valor de <span class="math inline">\(\theta\)</span>. El valor que toma el estimador con una muestra concreta, <span class="math inline">\(\hat{\theta} = h(x_1, \ldots, x_n)\)</span>, se llama <strong>estimación puntual</strong>.</p>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="La notación que usaremos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+La notación que usaremos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Seguimos la misma convención de Estadística I: las <strong>variables aleatorias</strong> se escriben con <strong>mayúscula</strong> y sus <strong>valores observados</strong> con <strong>minúscula</strong>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Símbolo</th>
+<th style="text-align: left;">Se lee</th>
+<th style="text-align: left;">Qué es</th>
+<th style="text-align: center;">¿Es aleatorio?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\theta\)</span></td>
+<td style="text-align: left;">“theta”</td>
+<td style="text-align: left;">El <strong>parámetro</strong>: un número fijo, pero desconocido</td>
+<td style="text-align: center;">No</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(\hat{\Theta}\)</span></td>
+<td style="text-align: left;">“theta mayúscula gorro”</td>
+<td style="text-align: left;">El <strong>estimador</strong>: la regla, una variable aleatoria</td>
+<td style="text-align: center;">Sí</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\hat{\theta}\)</span></td>
+<td style="text-align: left;">“theta gorro”</td>
+<td style="text-align: left;">La <strong>estimación</strong>: el número que da el estimador con una muestra</td>
+<td style="text-align: center;">No</td>
+</tr>
+</tbody>
+</table>
+<p>Así, para la media, <span class="math inline">\(\theta = \mu\)</span>, <span class="math inline">\(\hat{\Theta} = \bar{X}\)</span> y <span class="math inline">\(\hat{\theta} = \bar{x}\)</span>: la misma distinción que hicimos en el capítulo 4 de Estadística I entre <span class="math inline">\(\bar{X}\)</span> y <span class="math inline">\(\bar{x}\)</span>. El estimador es la <strong>regla</strong> y la estimación es el <strong>número</strong> que esa regla produce con unos datos particulares. La única excepción, por costumbre, es la proporción: se escribe <span class="math inline">\(\hat{p}\)</span> tanto para el estimador como para la estimación, y el contexto indica de cuál se trata.</p>
+</div>
+</div>
+<p>La <a href="#tbl-estimadores" class="quarto-xref">Tabla&nbsp;1</a> muestra los estimadores puntuales de los parámetros más usados.</p>
+<div id="tbl-estimadores" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-estimadores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;1: Estimadores puntuales de los parámetros más usados.
+</figcaption>
+<div aria-describedby="tbl-estimadores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Estimador</th>
+<th style="text-align: left;">Estimación con los datos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Media <span class="math inline">\(\mu\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{X}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{x}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Varianza <span class="math inline">\(\sigma^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(S^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(s^2\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Proporción <span class="math inline">\(p\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\hat{p} = X/n\)</span></td>
+<td style="text-align: left;">proporción observada</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Diferencia de medias <span class="math inline">\(\mu_X - \mu_Y\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{X} - \bar{Y}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{x} - \bar{y}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Diferencia de proporciones <span class="math inline">\(p_X - p_Y\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\hat{p}_X - \hat{p}_Y\)</span></td>
+<td style="text-align: left;">diferencia observada</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Cociente de varianzas <span class="math inline">\(\sigma_X^2/\sigma_Y^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(S_X^2/S_Y^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(s_X^2/s_Y^2\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="propiedades-de-los-estimadores" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="propiedades-de-los-estimadores"><span class="header-section-number">3</span> Propiedades de los estimadores</h2>
+<p>Para un mismo parámetro se pueden proponer muchos estimadores. La media de una población simétrica, por ejemplo, se podría estimar con la media muestral, con la mediana muestral o con el promedio entre el mínimo y el máximo. ¿Cuál elegir? ¿Qué hace que un estimador sea bueno? Como un estimador es una variable aleatoria, la respuesta está en su <strong>distribución muestral</strong>: un buen estimador es uno cuya distribución está centrada en el parámetro y concentrada alrededor de él <span class="citation" data-cites="devore2008">(<a href="#ref-devore2008" role="doc-biblioref">Devore, 2008, pp. 231, 235</a>)</span>.</p>
+<section id="insesgamiento" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="insesgamiento"><span class="header-section-number">3.1</span> Insesgamiento</h3>
+<div id="def-insesgado" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 3 (Estimador insesgado)</strong></span> Un estimador <span class="math inline">\(\hat{\Theta}\)</span> es <strong>insesgado</strong> para el parámetro <span class="math inline">\(\theta\)</span> si <span class="math display">\[
+E(\hat{\Theta}) = \theta .
+\]</span> Si no lo es, la diferencia <span class="math inline">\(E(\hat{\Theta}) - \theta\)</span> se llama <strong>sesgo</strong>.</p>
+</div>
+<p>Un estimador insesgado no acierta en cada muestra, pero en promedio, sobre todas las muestras posibles, no tiende a sobreestimar ni a subestimar el parámetro.</p>
+<div id="exm-insesgados" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 1</strong></span> &nbsp;</p>
+<ol type="a">
+<li><strong>La media muestral</strong> es un estimador insesgado de <span class="math inline">\(\mu\)</span>, porque, como vimos en el capítulo 4 de Estadística I, <span class="math inline">\(E(\bar{X}) = \mu\)</span>.</li>
+<li><strong>La proporción muestral</strong> es un estimador insesgado de <span class="math inline">\(p\)</span>, porque <span class="math inline">\(E(\hat{p}) = p\)</span>.</li>
+<li><strong>La varianza muestral</strong> <span class="math inline">\(S^2\)</span> es un estimador insesgado de <span class="math inline">\(\sigma^2\)</span>. Esta es la razón, anunciada en el capítulo 1 de Estadística I, por la cual se divide entre <span class="math inline">\(n - 1\)</span>. La demostración se apoya en la identidad <span class="math display">\[
+\sum_{i=1}^{n} (X_i - \bar{X})^2 = \sum_{i=1}^{n} (X_i - \mu)^2 - n(\bar{X} - \mu)^2 .
+\]</span> Tomando valor esperado en ambos lados, y como <span class="math inline">\(E(X_i - \mu)^2 = \sigma^2\)</span> y <span class="math inline">\(E(\bar{X} - \mu)^2 = V(\bar{X}) = \sigma^2/n\)</span>, <span class="math display">\[
+E\left[\sum_{i=1}^{n} (X_i - \bar{X})^2\right] = n\sigma^2 - n\,\frac{\sigma^2}{n} = (n - 1)\,\sigma^2 ,
+\]</span> de modo que <span class="math inline">\(E(S^2) = \dfrac{(n-1)\sigma^2}{n - 1} = \sigma^2\)</span>. Si se dividiera entre <span class="math inline">\(n\)</span>, el valor esperado sería <span class="math inline">\(\frac{n-1}{n}\sigma^2\)</span>: ese estimador subestimaría sistemáticamente la varianza.</li>
+</ol>
+</div>
+</section>
+<section id="consistencia" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="consistencia"><span class="header-section-number">3.2</span> Consistencia</h3>
+<div id="def-consistente" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 4 (Estimador consistente)</strong></span> Sea <span class="math inline">\(\hat{\Theta}_n\)</span> un estimador de <span class="math inline">\(\theta\)</span> calculado con una muestra de tamaño <span class="math inline">\(n\)</span>. Se dice que <span class="math inline">\(\hat{\Theta}_n\)</span> es <strong>consistente</strong> si, para todo <span class="math inline">\(\varepsilon &gt; 0\)</span>, <span class="math display">\[
+\lim_{n \to \infty} P\big(|\hat{\Theta}_n - \theta| \le \varepsilon\big) = 1 .
+\]</span></p>
+</div>
+<p>En palabras: a medida que la muestra crece, la probabilidad de que el estimador quede tan cerca como se quiera del parámetro tiende a 1. Una condición suficiente, fácil de verificar, es que el estimador sea insesgado (o que su sesgo tienda a cero) y que su varianza tienda a cero cuando <span class="math inline">\(n\)</span> crece. Por ejemplo, <span class="math inline">\(\bar{X}\)</span> es consistente, porque es insesgado y <span class="math inline">\(V(\bar{X}) = \sigma^2/n \to 0\)</span>.</p>
+</section>
+<section id="eficiencia" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="eficiencia"><span class="header-section-number">3.3</span> Eficiencia</h3>
+<div id="def-eficiente" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 5 (Estimador eficiente)</strong></span> Entre dos estimadores insesgados de un mismo parámetro, es más <strong>eficiente</strong> el que tiene menor varianza. Si se consideran todos los estimadores insesgados de <span class="math inline">\(\theta\)</span>, el que tiene la menor varianza se llama <strong>estimador insesgado de varianza mínima</strong>, o el estimador más eficiente.</p>
+</div>
+<p>Si dos estimadores están centrados en el parámetro, conviene el que se dispersa menos, porque sus estimaciones tienden a estar más cerca del valor verdadero.</p>
+<div id="exm-eficiencia" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 2</strong></span> Si la población es normal, tanto la media como la mediana muestral son estimadores insesgados de <span class="math inline">\(\mu\)</span>, porque la distribución es simétrica. Pero no son igual de eficientes: para muestras grandes, la varianza de la mediana es aproximadamente <span class="math inline">\(\pi\sigma^2/(2n) \approx 1{,}57\,\sigma^2/n\)</span>, mayor que la de la media, <span class="math inline">\(\sigma^2/n\)</span>; es decir, la eficiencia relativa asintótica de la mediana frente a la media es <span class="math inline">\(2/\pi \approx 0{,}64\)</span>, un resultado que se remonta a Fisher <span class="citation" data-cites="hodges1970">(<a href="#ref-hodges1970" role="doc-biblioref">Hodges &amp; Lehmann, 1970</a>)</span>. La <a href="#fig-eficiencia" class="quarto-xref">Figura&nbsp;1</a> lo muestra con una simulación de 10 000 muestras de tamaño 25 de una población <span class="math inline">\(N(50,\ 10^2)\)</span>: las dos distribuciones están centradas en 50, pero la de la mediana es más dispersa. Para obtener con la mediana la misma precisión que con la media, se necesitaría una muestra un 57 % más grande.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-eficiencia" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-eficiencia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap1-estimacion_files/figure-html/fig-eficiencia-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eficiencia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Distribución de la media y de la mediana muestral en 10 000 muestras de tamaño 25 de una población normal con media 50. Ambas son insesgadas, pero la media es más eficiente.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Sesgo y varianza: el error cuadrático medio">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sesgo y varianza: el error cuadrático medio
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A veces hay que elegir entre un estimador insesgado con mucha varianza y otro con un pequeño sesgo pero mucha menos varianza. Para compararlos se usa el <strong>error cuadrático medio</strong>, que combina las dos cosas: <span class="math display">\[
+ECM(\hat{\Theta}) = E\big[(\hat{\Theta} - \theta)^2\big] = V(\hat{\Theta}) + \big[\text{sesgo}(\hat{\Theta})\big]^2 .
+\]</span> Para un estimador insesgado, el error cuadrático medio es simplemente su varianza <span class="citation" data-cites="devore2008">(<a href="#ref-devore2008" role="doc-biblioref">Devore, 2008, p. 230</a>)</span>.</p>
+</div>
+</div>
+</section>
+<section id="suficiencia" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="suficiencia"><span class="header-section-number">3.4</span> Suficiencia</h3>
+<div id="def-suficiente" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 6 (Estimador suficiente)</strong></span> Un estimador <span class="math inline">\(\hat{\Theta}\)</span> es <strong>suficiente</strong> para <span class="math inline">\(\theta\)</span> si utiliza toda la información que la muestra contiene acerca de <span class="math inline">\(\theta\)</span>, de modo que, una vez conocido su valor, los datos individuales no aportan información adicional sobre el parámetro.</p>
+</div>
+<p>Por ejemplo, para estimar la probabilidad <span class="math inline">\(p\)</span> de éxito en <span class="math inline">\(n\)</span> ensayos de Bernoulli, basta saber el <strong>número</strong> de éxitos: el orden en que ocurrieron no dice nada adicional sobre <span class="math inline">\(p\)</span>. Por eso la proporción muestral es un estimador suficiente de <span class="math inline">\(p\)</span>. Del mismo modo, para una población normal con varianza conocida, la media muestral es suficiente para <span class="math inline">\(\mu\)</span>. El concepto fue introducido por Fisher, quien lo planteó como el criterio de que el estadístico resuma toda la información relevante que la muestra contiene sobre el parámetro <span class="citation" data-cites="fisher1922">(<a href="#ref-fisher1922" role="doc-biblioref">Fisher, 1922</a>)</span>. Su definición formal requiere herramientas que van más allá de este curso.</p>
+<p>La <a href="#tbl-propiedades" class="quarto-xref">Tabla&nbsp;2</a> resume las cuatro propiedades.</p>
+<div id="tbl-propiedades" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-propiedades-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;2: Propiedades deseables de los estimadores puntuales.
+</figcaption>
+<div aria-describedby="tbl-propiedades-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Propiedad</th>
+<th style="text-align: left;">Pregunta que responde</th>
+<th style="text-align: left;">Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Insesgamiento</td>
+<td style="text-align: left;">¿Está centrado en el parámetro?</td>
+<td style="text-align: left;"><span class="math inline">\(E(S^2) = \sigma^2\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Consistencia</td>
+<td style="text-align: left;">¿Se acerca al parámetro al crecer <span class="math inline">\(n\)</span>?</td>
+<td style="text-align: left;"><span class="math inline">\(V(\bar{X}) = \sigma^2/n \to 0\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Eficiencia</td>
+<td style="text-align: left;">¿Tiene la menor varianza posible?</td>
+<td style="text-align: left;">La media frente a la mediana en la normal</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Suficiencia</td>
+<td style="text-align: left;">¿Usa toda la información de la muestra?</td>
+<td style="text-align: left;">El número de éxitos para estimar <span class="math inline">\(p\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+</section>
+<section id="intervalos-de-confianza" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="intervalos-de-confianza"><span class="header-section-number">4</span> Intervalos de confianza</h2>
+<p>Incluso el mejor estimador puntual casi nunca coincide exactamente con el parámetro: con la media de una muestra sabemos que el valor verdadero está “cerca”, pero no cuánto. Por eso es preferible dar un <strong>intervalo</strong> de valores, construido de manera que contenga al parámetro con una probabilidad alta y conocida.</p>
+<div id="def-ic" class="theorem definition">
+<p><span class="theorem-title"><strong>Definición 7 (Intervalo de confianza)</strong></span> Sean <span class="math inline">\(\hat{\Theta}_L\)</span> y <span class="math inline">\(\hat{\Theta}_U\)</span> dos estadísticos tales que <span class="math display">\[
+P\big(\hat{\Theta}_L &lt; \theta &lt; \hat{\Theta}_U\big) = 1 - \alpha,
+\qquad 0 &lt; \alpha &lt; 1 .
+\]</span> Con una muestra concreta, los valores observados <span class="math inline">\(\hat{\theta}_L &lt; \theta &lt; \hat{\theta}_U\)</span> forman un <strong>intervalo de confianza</strong> del <span class="math inline">\(100(1 - \alpha)\)</span> % para <span class="math inline">\(\theta\)</span>. El número <span class="math inline">\(1 - \alpha\)</span> se llama <strong>nivel de confianza</strong> (o coeficiente de confianza), y <span class="math inline">\(\hat{\theta}_L\)</span> y <span class="math inline">\(\hat{\theta}_U\)</span> son los <strong>límites de confianza</strong> inferior y superior.</p>
+</div>
+<p>Los niveles de confianza más usados son 90 %, 95 % y 99 % <span class="citation" data-cites="daniel1987">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, p. 178</a>)</span>, que corresponden a <span class="math inline">\(\alpha = 0{,}10\)</span>, <span class="math inline">\(0{,}05\)</span> y <span class="math inline">\(0{,}01\)</span>. Observe que los límites <span class="math inline">\(\hat{\Theta}_L\)</span> y <span class="math inline">\(\hat{\Theta}_U\)</span> son <strong>variables aleatorias</strong>: cambian de una muestra a otra. Lo que es fijo, aunque desconocido, es el parámetro <span class="math inline">\(\theta\)</span>.</p>
+<section id="cómo-se-interpreta-un-intervalo-de-confianza" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="cómo-se-interpreta-un-intervalo-de-confianza"><span class="header-section-number">4.1</span> Cómo se interpreta un intervalo de confianza</h3>
+<p>La interpretación correcta se basa, como la probabilidad frecuentista, en la repetición <span class="citation" data-cites="daniel1987 devore2008 walpole2012">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, p. 178</a>; <a href="#ref-devore2008" role="doc-biblioref">Devore, 2008, p. 257</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 271</a>)</span>:</p>
+<blockquote class="blockquote">
+<p>Un intervalo de confianza del 95 % se construye con un procedimiento tal que, si se repitiera el muestreo muchas veces y en cada muestra se calculara el intervalo, aproximadamente el 95 % de los intervalos obtenidos contendría el verdadero valor del parámetro.</p>
+</blockquote>
+<p>La <a href="#fig-ic-simulados" class="quarto-xref">Figura&nbsp;2</a> lo ilustra con 100 muestras simuladas de tamaño 20 de una población normal con media <span class="math inline">\(\mu = 50\)</span>. Con cada muestra se calculó un intervalo de confianza del 95 % para <span class="math inline">\(\mu\)</span>, con el método que veremos en la siguiente sección. Cada intervalo es distinto, porque cada muestra es distinta; en esta simulación, 8 de los 100 intervalos no contienen el valor verdadero, muy cerca del 5 % esperado.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ic-simulados" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ic-simulados-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap1-estimacion_files/figure-html/fig-ic-simulados-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ic-simulados-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Intervalos de confianza del 95 % para la media, calculados con 100 muestras simuladas de tamaño 20 de una población con media 50 (línea vertical). En rojo, los intervalos que no contienen el valor verdadero.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Un error de interpretación muy frecuente">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Un error de interpretación muy frecuente
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Una vez calculado con una muestra concreta, por ejemplo <span class="math inline">\((4{,}24;\ 5{,}21)\)</span>, el intervalo <strong>ya no es aleatorio</strong>: contiene o no contiene a <span class="math inline">\(\mu\)</span>, y no sabemos cuál de las dos cosas ocurre. Por eso no es correcto decir “hay una probabilidad del 95 % de que <span class="math inline">\(\mu\)</span> esté entre 4,24 y 5,21”. Lo correcto es decir “tenemos una confianza del 95 % en que el intervalo contiene a <span class="math inline">\(\mu\)</span>”, entendiendo que la confianza se refiere al <strong>procedimiento</strong>: el 95 % de los intervalos construidos así contienen el parámetro. Esta confusión es tan común que la cometen incluso investigadores con experiencia: en un estudio con 120 investigadores y 442 estudiantes de psicología, ambos grupos aceptaron en promedio más de tres de seis interpretaciones incorrectas de un intervalo de confianza <span class="citation" data-cites="hoekstra2014">(<a href="#ref-hoekstra2014" role="doc-biblioref">Hoekstra et&nbsp;al., 2014</a>)</span>.</p>
+</div>
+</div>
+<p>Hay un compromiso entre confianza y precisión: para aumentar el nivel de confianza hay que ensanchar el intervalo, y un intervalo muy ancho dice poco <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 269</a>)</span>. La única forma de ganar a la vez confianza y precisión es aumentar el tamaño de la muestra, como muestra la fórmula del margen de error de la sección siguiente.</p>
+</section>
+<section id="cómo-se-encuentran-los-límites-de-confianza" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="cómo-se-encuentran-los-límites-de-confianza"><span class="header-section-number">4.2</span> Cómo se encuentran los límites de confianza</h3>
+<p>¿Cómo se obtienen, en la práctica, los estadísticos <span class="math inline">\(\hat{\Theta}_L\)</span> y <span class="math inline">\(\hat{\Theta}_U\)</span> de la <a href="#def-ic" class="quarto-xref">Definición&nbsp;7</a>? El procedimiento general, conocido como <strong>método de la cantidad pivotal</strong>, consta de cinco pasos <span class="citation" data-cites="devore2008">(<a href="#ref-devore2008" role="doc-biblioref">Devore, 2008, p. 260</a>)</span>.</p>
+<ol type="1">
+<li><strong>Identificar el parámetro</strong> <span class="math inline">\(\theta\)</span> que se quiere estimar y su <strong>estimador puntual</strong> <span class="math inline">\(\hat{\Theta}\)</span>.</li>
+<li><strong>Encontrar una cantidad pivotal</strong>: una expresión <span class="math inline">\(Q\)</span> que dependa del estimador y del parámetro, cuya distribución sea <strong>conocida</strong> y <strong>no dependa de <span class="math inline">\(\theta\)</span></strong>. Las cantidades pivotales que usaremos son precisamente los estadísticos de la tabla resumen del capítulo 4 de Estadística I: <span class="math inline">\(Z\)</span>, <span class="math inline">\(T\)</span>, <span class="math inline">\(\chi^2\)</span> y <span class="math inline">\(F\)</span>.</li>
+<li><strong>Buscar dos cuantiles</strong> <span class="math inline">\(a\)</span> y <span class="math inline">\(b\)</span> de la distribución de <span class="math inline">\(Q\)</span> que dejen entre ellos un área <span class="math inline">\(1 - \alpha\)</span> y, por fuera, un área <span class="math inline">\(\alpha/2\)</span> en cada cola: <span class="math display">\[
+P(a &lt; Q &lt; b) = 1 - \alpha .
+\]</span></li>
+<li><strong>Despejar el parámetro</strong> <span class="math inline">\(\theta\)</span> en el centro de la doble desigualdad <span class="math inline">\(a &lt; Q &lt; b\)</span>, con las reglas usuales del álgebra, hasta llegar a una expresión de la forma <span class="math display">\[
+P\big(\hat{\Theta}_L &lt; \theta &lt; \hat{\Theta}_U\big) = 1 - \alpha .
+\]</span> Las expresiones que quedan a la izquierda y a la derecha de <span class="math inline">\(\theta\)</span> son los <strong>límites de confianza</strong> inferior y superior.</li>
+<li><strong>Reemplazar</strong> en <span class="math inline">\(\hat{\Theta}_L\)</span> y <span class="math inline">\(\hat{\Theta}_U\)</span> los valores observados en la muestra, lo que da el intervalo numérico <span class="math inline">\((\hat{\theta}_L,\ \hat{\theta}_U)\)</span>.</li>
+</ol>
+<p>Al despejar en el paso 4 hay que recordar dos reglas de las desigualdades: al <strong>multiplicar o dividir por un número negativo</strong>, y al <strong>tomar el recíproco</strong> de cantidades positivas, el sentido de las desigualdades se <strong>invierte</strong>. Las dos aparecerán en las secciones siguientes.</p>
+</section>
+</section>
+<section id="intervalo-de-confianza-para-la-media" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="intervalo-de-confianza-para-la-media"><span class="header-section-number">5</span> Intervalo de confianza para la media</h2>
+<p>Para construir un intervalo de confianza se necesitan dos ingredientes: un estimador puntual del parámetro y su distribución muestral. Para la media <span class="math inline">\(\mu\)</span>, el estimador es <span class="math inline">\(\bar{X}\)</span>, y su distribución la estudiamos en el capítulo 4 de Estadística I. Distinguimos dos casos, según se conozca o no la varianza de la población.</p>
+<p>Usaremos la notación de cuantiles del capítulo 4 de Estadística I: <span class="math inline">\(z_{1-\alpha/2}\)</span> es el valor que deja una probabilidad <span class="math inline">\(1 - \alpha/2\)</span> a su izquierda en la normal estándar, de modo que entre <span class="math inline">\(-z_{1-\alpha/2}\)</span> y <span class="math inline">\(z_{1-\alpha/2}\)</span> queda un área <span class="math inline">\(1 - \alpha\)</span>. Para un intervalo del 95 %, <span class="math inline">\(\alpha = 0{,}05\)</span> y <span class="math inline">\(z_{0{,}975} = 1{,}96\)</span> (<a href="#fig-area-z" class="quarto-xref">Figura&nbsp;3</a>).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-area-z" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-area-z-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap1-estimacion_files/figure-html/fig-area-z-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-area-z-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3: Área central <span class="math inline">\(1 - \alpha\)</span> bajo la normal estándar, entre los cuantiles <span class="math inline">\(-z_{1-\alpha/2}\)</span> y <span class="math inline">\(z_{1-\alpha/2}\)</span>, con un área <span class="math inline">\(\alpha/2\)</span> en cada cola.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="caso-1-varianza-conocida" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="caso-1-varianza-conocida"><span class="header-section-number">5.1</span> Caso 1: varianza conocida</h3>
+<div class="callout callout-style-default callout-note callout-titled" title="Supuestos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supuestos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> es una <strong>muestra aleatoria</strong> de una población con distribución <strong>normal</strong>.</li>
+<li>La media <span class="math inline">\(\mu\)</span> de la población es <strong>desconocida</strong>; es el parámetro que se quiere estimar.</li>
+<li>La varianza <span class="math inline">\(\sigma^2\)</span> de la población es <strong>conocida</strong>.</li>
+</ul>
+<p>El objetivo es construir un intervalo de confianza del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(\mu\)</span>, con <span class="math inline">\(0 &lt; \alpha &lt; 1\)</span>, a partir del mejor estimador de <span class="math inline">\(\mu\)</span>, la media muestral <span class="math inline">\(\bar{X}\)</span> <span class="citation" data-cites="canavos1988 walpole2012">(<a href="#ref-canavos1988" role="doc-biblioref">Canavos, 1988, p. 274</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 270</a>)</span>.</p>
+</div>
+</div>
+<p>Si la población no es normal pero la muestra es grande, el procedimiento sigue siendo aproximadamente válido gracias al teorema central del límite. Apliquemos los cinco pasos del método de la cantidad pivotal.</p>
+<p><strong>Paso 1. Parámetro y estimador.</strong> El parámetro es <span class="math inline">\(\theta = \mu\)</span>, y su estimador puntual es <span class="math inline">\(\hat{\Theta} = \bar{X}\)</span>.</p>
+<p><strong>Paso 2. Cantidad pivotal.</strong> Por el capítulo 4 de Estadística I, <span class="math display">\[
+Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0, 1),
+\]</span> exacta o aproximadamente. <span class="math inline">\(Z\)</span> depende de <span class="math inline">\(\bar{X}\)</span> y de <span class="math inline">\(\mu\)</span>, y su distribución, la normal estándar, no depende de <span class="math inline">\(\mu\)</span>.</p>
+<p><strong>Paso 3. Cuantiles.</strong> Como la normal estándar es simétrica, los cuantiles que dejan un área <span class="math inline">\(\alpha/2\)</span> en cada cola son <span class="math inline">\(-z_{1-\alpha/2}\)</span> y <span class="math inline">\(z_{1-\alpha/2}\)</span> (<a href="#fig-area-z" class="quarto-xref">Figura&nbsp;3</a>), de modo que <span class="math display">\[
+P\left(-z_{1-\alpha/2} &lt; \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} &lt; z_{1-\alpha/2}\right) = 1 - \alpha .
+\]</span></p>
+<p><strong>Paso 4. Despejar <span class="math inline">\(\mu\)</span>.</strong> Se trabaja sobre la doble desigualdad del paréntesis, aplicando la misma operación a sus tres partes:</p>
+<ul>
+<li>se multiplica por <span class="math inline">\(\sigma/\sqrt{n}\)</span>, que es positivo, y las desigualdades se conservan: <span class="math display">\[
+-z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}} &lt; \bar{X} - \mu &lt; z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}} ;
+\]</span></li>
+<li>se resta <span class="math inline">\(\bar{X}\)</span>: <span class="math display">\[
+-\bar{X} - z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}} &lt; -\mu &lt; -\bar{X} + z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}} ;
+\]</span></li>
+<li>se multiplica por <span class="math inline">\(-1\)</span>, lo que <strong>invierte</strong> las desigualdades: <span class="math display">\[
+\bar{X} + z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}} &gt; \mu &gt; \bar{X} - z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}} ;
+\]</span></li>
+<li>y se reescribe de menor a mayor.</li>
+</ul>
+<p>Como cada paso transforma la desigualdad en otra equivalente, la probabilidad se mantiene: <span class="math display">\[
+P\Bigg(\underbrace{\bar{X} - z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}}_{\hat{\Theta}_L} &lt; \mu &lt; \underbrace{\bar{X} + z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}}_{\hat{\Theta}_U}\Bigg) = 1 - \alpha .
+\]</span> Los límites de confianza inferior y superior son, entonces, <span class="math inline">\(\hat{\Theta}_L = \bar{X} - z_{1-\alpha/2}\,\sigma/\sqrt{n}\)</span> y <span class="math inline">\(\hat{\Theta}_U = \bar{X} + z_{1-\alpha/2}\,\sigma/\sqrt{n}\)</span>.</p>
+<p><strong>Paso 5. Valores observados.</strong> Con una muestra concreta, se reemplaza <span class="math inline">\(\bar{X}\)</span> por la media observada <span class="math inline">\(\bar{x}\)</span>, lo que da el resultado siguiente.</p>
+<div id="thm-ic-media-z" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 1 (Intervalo para la media con varianza conocida)</strong></span> Si <span class="math inline">\(\bar{x}\)</span> es la media de una muestra aleatoria de tamaño <span class="math inline">\(n\)</span> de una población normal con varianza conocida <span class="math inline">\(\sigma^2\)</span>, un intervalo de confianza del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(\mu\)</span> es <span class="math display">\[
+\bar{x} \pm z_{1-\alpha/2}\,\frac{\sigma}{\sqrt{n}} .
+\]</span> Si la población no es normal, el intervalo es aproximadamente válido cuando <span class="math inline">\(n\)</span> es grande, por el teorema central del límite.</p>
+</div>
+<p>La cantidad <span class="math inline">\(E = z_{1-\alpha/2}\,\sigma/\sqrt{n}\)</span> se llama <strong>margen de error</strong>: la mitad del ancho del intervalo.</p>
+<div id="exm-ic-combustible" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 3</strong></span> Una empresa de transporte urbano quiere estimar el consumo promedio de combustible de su flota, en kilómetros por litro (km/L). Estudios previos indican que el consumo tiene distribución normal con varianza de 1,44 (km/L)², es decir, <span class="math inline">\(\sigma = 1{,}2\)</span> km/L. Se mide el consumo de 25 vehículos:</p>
+<blockquote class="blockquote">
+<p>12,5; 11,8; 13,2; 12,7; 14,0; 11,5; 13,5; 12,3; 11,9; 12,9; 13,1; 11,7; 12,8; 14,2; 11,6; 13,0; 13,4; 12,0; 11,8; 12,6; 13,3; 12,1; 11,9; 13,6; 12,4.</p>
+</blockquote>
+<p>La media muestral es <span class="math inline">\(\bar{x} = 315{,}8/25 = 12{,}632\)</span> km/L, y el error estándar, <span class="math inline">\(\sigma/\sqrt{n} = 1{,}2/5 = 0{,}24\)</span>. La <a href="#tbl-ic-combustible" class="quarto-xref">Tabla&nbsp;3</a> muestra los intervalos para tres niveles de confianza.</p>
+<div id="tbl-ic-combustible" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ic-combustible-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;3: Intervalos de confianza para el consumo promedio de combustible.
+</figcaption>
+<div aria-describedby="tbl-ic-combustible-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nivel de confianza</th>
+<th style="text-align: center;"><span class="math inline">\(z_{1-\alpha/2}\)</span></th>
+<th style="text-align: center;">Margen de error</th>
+<th style="text-align: center;">Intervalo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">90 %</td>
+<td style="text-align: center;">1,645</td>
+<td style="text-align: center;">0,395</td>
+<td style="text-align: center;"><span class="math inline">\((12{,}24;\ 13{,}03)\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">95 %</td>
+<td style="text-align: center;">1,960</td>
+<td style="text-align: center;">0,470</td>
+<td style="text-align: center;"><span class="math inline">\((12{,}16;\ 13{,}10)\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">99 %</td>
+<td style="text-align: center;">2,576</td>
+<td style="text-align: center;">0,618</td>
+<td style="text-align: center;"><span class="math inline">\((12{,}01;\ 13{,}25)\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Con una confianza del 95 %, el consumo promedio de la flota está entre 12,16 y 13,10 km/L. Observe que, al aumentar la confianza, el intervalo se ensancha.</p>
+</div>
+</section>
+<section id="tamaño-de-muestra-para-estimar-una-media" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="tamaño-de-muestra-para-estimar-una-media"><span class="header-section-number">5.2</span> Tamaño de muestra para estimar una media</h3>
+<p>El margen de error permite responder una pregunta muy práctica: ¿cuántos datos se necesitan para estimar <span class="math inline">\(\mu\)</span> con una precisión dada? Si se desea que el margen de error no supere un valor <span class="math inline">\(E\)</span>, basta despejar <span class="math inline">\(n\)</span> de <span class="math inline">\(E = z_{1-\alpha/2}\,\sigma/\sqrt{n}\)</span>: <span class="math display">\[
+n = \left(\frac{z_{1-\alpha/2}\,\sigma}{E}\right)^2 ,
+\]</span> redondeando <strong>siempre hacia arriba</strong> al entero siguiente. Si no se conoce <span class="math inline">\(\sigma\)</span>, se usa una estimación de un estudio previo o de una muestra piloto.</p>
+<div id="exm-n-combustible" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 4</strong></span> ¿Cuántos vehículos hay que medir para estimar el consumo promedio con un margen de error de 0,3 km/L y una confianza del 95 %? <span class="math display">\[
+n = \left(\frac{1{,}96 \times 1{,}2}{0{,}3}\right)^2 = 61{,}46 ,
+\]</span> de modo que se necesitan <strong>62</strong> vehículos.</p>
+</div>
+</section>
+<section id="caso-2-varianza-desconocida" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="caso-2-varianza-desconocida"><span class="header-section-number">5.3</span> Caso 2: varianza desconocida</h3>
+<div class="callout callout-style-default callout-note callout-titled" title="Supuestos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supuestos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> es una <strong>muestra aleatoria</strong> de una población con distribución <strong>normal</strong>.</li>
+<li>La media <span class="math inline">\(\mu\)</span> y la varianza <span class="math inline">\(\sigma^2\)</span> de la población son <strong>desconocidas</strong>; el parámetro que se quiere estimar es <span class="math inline">\(\mu\)</span>.</li>
+</ul>
+</div>
+</div>
+<p>Esta es la situación más frecuente, porque rara vez se conoce <span class="math inline">\(\sigma\)</span>. En el capítulo 4 de Estadística I vimos que al reemplazar <span class="math inline">\(\sigma\)</span> por <span class="math inline">\(S\)</span> el estadístico <span class="math inline">\(T = (\bar{X} - \mu)/(S/\sqrt{n})\)</span> tiene distribución <span class="math inline">\(t(n - 1)\)</span>. El procedimiento es el mismo: la cantidad pivotal es ahora <span class="math inline">\(T\)</span>, los cuantiles son <span class="math inline">\(-t_{1-\alpha/2;\,n-1}\)</span> y <span class="math inline">\(t_{1-\alpha/2;\,n-1}\)</span> (<a href="#fig-area-t" class="quarto-xref">Figura&nbsp;4</a>), y al despejar <span class="math inline">\(\mu\)</span> se siguen los mismos pasos del caso 1, cambiando <span class="math inline">\(\sigma\)</span> por <span class="math inline">\(S\)</span> y el cuantil de la normal por el de la <span class="math inline">\(t\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-area-t" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-area-t-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap1-estimacion_files/figure-html/fig-area-t-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-area-t-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4: Área central <span class="math inline">\(1 - \alpha\)</span> bajo la distribución t, entre los cuantiles <span class="math inline">\(-t_{1-\alpha/2}\)</span> y <span class="math inline">\(t_{1-\alpha/2}\)</span>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="thm-ic-media-t" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 2 (Intervalo para la media con varianza desconocida)</strong></span> Si <span class="math inline">\(\bar{x}\)</span> y <span class="math inline">\(s\)</span> son la media y la desviación estándar de una muestra aleatoria de tamaño <span class="math inline">\(n\)</span> de una población normal, un intervalo de confianza del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(\mu\)</span> es <span class="math display">\[
+\bar{x} \pm t_{1-\alpha/2;\,n-1}\,\frac{s}{\sqrt{n}} .
+\]</span></p>
+</div>
+<div id="exm-ic-mochilas" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 5</strong></span> En un estudio sobre ergonomía y salud infantil se midió el peso, en kilogramos, de las mochilas de 20 estudiantes de primaria elegidos al azar, al inicio de la jornada escolar:</p>
+<blockquote class="blockquote">
+<p>3,2; 4,1; 5,5; 3,8; 4,9; 6,2; 3,5; 5,1; 4,4; 3,9; 5,7; 6,5; 3,3; 4,7; 5,3; 4,0; 3,6; 4,8; 5,9; 6,1.</p>
+</blockquote>
+<p>Se sabe por experiencia que el peso tiene distribución normal. Para un intervalo del 95 %: <span class="math inline">\(\bar{x} = 94{,}5/20 = 4{,}725\)</span> kg, <span class="math inline">\(s = 1{,}035\)</span> kg y <span class="math inline">\(t_{0{,}975;\,19} = 2{,}093\)</span>. El margen de error es <span class="math inline">\(2{,}093 \times 1{,}035/\sqrt{20} = 0{,}484\)</span>, y el intervalo es <span class="math display">\[
+4{,}725 \pm 0{,}484 = (4{,}24;\ 5{,}21) \text{ kg}.
+\]</span> Con una confianza del 95 %, el peso promedio de las mochilas está entre 4,24 y 5,21 kg.</p>
+</div>
+<p>En R, el intervalo con la <span class="math inline">\(t\)</span> se obtiene directamente con <code>t.test()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mochilas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.2</span>, <span class="fl">4.1</span>, <span class="fl">5.5</span>, <span class="fl">3.8</span>, <span class="fl">4.9</span>, <span class="fl">6.2</span>, <span class="fl">3.5</span>, <span class="fl">5.1</span>, <span class="fl">4.4</span>, <span class="fl">3.9</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>              <span class="fl">5.7</span>, <span class="fl">6.5</span>, <span class="fl">3.3</span>, <span class="fl">4.7</span>, <span class="fl">5.3</span>, <span class="fl">4.0</span>, <span class="fl">3.6</span>, <span class="fl">4.8</span>, <span class="fl">5.9</span>, <span class="fl">6.1</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(mochilas, <span class="at">conf.level =</span> <span class="fl">0.95</span>)<span class="sc">$</span>conf.int</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.240793 5.209207
+attr(,"conf.level")
+[1] 0.95</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># El intervalo con varianza conocida se calcula con la fórmula</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>consumo <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">12.5</span>, <span class="fl">11.8</span>, <span class="fl">13.2</span>, <span class="fl">12.7</span>, <span class="fl">14.0</span>, <span class="fl">11.5</span>, <span class="fl">13.5</span>, <span class="fl">12.3</span>, <span class="fl">11.9</span>, <span class="fl">12.9</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>             <span class="fl">13.1</span>, <span class="fl">11.7</span>, <span class="fl">12.8</span>, <span class="fl">14.2</span>, <span class="fl">11.6</span>, <span class="fl">13.0</span>, <span class="fl">13.4</span>, <span class="fl">12.0</span>, <span class="fl">11.8</span>, <span class="fl">12.6</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>             <span class="fl">13.3</span>, <span class="fl">12.1</span>, <span class="fl">11.9</span>, <span class="fl">13.6</span>, <span class="fl">12.4</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(consumo) <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> <span class="fl">1.2</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(consumo))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12.16161 13.10239</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="¿Y si la población no es normal?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+¿Y si la población no es normal?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El intervalo con la <span class="math inline">\(t\)</span> es bastante robusto: funciona bien con poblaciones aproximadamente simétricas y, cuando <span class="math inline">\(n\)</span> es grande (por ejemplo, <span class="math inline">\(n \ge 30\)</span>), el teorema central del límite garantiza que es aproximadamente válido aunque la población no sea normal. En ese caso, como <span class="math inline">\(t_{1-\alpha/2;\,n-1}\)</span> es muy parecido a <span class="math inline">\(z_{1-\alpha/2}\)</span>, algunos textos usan directamente <span class="math inline">\(\bar{x} \pm z_{1-\alpha/2}\, s/\sqrt{n}\)</span> <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 276</a>)</span>. Con muestras pequeñas de poblaciones muy asimétricas, en cambio, el intervalo puede ser poco confiable.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="intervalo-de-confianza-para-una-proporción" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="intervalo-de-confianza-para-una-proporción"><span class="header-section-number">6</span> Intervalo de confianza para una proporción</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Supuestos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supuestos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Se observan <span class="math inline">\(n\)</span> ensayos de Bernoulli independientes (por ejemplo, <span class="math inline">\(n\)</span> unidades elegidas mediante una muestra aleatoria), en cada uno de los cuales la característica de interés está presente con probabilidad <span class="math inline">\(p\)</span>.</li>
+<li>La proporción <span class="math inline">\(p\)</span> de la población es <strong>desconocida</strong>; es el parámetro que se quiere estimar.</li>
+<li>El tamaño de muestra es <strong>grande</strong>, de modo que <span class="math inline">\(n\hat{p} \ge 5\)</span> y <span class="math inline">\(n(1 - \hat{p}) \ge 5\)</span>.</li>
+</ul>
+</div>
+</div>
+<p>El estimador puntual de una proporción <span class="math inline">\(p\)</span> es <span class="math inline">\(\hat{p} = X/n\)</span>, donde <span class="math inline">\(X\)</span> es el número de unidades de la muestra que tienen la característica de interés. En el capítulo 4 de Estadística I vimos que, si <span class="math inline">\(np \ge 5\)</span> y <span class="math inline">\(n(1 - p) \ge 5\)</span>, <span class="math display">\[
+Z = \frac{\hat{p} - p}{\sqrt{p(1 - p)/n}} \approx N(0, 1) .
+\]</span> Siguiendo el mismo procedimiento de la media, aparece un problema: el error estándar <span class="math inline">\(\sqrt{p(1-p)/n}\)</span> depende de <span class="math inline">\(p\)</span>, el parámetro que se quiere estimar. La solución más sencilla es reemplazarlo por su estimación <span class="math inline">\(\hat{p}\)</span>.</p>
+<div id="thm-ic-proporcion" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 3 (Intervalo para una proporción)</strong></span> Si <span class="math inline">\(\hat{p}\)</span> es la proporción observada en una muestra aleatoria de tamaño <span class="math inline">\(n\)</span>, y <span class="math inline">\(n\hat{p} \ge 5\)</span> y <span class="math inline">\(n(1 - \hat{p}) \ge 5\)</span>, un intervalo de confianza aproximado del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(p\)</span> es <span class="math display">\[
+\hat{p} \pm z_{1-\alpha/2}\sqrt{\frac{\hat{p}(1 - \hat{p})}{n}} .
+\]</span></p>
+</div>
+<div id="exm-ic-transporte" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 6</strong></span> Bucaramanga está evaluando el uso del transporte público para diseñar nuevas estrategias de movilidad. En una encuesta a 500 ciudadanos elegidos al azar, 200 respondieron que usan el transporte público al menos tres veces por semana. Entonces <span class="math inline">\(\hat{p} = 200/500 = 0{,}40\)</span>, y un intervalo del 95 % es <span class="math display">\[
+0{,}40 \pm 1{,}96\sqrt{\frac{0{,}40 \times 0{,}60}{500}} = 0{,}40 \pm 0{,}043 = (0{,}357;\ 0{,}443) .
+\]</span> Con una confianza del 95 %, entre el 35,7 % y el 44,3 % de los ciudadanos usa el transporte público al menos tres veces por semana.</p>
+</div>
+<div id="exm-ic-infracciones" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 7</strong></span> Un municipio implementó un programa de educación vial en los colegios. En una muestra de 400 jóvenes que obtuvieron recientemente su licencia de conducción, 120 recibieron al menos una infracción en el último año. ¿Puede afirmarse, con una confianza del 95 %, que menos del 35 % de los jóvenes comete infracciones?</p>
+<p>Con <span class="math inline">\(\hat{p} = 120/400 = 0{,}30\)</span>, el intervalo del 95 % es <span class="math inline">\(0{,}30 \pm 0{,}045 = (0{,}255;\ 0{,}345)\)</span>. Como todo el intervalo está por debajo de 0,35, los datos son compatibles con la afirmación: con una confianza del 95 %, la proporción de jóvenes con infracciones es menor que el 35 %. Este razonamiento, que usa un intervalo para evaluar una afirmación, se formalizará con las pruebas de hipótesis del capítulo 2.</p>
+</div>
+<section id="tamaño-de-muestra-para-estimar-una-proporción" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="tamaño-de-muestra-para-estimar-una-proporción"><span class="header-section-number">6.1</span> Tamaño de muestra para estimar una proporción</h3>
+<p>Si se desea que el margen de error no supere un valor <span class="math inline">\(E\)</span>, despejando <span class="math inline">\(n\)</span> de <span class="math inline">\(E = z_{1-\alpha/2}\sqrt{p(1-p)/n}\)</span> se obtiene <span class="math display">\[
+n = \frac{z_{1-\alpha/2}^2\; p(1 - p)}{E^2} ,
+\]</span> redondeando hacia arriba. La fórmula requiere un valor de <span class="math inline">\(p\)</span>, que todavía no se conoce. Se puede usar una estimación de un estudio anterior o, si no hay ninguna información, <span class="math inline">\(p = 0{,}5\)</span>: como el producto <span class="math inline">\(p(1 - p)\)</span> alcanza su valor máximo en <span class="math inline">\(p = 0{,}5\)</span>, ese valor da el tamaño de muestra más grande posible y garantiza el margen de error deseado cualquiera que sea el valor verdadero de <span class="math inline">\(p\)</span>. Como advierte Daniel, este procedimiento produce la muestra más grande posible y, por tanto, la más costosa, de modo que solo debe usarse si no hay una mejor estimación de <span class="math inline">\(p\)</span>, como la de una muestra piloto o una cota superior conocida <span class="citation" data-cites="daniel1987 walpole2012">(<a href="#ref-daniel1987" role="doc-biblioref">Daniel, 1987, pp. 202-203</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 299</a>)</span>.</p>
+<div id="exm-n-proporcion" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 8</strong></span> &nbsp;</p>
+<ol type="a">
+<li>Una organización ambiental quiere estimar la proporción de personas que apoyan la transición a energías renovables en una ciudad, con una confianza del 90 % y un margen de error máximo de 3 puntos porcentuales. Sin información previa, se usa <span class="math inline">\(p = 0{,}5\)</span>: <span class="math display">\[
+n = \frac{1{,}645^2 \times 0{,}5 \times 0{,}5}{0{,}03^2} = 751{,}5 ,
+\]</span> de modo que hay que encuestar a <strong>752</strong> personas.</li>
+<li>Un gobierno local quiere estimar la proporción de ciudadanos satisfechos con el transporte público, de modo que la <strong>longitud total</strong> del intervalo del 95 % sea 0,08. Como la longitud es el doble del margen de error, <span class="math inline">\(E = 0{,}04\)</span>, y <span class="math display">\[
+n = \frac{1{,}96^2 \times 0{,}5 \times 0{,}5}{0{,}04^2} = 600{,}2 ,
+\]</span> es decir, <strong>601</strong> personas.</li>
+</ol>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Otros intervalos para la proporción">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Otros intervalos para la proporción
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El intervalo de la <a href="#thm-ic-proporcion" class="quarto-xref">Teorema&nbsp;3</a>, conocido como intervalo de Wald, es el más sencillo, pero con muestras pequeñas o con <span class="math inline">\(p\)</span> cercano a 0 o a 1 puede tener una confianza real menor que la nominal. Por eso existen versiones mejoradas, como el intervalo de Wilson, o intervalo <em>score</em>, cuya confianza real se acerca más a la nominal; Montgomery y Runger lo presentan con base en el trabajo de Agresti y Coull <span class="citation" data-cites="montgomery2018">(<a href="#ref-montgomery2018" role="doc-biblioref">Montgomery &amp; Runger, 2018, p. 188</a>)</span>. La función <code>prop.test()</code> de R calcula el intervalo de Wilson, por defecto con una corrección por continuidad <span class="citation" data-cites="rcore2024">(<a href="#ref-rcore2024" role="doc-biblioref">R Core Team, 2024</a>)</span>. Con muestras grandes, los resultados son muy parecidos.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>p_gorro <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="sc">/</span> <span class="dv">500</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>p_gorro <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(p_gorro <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_gorro) <span class="sc">/</span> <span class="dv">500</span>)  <span class="co"># Wald</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3570593 0.4429407</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="dv">200</span>, <span class="dv">500</span>, <span class="at">conf.level =</span> <span class="fl">0.95</span>)<span class="sc">$</span>conf.int                          <span class="co"># Wilson</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3570044 0.4445558
+attr(,"conf.level")
+[1] 0.95</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="intervalo-de-confianza-para-la-varianza" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="intervalo-de-confianza-para-la-varianza"><span class="header-section-number">7</span> Intervalo de confianza para la varianza</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Supuestos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supuestos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> es una <strong>muestra aleatoria</strong> de una población con distribución <strong>normal</strong>.</li>
+<li>La media <span class="math inline">\(\mu\)</span> y la varianza <span class="math inline">\(\sigma^2\)</span> de la población son <strong>desconocidas</strong>; el parámetro que se quiere estimar es <span class="math inline">\(\sigma^2\)</span>.</li>
+</ul>
+</div>
+</div>
+<p>En muchos procesos industriales la variabilidad es tan importante como el promedio: de nada sirve que un proceso produzca piezas con el diámetro correcto en promedio, si muchas se salen de las especificaciones. Para estimar la varianza <span class="math inline">\(\sigma^2\)</span> de una población <strong>normal</strong> se usa el resultado del capítulo 4 de Estadística I: <span class="math display">\[
+\frac{(n - 1)S^2}{\sigma^2} \sim \chi^2(n - 1) .
+\]</span> Si <span class="math inline">\(\chi^2_{\alpha/2;\,n-1}\)</span> y <span class="math inline">\(\chi^2_{1-\alpha/2;\,n-1}\)</span> son los cuantiles que dejan áreas <span class="math inline">\(\alpha/2\)</span> en cada cola (<a href="#fig-area-chi" class="quarto-xref">Figura&nbsp;5</a>), <span class="math display">\[
+P\left(\chi^2_{\alpha/2;\,n-1} &lt; \frac{(n - 1)S^2}{\sigma^2} &lt; \chi^2_{1-\alpha/2;\,n-1}\right) = 1 - \alpha ,
+\]</span> Para despejar <span class="math inline">\(\sigma^2\)</span> (paso 4), se toma el <strong>recíproco</strong> de las tres partes, que son positivas, lo que <strong>invierte</strong> las desigualdades: <span class="math display">\[
+\frac{1}{\chi^2_{\alpha/2;\,n-1}} &gt; \frac{\sigma^2}{(n - 1)S^2} &gt; \frac{1}{\chi^2_{1-\alpha/2;\,n-1}} ,
+\]</span> y luego se multiplica por <span class="math inline">\((n - 1)S^2\)</span>, que es positivo. Reescribiendo de menor a mayor, <span class="math display">\[
+P\left(\underbrace{\frac{(n - 1)S^2}{\chi^2_{1-\alpha/2;\,n-1}}}_{\hat{\Theta}_L} &lt; \sigma^2 &lt; \underbrace{\frac{(n - 1)S^2}{\chi^2_{\alpha/2;\,n-1}}}_{\hat{\Theta}_U}\right) = 1 - \alpha .
+\]</span> Observe que el cuantil <strong>mayor</strong>, <span class="math inline">\(\chi^2_{1-\alpha/2;\,n-1}\)</span>, queda en el denominador del límite <strong>inferior</strong>, y el menor en el del superior.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-area-chi" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-area-chi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap1-estimacion_files/figure-html/fig-area-chi-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-area-chi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5: Cuantiles de la distribución chi-cuadrado que dejan un área <span class="math inline">\(\alpha/2\)</span> en cada cola.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="thm-ic-varianza" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 4 (Intervalo para la varianza)</strong></span> Si <span class="math inline">\(s^2\)</span> es la varianza de una muestra aleatoria de tamaño <span class="math inline">\(n\)</span> de una población normal, un intervalo de confianza del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(\sigma^2\)</span> es <span class="math display">\[
+\left(\frac{(n - 1)s^2}{\chi^2_{1-\alpha/2;\,n-1}},\ \frac{(n - 1)s^2}{\chi^2_{\alpha/2;\,n-1}}\right).
+\]</span> Un intervalo para la desviación estándar <span class="math inline">\(\sigma\)</span> se obtiene sacando la raíz cuadrada de los dos límites.</p>
+</div>
+<p>Observe que, a diferencia de los anteriores, este intervalo <strong>no es simétrico</strong> alrededor de la estimación puntual <span class="math inline">\(s^2\)</span>, porque la distribución chi-cuadrado no es simétrica.</p>
+<div id="exm-ic-cojinetes" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 9</strong></span> Un proceso de manufactura produce cojinetes de bola con un diámetro interior nominal de 3 cm. Para evaluar la variabilidad del proceso, se miden los diámetros de 12 cojinetes elegidos al azar <span class="citation" data-cites="canavos1988">(<a href="#ref-canavos1988" role="doc-biblioref">Canavos, 1988, p. 281</a>)</span>:</p>
+<blockquote class="blockquote">
+<p>3,01; 3,05; 2,99; 2,99; 3,00; 3,02; 2,98; 2,99; 2,97; 2,97; 3,02; 3,01.</p>
+</blockquote>
+<p>Suponiendo que el diámetro tiene distribución normal, se busca un intervalo del 99 % para <span class="math inline">\(\sigma^2\)</span>. La varianza muestral es <span class="math inline">\(s^2 = 0{,}006/11 = 0{,}000545\)</span> cm², y con <span class="math inline">\(\alpha = 0{,}01\)</span> los cuantiles de una <span class="math inline">\(\chi^2(11)\)</span> son <span class="math inline">\(\chi^2_{0{,}005;\,11} = 2{,}603\)</span> y <span class="math inline">\(\chi^2_{0{,}995;\,11} = 26{,}757\)</span>. Entonces <span class="math display">\[
+\left(\frac{11 \times 0{,}000545}{26{,}757},\ \frac{11 \times 0{,}000545}{2{,}603}\right) = (0{,}000224;\ 0{,}002305) \text{ cm}^2 ,
+\]</span> y para la desviación estándar, <span class="math inline">\((0{,}015;\ 0{,}048)\)</span> cm. Con una confianza del 99 %, la desviación estándar del diámetro está entre 0,015 y 0,048 cm.</p>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="La normalidad es indispensable">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+La normalidad es indispensable
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Como advertimos en el capítulo 4 de Estadística I, el resultado de la chi-cuadrado depende mucho de que la población sea normal, y el teorema central del límite no lo corrige. Con poblaciones que no son normales, este intervalo puede tener una confianza real muy distinta de la nominal, aun con muestras grandes. Antes de usarlo conviene revisar, con un histograma o un diagrama de caja, que los datos no sean muy asimétricos ni tengan valores atípicos <span class="citation" data-cites="montgomery2018">(<a href="#ref-montgomery2018" role="doc-biblioref">Montgomery &amp; Runger, 2018, p. 184</a>)</span>.</p>
+</div>
+</div>
+<p>R no tiene una función incorporada para este intervalo, pero se calcula fácilmente con <code>qchisq()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cojinetes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.01</span>, <span class="fl">3.05</span>, <span class="fl">2.99</span>, <span class="fl">2.99</span>, <span class="fl">3.00</span>, <span class="fl">3.02</span>, <span class="fl">2.98</span>, <span class="fl">2.99</span>, <span class="fl">2.97</span>, <span class="fl">2.97</span>, <span class="fl">3.02</span>, <span class="fl">3.01</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(cojinetes); s2 <span class="ot">&lt;-</span> <span class="fu">var</span>(cojinetes); alfa <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ic_var <span class="ot">&lt;-</span> (n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> s2 <span class="sc">/</span> <span class="fu">qchisq</span>(<span class="fu">c</span>(<span class="dv">1</span> <span class="sc">-</span> alfa <span class="sc">/</span> <span class="dv">2</span>, alfa <span class="sc">/</span> <span class="dv">2</span>), <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>ic_var           <span class="co"># intervalo para la varianza</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0002242417 0.0023048362</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(ic_var)     <span class="co"># intervalo para la desviación estándar</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01497470 0.04800871</code></pre>
+</div>
+</div>
+</section>
+<section id="intervalos-para-la-diferencia-de-dos-medias" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="intervalos-para-la-diferencia-de-dos-medias"><span class="header-section-number">8</span> Intervalos para la diferencia de dos medias</h2>
+<p>Muchas preguntas de interés comparan dos poblaciones: ¿frenan en menos distancia las llantas de una marca que las de otra?, ¿ganan más los ingenieros de una ciudad que los de otra?, ¿tarda más una sucursal que otra en entregar los pedidos? Para responderlas se estima la <strong>diferencia</strong> entre las dos medias, <span class="math inline">\(\mu_X - \mu_Y\)</span>.</p>
+<p>Usaremos la siguiente notación: <span class="math inline">\(X_1, \ldots, X_{n_X}\)</span> es una muestra de la primera población, con media <span class="math inline">\(\mu_X\)</span> y varianza <span class="math inline">\(\sigma_X^2\)</span>, y <span class="math inline">\(Y_1, \ldots, Y_{n_Y}\)</span> una muestra de la segunda, con media <span class="math inline">\(\mu_Y\)</span> y varianza <span class="math inline">\(\sigma_Y^2\)</span>. El estimador puntual de <span class="math inline">\(\mu_X - \mu_Y\)</span> es <span class="math inline">\(\bar{X} - \bar{Y}\)</span>.</p>
+<p>Es importante distinguir dos situaciones. En la mayoría de los casos las dos muestras son <strong>independientes</strong>: las unidades de una no tienen relación con las de la otra, como los autos con llantas de la marca A y los autos con llantas de la marca B. Pero a veces las observaciones vienen en <strong>parejas</strong>, porque se mide dos veces a la misma unidad (antes y después de un tratamiento) o a unidades emparejadas por alguna razón. Las primeras tres secciones tratan el caso de muestras independientes, y la cuarta, el de muestras pareadas.</p>
+<section id="caso-1-varianzas-conocidas" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="caso-1-varianzas-conocidas"><span class="header-section-number">8.1</span> Caso 1: varianzas conocidas</h3>
+<div class="callout callout-style-default callout-note callout-titled" title="Supuestos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supuestos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(X_1, \ldots, X_{n_X}\)</span> y <span class="math inline">\(Y_1, \ldots, Y_{n_Y}\)</span> son muestras aleatorias <strong>independientes</strong> de dos poblaciones <strong>normales</strong>.</li>
+<li>Las medias <span class="math inline">\(\mu_X\)</span> y <span class="math inline">\(\mu_Y\)</span> son <strong>desconocidas</strong>; se quiere estimar <span class="math inline">\(\mu_X - \mu_Y\)</span>.</li>
+<li>Las varianzas <span class="math inline">\(\sigma_X^2\)</span> y <span class="math inline">\(\sigma_Y^2\)</span> son <strong>conocidas</strong>.</li>
+</ul>
+</div>
+</div>
+<p>Apliquemos el método de la cantidad pivotal. El parámetro es <span class="math inline">\(\theta = \mu_X - \mu_Y\)</span> y su estimador, <span class="math inline">\(\hat{\Theta} = \bar{X} - \bar{Y}\)</span>. Como <span class="math inline">\(\bar{X}\)</span> y <span class="math inline">\(\bar{Y}\)</span> son normales e independientes, su diferencia también es normal, con media <span class="math inline">\(\mu_X - \mu_Y\)</span> y varianza igual a la <strong>suma</strong> de las varianzas: <span class="math display">\[
+\bar{X} - \bar{Y} \sim N\!\left(\mu_X - \mu_Y,\ \frac{\sigma_X^2}{n_X} + \frac{\sigma_Y^2}{n_Y}\right),
+\]</span> de modo que la cantidad pivotal es <span class="math display">\[
+Z = \frac{(\bar{X} - \bar{Y}) - (\mu_X - \mu_Y)}{\sqrt{\dfrac{\sigma_X^2}{n_X} + \dfrac{\sigma_Y^2}{n_Y}}} \sim N(0, 1).
+\]</span> Con los cuantiles <span class="math inline">\(\pm z_{1-\alpha/2}\)</span>, y despejando <span class="math inline">\(\mu_X - \mu_Y\)</span> con los mismos pasos del caso de una media, se obtiene el intervalo.</p>
+<div id="thm-ic-dif-medias-z" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 5 (Intervalo para la diferencia de medias con varianzas conocidas)</strong></span> Bajo los supuestos anteriores, un intervalo de confianza del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(\mu_X - \mu_Y\)</span> es <span class="math display">\[
+(\bar{x} - \bar{y}) \pm z_{1-\alpha/2}\sqrt{\frac{\sigma_X^2}{n_X} + \frac{\sigma_Y^2}{n_Y}} .
+\]</span> Si las poblaciones no son normales pero ambas muestras son grandes, el intervalo es aproximadamente válido.</p>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="¿Cómo se interpreta un intervalo para una diferencia?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+¿Cómo se interpreta un intervalo para una diferencia?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Si <strong>todo</strong> el intervalo es <strong>positivo</strong>, hay evidencia de que <span class="math inline">\(\mu_X &gt; \mu_Y\)</span>.</li>
+<li>Si <strong>todo</strong> el intervalo es <strong>negativo</strong>, hay evidencia de que <span class="math inline">\(\mu_X &lt; \mu_Y\)</span>.</li>
+<li>Si el intervalo <strong>contiene el 0</strong>, los datos son compatibles con que las dos medias sean iguales: no hay evidencia de una diferencia.</li>
+</ul>
+<p>La misma regla se aplica a la diferencia de proporciones. Para el cociente de varianzas, el valor de referencia es el <strong>1</strong> en lugar del 0.</p>
+</div>
+</div>
+<div id="exm-ic-llantas" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 10</strong></span> Un laboratorio de seguridad vial compara la distancia de frenado de dos marcas de llantas, desde una velocidad de 100 km/h. Se prueban 30 autos con llantas de la marca A y 25 con llantas de la marca B, y se mide la distancia de frenado de cada uno, en metros:</p>
+<blockquote class="blockquote">
+<p><strong>Marca A:</strong> 42,3; 41,8; 43,1; 42,7; 41,5; 43,0; 42,6; 42,9; 41,9; 42,4; 43,2; 42,8; 41,7; 42,5; 42,0; 41,6; 42,3; 42,1; 43,3; 42,2; 41,4; 42,7; 42,9; 41,8; 42,6; 42,0; 42,5; 41,9; 42,4; 42,3.</p>
+<p><strong>Marca B:</strong> 45,0; 44,8; 45,3; 45,7; 44,9; 45,2; 45,6; 45,1; 44,7; 45,4; 45,8; 44,6; 45,9; 45,5; 44,5; 45,0; 44,9; 45,3; 44,8; 45,6; 45,7; 44,6; 45,2; 45,1; 44,9.</p>
+</blockquote>
+<p>Por la información histórica del laboratorio, se supone que las distancias son normales con varianzas conocidas <span class="math inline">\(\sigma_A^2 = 4\)</span> y <span class="math inline">\(\sigma_B^2 = 5{,}2\)</span>. ¿Frenan en promedio en menos distancia los autos con la marca A?</p>
+<p>Las medias muestrales son <span class="math inline">\(\bar{x}_A = 1270{,}4/30 = 42{,}347\)</span> m y <span class="math inline">\(\bar{x}_B = 1129{,}1/25 = 45{,}164\)</span> m, de modo que la diferencia estimada es <span class="math inline">\(\bar{x}_A - \bar{x}_B = -2{,}817\)</span> m. El error estándar es <span class="math inline">\(\sqrt{4/30 + 5{,}2/25} = 0{,}584\)</span>, y el intervalo del 95 % es <span class="math display">\[
+-2{,}817 \pm 1{,}96 \times 0{,}584 = -2{,}817 \pm 1{,}145 = (-3{,}96;\ -1{,}67) \text{ m}.
+\]</span> Todo el intervalo es negativo: con una confianza del 95 %, la distancia media de frenado con la marca A es entre 1,67 y 3,96 metros <strong>menor</strong> que con la marca B.</p>
+</div>
+</section>
+<section id="caso-2-varianzas-desconocidas-pero-iguales" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="caso-2-varianzas-desconocidas-pero-iguales"><span class="header-section-number">8.2</span> Caso 2: varianzas desconocidas pero iguales</h3>
+<div class="callout callout-style-default callout-note callout-titled" title="Supuestos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supuestos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(X_1, \ldots, X_{n_X}\)</span> y <span class="math inline">\(Y_1, \ldots, Y_{n_Y}\)</span> son muestras aleatorias <strong>independientes</strong> de dos poblaciones <strong>normales</strong>.</li>
+<li>Las medias <span class="math inline">\(\mu_X\)</span> y <span class="math inline">\(\mu_Y\)</span> son <strong>desconocidas</strong>; se quiere estimar <span class="math inline">\(\mu_X - \mu_Y\)</span>.</li>
+<li>Las varianzas son <strong>desconocidas pero iguales</strong>: <span class="math inline">\(\sigma_X^2 = \sigma_Y^2 = \sigma^2\)</span>.</li>
+</ul>
+</div>
+</div>
+<p>Si las dos poblaciones tienen la misma varianza <span class="math inline">\(\sigma^2\)</span>, las dos varianzas muestrales estiman lo mismo, y conviene combinarlas en un solo estimador, la <strong>varianza combinada</strong> (<em>pooled</em>), que es un promedio de <span class="math inline">\(S_X^2\)</span> y <span class="math inline">\(S_Y^2\)</span> ponderado por sus grados de libertad: <span class="math display">\[
+S_p^2 = \frac{(n_X - 1)S_X^2 + (n_Y - 1)S_Y^2}{n_X + n_Y - 2} .
+\]</span> Reemplazando <span class="math inline">\(\sigma^2\)</span> por <span class="math inline">\(S_p^2\)</span>, la cantidad pivotal deja de ser normal y pasa a tener una distribución <span class="math inline">\(t\)</span>: <span class="math display">\[
+T = \frac{(\bar{X} - \bar{Y}) - (\mu_X - \mu_Y)}{S_p\sqrt{\dfrac{1}{n_X} + \dfrac{1}{n_Y}}} \sim t(n_X + n_Y - 2) .
+\]</span></p>
+<div id="thm-ic-dif-medias-t" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 6 (Intervalo para la diferencia de medias con varianzas iguales)</strong></span> Bajo los supuestos anteriores, un intervalo de confianza del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(\mu_X - \mu_Y\)</span> es <span class="math display">\[
+(\bar{x} - \bar{y}) \pm t_{1-\alpha/2;\,k}\; s_p\sqrt{\frac{1}{n_X} + \frac{1}{n_Y}},
+\qquad k = n_X + n_Y - 2 .
+\]</span></p>
+</div>
+<div id="exm-ic-sueldos" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 11</strong></span> Una empresa compara los sueldos mensuales, en dólares, de los ingenieros de dos ciudades, con muestras independientes:</p>
+<blockquote class="blockquote">
+<p><strong>Ciudad A (<span class="math inline">\(n_A = 15\)</span>):</strong> 4500, 4700, 4200, 4800, 5100, 4600, 5000, 4900, 5200, 4300, 4800, 4700, 4400, 4950, 5050.</p>
+<p><strong>Ciudad B (<span class="math inline">\(n_B = 12\)</span>):</strong> 4000, 4100, 3950, 4200, 4350, 4500, 4250, 4400, 4150, 4300, 4050, 4450.</p>
+</blockquote>
+<p>Se supone que los sueldos son normales con varianzas desconocidas pero iguales. ¿Ganan más, en promedio, los ingenieros de la ciudad A?</p>
+<p>Las medias son <span class="math inline">\(\bar{x}_A = 4746{,}67\)</span> y <span class="math inline">\(\bar{x}_B = 4225{,}00\)</span> dólares, y las desviaciones estándar, <span class="math inline">\(s_A = 300{,}28\)</span> y <span class="math inline">\(s_B = 180{,}28\)</span>. La varianza combinada es <span class="math display">\[
+s_p^2 = \frac{14 \times 300{,}28^2 + 11 \times 180{,}28^2}{25} = 64\,793{,}33,
+\qquad s_p = 254{,}55 .
+\]</span> Con <span class="math inline">\(t_{0{,}975;\,25} = 2{,}060\)</span>, el intervalo del 95 % es <span class="math display">\[
+521{,}67 \pm 2{,}060 \times 254{,}55 \sqrt{\frac{1}{15} + \frac{1}{12}} = 521{,}67 \pm 203{,}04 = (318{,}63;\ 724{,}71) .
+\]</span> Todo el intervalo es positivo: con una confianza del 95 %, los ingenieros de la ciudad A ganan en promedio entre 319 y 725 dólares más que los de la ciudad B.</p>
+</div>
+</section>
+<section id="caso-3-varianzas-desconocidas-y-diferentes" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="caso-3-varianzas-desconocidas-y-diferentes"><span class="header-section-number">8.3</span> Caso 3: varianzas desconocidas y diferentes</h3>
+<div class="callout callout-style-default callout-note callout-titled" title="Supuestos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supuestos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(X_1, \ldots, X_{n_X}\)</span> y <span class="math inline">\(Y_1, \ldots, Y_{n_Y}\)</span> son muestras aleatorias <strong>independientes</strong> de dos poblaciones <strong>normales</strong>.</li>
+<li>Las medias <span class="math inline">\(\mu_X\)</span> y <span class="math inline">\(\mu_Y\)</span> son <strong>desconocidas</strong>; se quiere estimar <span class="math inline">\(\mu_X - \mu_Y\)</span>.</li>
+<li>Las varianzas son <strong>desconocidas y no se puede suponer que sean iguales</strong>.</li>
+</ul>
+</div>
+</div>
+<p>En este caso no tiene sentido combinar las varianzas muestrales. Se usa cada una por separado, y la cantidad pivotal <span class="math display">\[
+T = \frac{(\bar{X} - \bar{Y}) - (\mu_X - \mu_Y)}{\sqrt{\dfrac{S_X^2}{n_X} + \dfrac{S_Y^2}{n_Y}}}
+\]</span> tiene, <strong>aproximadamente</strong>, una distribución <span class="math inline">\(t\)</span> con <span class="math display">\[
+\nu = \frac{\left(\dfrac{s_X^2}{n_X} + \dfrac{s_Y^2}{n_Y}\right)^2}{\dfrac{\left(s_X^2/n_X\right)^2}{n_X - 1} + \dfrac{\left(s_Y^2/n_Y\right)^2}{n_Y - 1}}
+\]</span> grados de libertad. Esta aproximación se conoce como <strong>método de Welch</strong>, o de Welch-Satterthwaite <span class="citation" data-cites="walpole2012 montgomery2018">(<a href="#ref-montgomery2018" role="doc-biblioref">Montgomery &amp; Runger, 2018, p. 256</a>; <a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, p. 289</a>)</span>. Como <span class="math inline">\(\nu\)</span> rara vez es un número entero, se redondea <strong>hacia abajo</strong> al entero más cercano.</p>
+<div id="thm-ic-dif-medias-welch" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 7 (Intervalo para la diferencia de medias con varianzas diferentes)</strong></span> Bajo los supuestos anteriores, un intervalo de confianza aproximado del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(\mu_X - \mu_Y\)</span> es <span class="math display">\[
+(\bar{x} - \bar{y}) \pm t_{1-\alpha/2;\,\nu}\sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}} .
+\]</span></p>
+</div>
+<div id="exm-ic-welch" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 12</strong></span> En la pizzería de Estadística I, ¿tardan más las entregas de la sucursal West que las de la sucursal East? En la base de datos hay 410 entregas de East, con un tiempo medio de 31,07 minutos y una desviación estándar de 6,68, y 435 de West, con un tiempo medio de 35,19 minutos y una desviación estándar de 5,73. Como veremos en la sección del cociente de varianzas, no es razonable suponer que las varianzas sean iguales.</p>
+<p>Los grados de libertad de Welch son <span class="math inline">\(\nu = 807{,}19\)</span>, que se redondean a 807, y <span class="math inline">\(t_{0{,}975;\,807} = 1{,}963\)</span>. El intervalo del 95 % para <span class="math inline">\(\mu_{\text{East}} - \mu_{\text{West}}\)</span> es <span class="math display">\[
+(31{,}07 - 35{,}19) \pm 1{,}963\sqrt{\frac{6{,}68^2}{410} + \frac{5{,}73^2}{435}} = -4{,}13 \pm 0{,}84 = (-4{,}97;\ -3{,}28) \text{ minutos}.
+\]</span> Con una confianza del 95 %, las entregas de East tardan en promedio entre 3,3 y 5,0 minutos <strong>menos</strong> que las de West.</p>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="¿Cuál de los tres casos usar?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+¿Cuál de los tres casos usar?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En la práctica casi nunca se conocen las varianzas, de modo que el caso 1 se usa poco. Entre los casos 2 y 3, si hay dudas sobre la igualdad de las varianzas, es más seguro usar el método de Welch: funciona bien aunque las varianzas sean iguales, mientras que el intervalo con varianza combinada puede ser engañoso si no lo son, sobre todo cuando los tamaños de muestra son distintos <span class="citation" data-cites="delacre2017">(<a href="#ref-delacre2017" role="doc-biblioref">Delacre et&nbsp;al., 2017</a>)</span>. Por eso la función <code>t.test()</code> de R usa el método de Welch por defecto. La igualdad de las varianzas se puede evaluar con el intervalo para el cociente de varianzas, que veremos más adelante.</p>
+</div>
+</div>
+</section>
+<section id="muestras-pareadas" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="muestras-pareadas"><span class="header-section-number">8.4</span> Muestras pareadas</h3>
+<div class="callout callout-style-default callout-note callout-titled" title="Supuestos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supuestos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Se observan <span class="math inline">\(n\)</span> <strong>parejas</strong> de valores <span class="math inline">\((X_i, Y_i)\)</span>, medidos en la misma unidad o en unidades emparejadas.</li>
+<li>Las diferencias <span class="math inline">\(D_i = X_i - Y_i\)</span> son una muestra aleatoria de una población <strong>normal</strong> con media <span class="math inline">\(\mu_D = \mu_X - \mu_Y\)</span> y varianza desconocida.</li>
+</ul>
+</div>
+</div>
+<p>Cuando las observaciones vienen en parejas, las dos muestras <strong>no</strong> son independientes, y no se pueden usar los casos anteriores <span class="citation" data-cites="walpole2012">(<a href="#ref-walpole2012" role="doc-biblioref">Walpole et&nbsp;al., 2012, pp. 291-293</a>)</span>. La solución es sencilla: se calcula la diferencia <span class="math inline">\(d_i = x_i - y_i\)</span> dentro de cada pareja y se trabaja con esas diferencias como si fueran <strong>una sola muestra</strong>. El intervalo para <span class="math inline">\(\mu_D\)</span> es, entonces, el intervalo para una media con varianza desconocida aplicado a las diferencias: <span class="math display">\[
+\bar{d} \pm t_{1-\alpha/2;\,n-1}\,\frac{s_d}{\sqrt{n}} ,
+\]</span> donde <span class="math inline">\(\bar{d}\)</span> y <span class="math inline">\(s_d\)</span> son la media y la desviación estándar de las diferencias.</p>
+<div id="exm-ic-pareadas" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 13</strong></span> Para comparar precios, se registró el precio, en miles de pesos, de los mismos 8 productos en dos supermercados:</p>
+<div id="tbl-pareadas" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pareadas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;4: Precios de ocho productos en dos supermercados (miles de pesos).
+</figcaption>
+<div aria-describedby="tbl-pareadas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Producto</th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">6</th>
+<th style="text-align: center;">7</th>
+<th style="text-align: center;">8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Supermercado A</td>
+<td style="text-align: center;">5,2</td>
+<td style="text-align: center;">3,8</td>
+<td style="text-align: center;">12,5</td>
+<td style="text-align: center;">7,9</td>
+<td style="text-align: center;">2,4</td>
+<td style="text-align: center;">9,6</td>
+<td style="text-align: center;">4,3</td>
+<td style="text-align: center;">6,8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Supermercado B</td>
+<td style="text-align: center;">5,6</td>
+<td style="text-align: center;">4,1</td>
+<td style="text-align: center;">13,2</td>
+<td style="text-align: center;">8,1</td>
+<td style="text-align: center;">2,5</td>
+<td style="text-align: center;">10,4</td>
+<td style="text-align: center;">4,4</td>
+<td style="text-align: center;">7,3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Diferencia B − A</td>
+<td style="text-align: center;">0,4</td>
+<td style="text-align: center;">0,3</td>
+<td style="text-align: center;">0,7</td>
+<td style="text-align: center;">0,2</td>
+<td style="text-align: center;">0,1</td>
+<td style="text-align: center;">0,8</td>
+<td style="text-align: center;">0,1</td>
+<td style="text-align: center;">0,5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Las observaciones están pareadas por producto. Las diferencias tienen media <span class="math inline">\(\bar{d} = 0{,}3875\)</span> y desviación estándar <span class="math inline">\(s_d = 0{,}2642\)</span>; con <span class="math inline">\(t_{0{,}975;\,7} = 2{,}365\)</span>, el intervalo del 95 % para la diferencia media de precios es <span class="math display">\[
+0{,}3875 \pm 2{,}365\,\frac{0{,}2642}{\sqrt{8}} = (0{,}167;\ 0{,}608) \text{ miles de pesos}.
+\]</span> Con una confianza del 95 %, el supermercado B es en promedio entre 167 y 608 pesos más caro por producto.</p>
+<p>Si, por error, se trataran las dos columnas como muestras independientes, el intervalo con varianza combinada sería <span class="math inline">\((-3{,}32;\ 4{,}09)\)</span>, que contiene el 0 y no permitiría concluir nada. La razón es que los precios varían muchísimo de un producto a otro (de 2400 a 13 200 pesos), y esa variabilidad, que no tiene nada que ver con los supermercados, “tapa” la diferencia. Al trabajar con las diferencias dentro de cada producto, esa variabilidad se elimina. Por eso es tan importante reconocer cuándo los datos son pareados.</p>
+</div>
+</section>
+</section>
+<section id="intervalo-para-la-diferencia-de-dos-proporciones" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="intervalo-para-la-diferencia-de-dos-proporciones"><span class="header-section-number">9</span> Intervalo para la diferencia de dos proporciones</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Supuestos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supuestos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Se toman dos muestras aleatorias <strong>independientes</strong>, de tamaños <span class="math inline">\(n_X\)</span> y <span class="math inline">\(n_Y\)</span>, de dos poblaciones en las que la característica de interés está presente con proporciones <span class="math inline">\(p_X\)</span> y <span class="math inline">\(p_Y\)</span>.</li>
+<li>Las proporciones <span class="math inline">\(p_X\)</span> y <span class="math inline">\(p_Y\)</span> son <strong>desconocidas</strong>; se quiere estimar <span class="math inline">\(p_X - p_Y\)</span>.</li>
+<li>Ambas muestras son <strong>grandes</strong>: <span class="math inline">\(n_X\hat{p}_X\)</span>, <span class="math inline">\(n_X(1-\hat{p}_X)\)</span>, <span class="math inline">\(n_Y\hat{p}_Y\)</span> y <span class="math inline">\(n_Y(1-\hat{p}_Y)\)</span> son mayores o iguales que 5.</li>
+</ul>
+</div>
+</div>
+<p>El estimador puntual de <span class="math inline">\(p_X - p_Y\)</span> es <span class="math inline">\(\hat{p}_X - \hat{p}_Y\)</span>, donde <span class="math inline">\(\hat{p}_X = X/n_X\)</span> y <span class="math inline">\(\hat{p}_Y = Y/n_Y\)</span>, y <span class="math inline">\(X\)</span> y <span class="math inline">\(Y\)</span> son los números de unidades con la característica en cada muestra, que tienen distribuciones binomiales independientes. Por el teorema central del límite, <span class="math inline">\(\hat{p}_X - \hat{p}_Y\)</span> es aproximadamente normal, con media <span class="math inline">\(p_X - p_Y\)</span> y varianza <span class="math inline">\(p_X(1 - p_X)/n_X + p_Y(1 - p_Y)/n_Y\)</span>, de modo que <span class="math display">\[
+Z = \frac{(\hat{p}_X - \hat{p}_Y) - (p_X - p_Y)}{\sqrt{\dfrac{p_X(1 - p_X)}{n_X} + \dfrac{p_Y(1 - p_Y)}{n_Y}}} \approx N(0, 1) .
+\]</span> Como en el caso de una proporción, el error estándar depende de los parámetros, y se estima reemplazándolos por <span class="math inline">\(\hat{p}_X\)</span> y <span class="math inline">\(\hat{p}_Y\)</span>.</p>
+<div id="thm-ic-dif-proporciones" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 8 (Intervalo para la diferencia de proporciones)</strong></span> Bajo los supuestos anteriores, un intervalo de confianza aproximado del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(p_X - p_Y\)</span> es <span class="math display">\[
+(\hat{p}_X - \hat{p}_Y) \pm z_{1-\alpha/2}\sqrt{\frac{\hat{p}_X(1 - \hat{p}_X)}{n_X} + \frac{\hat{p}_Y(1 - \hat{p}_Y)}{n_Y}} .
+\]</span></p>
+</div>
+<div id="exm-ic-zurdos" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 14</strong></span> En un estudio sobre el hábito de fumar, 190 de 400 personas zurdas y 300 de 800 personas diestras resultaron ser fumadoras. ¿Hay evidencia, con una confianza del 98 %, de que la proporción de fumadores es mayor entre los zurdos?</p>
+<p>Las proporciones muestrales son <span class="math inline">\(\hat{p}_Z = 190/400 = 0{,}475\)</span> y <span class="math inline">\(\hat{p}_D = 300/800 = 0{,}375\)</span>. Para un intervalo del 98 %, <span class="math inline">\(\alpha = 0{,}02\)</span> y <span class="math inline">\(z_{0{,}99} = 2{,}326\)</span>. El error estándar es <span class="math inline">\(\sqrt{0{,}475 \times 0{,}525/400 + 0{,}375 \times 0{,}625/800} = 0{,}0303\)</span>, y <span class="math display">\[
+0{,}100 \pm 2{,}326 \times 0{,}0303 = 0{,}100 \pm 0{,}070 = (0{,}030;\ 0{,}170) .
+\]</span> Todo el intervalo es positivo: con una confianza del 98 %, la proporción de fumadores entre los zurdos es mayor que entre los diestros, entre 3 y 17 puntos porcentuales.</p>
+</div>
+<div id="exm-ic-universidades" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 15</strong></span> En la universidad A, 350 de 500 estudiantes aprobaron un examen de matemáticas; en la universidad B, 390 de 600. ¿Hay evidencia de que las proporciones de aprobación sean diferentes?</p>
+<p>Con <span class="math inline">\(\hat{p}_A = 0{,}70\)</span> y <span class="math inline">\(\hat{p}_B = 0{,}65\)</span>, el intervalo del 95 % es <span class="math display">\[
+0{,}05 \pm 1{,}96\sqrt{\frac{0{,}70 \times 0{,}30}{500} + \frac{0{,}65 \times 0{,}35}{600}} = 0{,}05 \pm 0{,}055 = (-0{,}005;\ 0{,}105) .
+\]</span> El intervalo contiene el 0, de modo que los datos son compatibles con que las dos proporciones de aprobación sean iguales: no hay evidencia suficiente de una diferencia, con una confianza del 95 %.</p>
+</div>
+</section>
+<section id="intervalo-para-el-cociente-de-dos-varianzas" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="intervalo-para-el-cociente-de-dos-varianzas"><span class="header-section-number">10</span> Intervalo para el cociente de dos varianzas</h2>
+<p>En la industria es frecuente necesitar comparar la <strong>variabilidad</strong> de dos procesos: dos máquinas, dos proveedores o dos métodos de medición. Como las varianzas son cantidades positivas en escala de razón, se comparan mediante su <strong>cociente</strong> <span class="math inline">\(\sigma_X^2/\sigma_Y^2\)</span>, cuyo valor de referencia es 1: si el cociente es mayor que 1, la primera población es más variable.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Supuestos">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supuestos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(X_1, \ldots, X_{n_X}\)</span> y <span class="math inline">\(Y_1, \ldots, Y_{n_Y}\)</span> son muestras aleatorias <strong>independientes</strong> de dos poblaciones <strong>normales</strong>.</li>
+<li>Las varianzas <span class="math inline">\(\sigma_X^2\)</span> y <span class="math inline">\(\sigma_Y^2\)</span> son <strong>desconocidas</strong>; se quiere estimar <span class="math inline">\(\sigma_X^2/\sigma_Y^2\)</span>.</li>
+</ul>
+</div>
+</div>
+<p>El estimador puntual es <span class="math inline">\(S_X^2/S_Y^2\)</span>, y por el capítulo 4 de Estadística I la cantidad pivotal es <span class="math display">\[
+F = \frac{S_X^2/\sigma_X^2}{S_Y^2/\sigma_Y^2} \sim F(n_X - 1,\ n_Y - 1) .
+\]</span> Con los cuantiles <span class="math inline">\(f_{\alpha/2}\)</span> y <span class="math inline">\(f_{1-\alpha/2}\)</span> de esta distribución (<a href="#fig-area-f" class="quarto-xref">Figura&nbsp;6</a>), <span class="math display">\[
+P\left(f_{\alpha/2;\,n_X-1,\,n_Y-1} &lt; \frac{S_X^2}{S_Y^2}\cdot\frac{\sigma_Y^2}{\sigma_X^2} &lt; f_{1-\alpha/2;\,n_X-1,\,n_Y-1}\right) = 1 - \alpha .
+\]</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-area-f" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-area-f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="cap1-estimacion_files/figure-html/fig-area-f-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-area-f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;6: Cuantiles de la distribución F que dejan un área <span class="math inline">\(\alpha/2\)</span> en cada cola.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Para despejar el cociente <span class="math inline">\(\sigma_X^2/\sigma_Y^2\)</span>, se divide entre <span class="math inline">\(S_X^2/S_Y^2\)</span> y se toma el recíproco de las tres partes, lo que <strong>invierte</strong> las desigualdades, igual que en el intervalo para una varianza.</p>
+<div id="thm-ic-cociente-varianzas" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 9 (Intervalo para el cociente de varianzas)</strong></span> Bajo los supuestos anteriores, un intervalo de confianza del <span class="math inline">\(100(1-\alpha)\)</span> % para <span class="math inline">\(\sigma_X^2/\sigma_Y^2\)</span> es <span class="math display">\[
+\left(\frac{s_X^2}{s_Y^2}\cdot\frac{1}{f_{1-\alpha/2;\,n_X-1,\,n_Y-1}},\ \ \frac{s_X^2}{s_Y^2}\cdot\frac{1}{f_{\alpha/2;\,n_X-1,\,n_Y-1}}\right).
+\]</span> Para calcular el cuantil inferior, que muchas tablas no traen, se usa la propiedad <span class="math inline">\(f_{\alpha/2;\,\nu_1,\nu_2} = 1/f_{1-\alpha/2;\,\nu_2,\nu_1}\)</span>.</p>
+</div>
+<p>Como en el intervalo para una varianza, este resultado exige que <strong>ambas poblaciones sean normales</strong>, y es muy sensible al incumplimiento de ese supuesto <span class="citation" data-cites="montgomery2018">(<a href="#ref-montgomery2018" role="doc-biblioref">Montgomery &amp; Runger, 2018, pp. 268, 273</a>)</span>.</p>
+<div id="exm-ic-reaccion" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 16</strong></span> Se compara la variabilidad de los tiempos de reacción, en milisegundos, de dos grupos de personas expuestas a estímulos visuales distintos:</p>
+<blockquote class="blockquote">
+<p><strong>Grupo 1 (<span class="math inline">\(n_1 = 10\)</span>):</strong> 48, 52, 50, 49, 47, 55, 53, 51, 50, 49.</p>
+<p><strong>Grupo 2 (<span class="math inline">\(n_2 = 15\)</span>):</strong> 57, 55, 56, 58, 54, 59, 57, 56, 55, 60, 58, 59, 57, 55, 56.</p>
+</blockquote>
+<p>Las varianzas muestrales son <span class="math inline">\(s_1^2 = 5{,}822\)</span> y <span class="math inline">\(s_2^2 = 3{,}029\)</span>, y su cociente, <span class="math inline">\(1{,}922\)</span>. Con <span class="math inline">\(\nu_1 = 9\)</span> y <span class="math inline">\(\nu_2 = 14\)</span>, los cuantiles son <span class="math inline">\(f_{0{,}025;\,9,14} = 0{,}263\)</span> y <span class="math inline">\(f_{0{,}975;\,9,14} = 3{,}209\)</span>, y el intervalo del 95 % para <span class="math inline">\(\sigma_1^2/\sigma_2^2\)</span> es <span class="math display">\[
+\left(\frac{1{,}922}{3{,}209},\ \frac{1{,}922}{0{,}263}\right) = (0{,}599;\ 7{,}301) .
+\]</span> El intervalo contiene el 1: aunque la varianza muestral del grupo 1 es casi el doble de la del grupo 2, los datos son compatibles con que las varianzas poblacionales sean iguales. Con muestras pequeñas, como vimos en Estadística I, el cociente de varianzas muestrales es muy inestable.</p>
+</div>
+<div id="exm-ic-semaforos" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 17</strong></span> Se compara la variabilidad de la duración de la luz verde, en segundos, de los semáforos de dos intersecciones:</p>
+<blockquote class="blockquote">
+<p><strong>Intersección 1 (<span class="math inline">\(n_1 = 12\)</span>):</strong> 34, 36, 35, 37, 33, 38, 36, 34, 35, 37, 33, 38.</p>
+<p><strong>Intersección 2 (<span class="math inline">\(n_2 = 15\)</span>):</strong> 30, 32, 31, 29, 30, 33, 32, 30, 31, 33, 29, 30, 32, 31, 30.</p>
+</blockquote>
+<p>Con <span class="math inline">\(s_1^2 = 3{,}182\)</span>, <span class="math inline">\(s_2^2 = 1{,}695\)</span>, <span class="math inline">\(f_{0{,}025;\,11,14} = 0{,}298\)</span> y <span class="math inline">\(f_{0{,}975;\,11,14} = 3{,}095\)</span>, el intervalo del 95 % para el cociente de varianzas es <span class="math inline">\((0{,}607;\ 6{,}304)\)</span>. Como contiene el 1, no hay evidencia de que la variabilidad de las dos intersecciones sea diferente.</p>
+</div>
+<div id="exm-ic-varianzas-pizza" class="theorem example">
+<p><span class="theorem-title"><strong>Ejemplo 18</strong></span> En el <a href="#exm-ic-welch" class="quarto-xref">Ejemplo&nbsp;12</a> afirmamos que no era razonable suponer varianzas iguales para los tiempos de entrega de las sucursales East y West. Con <span class="math inline">\(s_E^2 = 44{,}63\)</span>, <span class="math inline">\(s_W^2 = 32{,}85\)</span> y muestras de 410 y 435 entregas, el intervalo del 95 % para <span class="math inline">\(\sigma_E^2/\sigma_W^2\)</span> es <span class="math inline">\((1{,}12;\ 1{,}65)\)</span>. Como no contiene el 1, hay evidencia de que los tiempos de East son más variables, lo que justifica el método de Welch. Del mismo modo, en el <a href="#exm-ic-sueldos" class="quarto-xref">Ejemplo&nbsp;11</a> el intervalo para el cociente de varianzas de los sueldos es <span class="math inline">\((0{,}83;\ 8{,}59)\)</span>, que contiene el 1 y es compatible con el supuesto de varianzas iguales.</p>
+</div>
+</section>
+<section id="estimación-con-r" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="estimación-con-r"><span class="header-section-number">11</span> Estimación con R</h2>
+<section id="funciones-para-intervalos-de-confianza" class="level3" data-number="11.1">
+<h3 data-number="11.1" class="anchored" data-anchor-id="funciones-para-intervalos-de-confianza"><span class="header-section-number">11.1</span> Funciones para intervalos de confianza</h3>
+<p>R calcula directamente la mayoría de los intervalos de este capítulo. Las funciones devuelven mucha información, que se estudiará en el capítulo 2 al hablar de pruebas de hipótesis; por ahora basta extraer el intervalo con <code>$conf.int</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>llantas_A <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">42.3</span>, <span class="fl">41.8</span>, <span class="fl">43.1</span>, <span class="fl">42.7</span>, <span class="fl">41.5</span>, <span class="fl">43.0</span>, <span class="fl">42.6</span>, <span class="fl">42.9</span>, <span class="fl">41.9</span>, <span class="fl">42.4</span>,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>               <span class="fl">43.2</span>, <span class="fl">42.8</span>, <span class="fl">41.7</span>, <span class="fl">42.5</span>, <span class="fl">42.0</span>, <span class="fl">41.6</span>, <span class="fl">42.3</span>, <span class="fl">42.1</span>, <span class="fl">43.3</span>, <span class="fl">42.2</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>               <span class="fl">41.4</span>, <span class="fl">42.7</span>, <span class="fl">42.9</span>, <span class="fl">41.8</span>, <span class="fl">42.6</span>, <span class="fl">42.0</span>, <span class="fl">42.5</span>, <span class="fl">41.9</span>, <span class="fl">42.4</span>, <span class="fl">42.3</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>llantas_B <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">45.0</span>, <span class="fl">44.8</span>, <span class="fl">45.3</span>, <span class="fl">45.7</span>, <span class="fl">44.9</span>, <span class="fl">45.2</span>, <span class="fl">45.6</span>, <span class="fl">45.1</span>, <span class="fl">44.7</span>, <span class="fl">45.4</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>               <span class="fl">45.8</span>, <span class="fl">44.6</span>, <span class="fl">45.9</span>, <span class="fl">45.5</span>, <span class="fl">44.5</span>, <span class="fl">45.0</span>, <span class="fl">44.9</span>, <span class="fl">45.3</span>, <span class="fl">44.8</span>, <span class="fl">45.6</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>               <span class="fl">45.7</span>, <span class="fl">44.6</span>, <span class="fl">45.2</span>, <span class="fl">45.1</span>, <span class="fl">44.9</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Caso 1: varianzas conocidas (con la fórmula)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>dif <span class="ot">&lt;-</span> <span class="fu">mean</span>(llantas_A) <span class="sc">-</span> <span class="fu">mean</span>(llantas_B)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>dif <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">4</span> <span class="sc">/</span> <span class="dv">30</span> <span class="sc">+</span> <span class="fl">5.2</span> <span class="sc">/</span> <span class="dv">25</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -3.962418 -1.672249</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sueldos_A <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4500</span>, <span class="dv">4700</span>, <span class="dv">4200</span>, <span class="dv">4800</span>, <span class="dv">5100</span>, <span class="dv">4600</span>, <span class="dv">5000</span>, <span class="dv">4900</span>, <span class="dv">5200</span>, <span class="dv">4300</span>,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>               <span class="dv">4800</span>, <span class="dv">4700</span>, <span class="dv">4400</span>, <span class="dv">4950</span>, <span class="dv">5050</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>sueldos_B <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4000</span>, <span class="dv">4100</span>, <span class="dv">3950</span>, <span class="dv">4200</span>, <span class="dv">4350</span>, <span class="dv">4500</span>, <span class="dv">4250</span>, <span class="dv">4400</span>, <span class="dv">4150</span>, <span class="dv">4300</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>               <span class="dv">4050</span>, <span class="dv">4450</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Caso 2: varianzas iguales</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(sueldos_A, sueldos_B, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>conf.int</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 318.6271 724.7063
+attr(,"conf.level")
+[1] 0.95</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Caso 3: varianzas diferentes (Welch, la opción por defecto)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(sueldos_A, sueldos_B)<span class="sc">$</span>conf.int</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 328.6864 714.6469
+attr(,"conf.level")
+[1] 0.95</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Muestras pareadas</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>super_A <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">5.2</span>, <span class="fl">3.8</span>, <span class="fl">12.5</span>, <span class="fl">7.9</span>, <span class="fl">2.4</span>, <span class="fl">9.6</span>, <span class="fl">4.3</span>, <span class="fl">6.8</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>super_B <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">5.6</span>, <span class="fl">4.1</span>, <span class="fl">13.2</span>, <span class="fl">8.1</span>, <span class="fl">2.5</span>, <span class="fl">10.4</span>, <span class="fl">4.4</span>, <span class="fl">7.3</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(super_B, super_A, <span class="at">paired =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>conf.int</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.166592 0.608408
+attr(,"conf.level")
+[1] 0.95</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Diferencia de proporciones (fórmula y prop.test)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="dv">190</span> <span class="sc">/</span> <span class="dv">400</span>; p2 <span class="ot">&lt;-</span> <span class="dv">300</span> <span class="sc">/</span> <span class="dv">800</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>(p1 <span class="sc">-</span> p2) <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="fl">0.99</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(p1 <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p1) <span class="sc">/</span> <span class="dv">400</span> <span class="sc">+</span> p2 <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p2) <span class="sc">/</span> <span class="dv">800</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02957633 0.17042367</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="fu">c</span>(<span class="dv">190</span>, <span class="dv">300</span>), <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">800</span>), <span class="at">conf.level =</span> <span class="fl">0.98</span>, <span class="at">correct =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>conf.int</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02957633 0.17042367
+attr(,"conf.level")
+[1] 0.98</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cociente de varianzas</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>grupo1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">48</span>, <span class="dv">52</span>, <span class="dv">50</span>, <span class="dv">49</span>, <span class="dv">47</span>, <span class="dv">55</span>, <span class="dv">53</span>, <span class="dv">51</span>, <span class="dv">50</span>, <span class="dv">49</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>grupo2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">57</span>, <span class="dv">55</span>, <span class="dv">56</span>, <span class="dv">58</span>, <span class="dv">54</span>, <span class="dv">59</span>, <span class="dv">57</span>, <span class="dv">56</span>, <span class="dv">55</span>, <span class="dv">60</span>, <span class="dv">58</span>, <span class="dv">59</span>, <span class="dv">57</span>, <span class="dv">55</span>, <span class="dv">56</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(grupo1, grupo2, <span class="at">conf.level =</span> <span class="fl">0.95</span>)<span class="sc">$</span>conf.int</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.599019 7.301305
+attr(,"conf.level")
+[1] 0.95</code></pre>
+</div>
+</div>
+<p>Con <code>correct = FALSE</code>, <code>prop.test()</code> calcula para dos proporciones el mismo intervalo de la <a href="#thm-ic-dif-proporciones" class="quarto-xref">Teorema&nbsp;8</a>; por defecto aplica una corrección por continuidad que lo ensancha ligeramente.</p>
+</section>
+<section id="resumen-del-capítulo" class="level3" data-number="11.2">
+<h3 data-number="11.2" class="anchored" data-anchor-id="resumen-del-capítulo"><span class="header-section-number">11.2</span> Resumen del capítulo</h3>
+<p>La <a href="#tbl-resumen-intervalos" class="quarto-xref">Tabla&nbsp;5</a> reúne todos los intervalos del capítulo.</p>
+<div id="tbl-resumen-intervalos" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-resumen-intervalos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla&nbsp;5: Resumen de los intervalos de confianza.
+</figcaption>
+<div aria-describedby="tbl-resumen-intervalos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Supuestos</th>
+<th style="text-align: left;">Intervalo de confianza del <span class="math inline">\(100(1-\alpha)\)</span> %</th>
+<th style="text-align: left;">En R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mu\)</span></td>
+<td style="text-align: left;">Normal, <span class="math inline">\(\sigma^2\)</span> conocida</td>
+<td style="text-align: left;"><span class="math inline">\(\bar{x} \pm z_{1-\alpha/2}\,\sigma/\sqrt{n}\)</span></td>
+<td style="text-align: left;">Fórmula</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mu\)</span></td>
+<td style="text-align: left;">Normal, <span class="math inline">\(\sigma^2\)</span> desconocida</td>
+<td style="text-align: left;"><span class="math inline">\(\bar{x} \pm t_{1-\alpha/2;\,n-1}\, s/\sqrt{n}\)</span></td>
+<td style="text-align: left;"><code>t.test(x)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(p\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(n\hat{p} \ge 5\)</span>, <span class="math inline">\(n(1-\hat{p}) \ge 5\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\hat{p} \pm z_{1-\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\)</span></td>
+<td style="text-align: left;"><code>prop.test(x, n)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\sigma^2\)</span></td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;"><span class="math inline">\(\left(\frac{(n-1)s^2}{\chi^2_{1-\alpha/2;\,n-1}},\ \frac{(n-1)s^2}{\chi^2_{\alpha/2;\,n-1}}\right)\)</span></td>
+<td style="text-align: left;">Fórmula</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mu_X - \mu_Y\)</span></td>
+<td style="text-align: left;">Normales independientes, varianzas conocidas</td>
+<td style="text-align: left;"><span class="math inline">\((\bar{x} - \bar{y}) \pm z_{1-\alpha/2}\sqrt{\frac{\sigma_X^2}{n_X} + \frac{\sigma_Y^2}{n_Y}}\)</span></td>
+<td style="text-align: left;">Fórmula</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mu_X - \mu_Y\)</span></td>
+<td style="text-align: left;">Normales independientes, varianzas iguales</td>
+<td style="text-align: left;"><span class="math inline">\((\bar{x} - \bar{y}) \pm t_{1-\alpha/2;\,n_X+n_Y-2}\; s_p\sqrt{\frac{1}{n_X} + \frac{1}{n_Y}}\)</span></td>
+<td style="text-align: left;"><code>t.test(x, y, var.equal = TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\mu_X - \mu_Y\)</span></td>
+<td style="text-align: left;">Normales independientes, varianzas diferentes</td>
+<td style="text-align: left;"><span class="math inline">\((\bar{x} - \bar{y}) \pm t_{1-\alpha/2;\,\nu}\sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}\)</span></td>
+<td style="text-align: left;"><code>t.test(x, y)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\mu_D\)</span></td>
+<td style="text-align: left;">Diferencias pareadas normales</td>
+<td style="text-align: left;"><span class="math inline">\(\bar{d} \pm t_{1-\alpha/2;\,n-1}\, s_d/\sqrt{n}\)</span></td>
+<td style="text-align: left;"><code>t.test(x, y, paired = TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(p_X - p_Y\)</span></td>
+<td style="text-align: left;">Muestras grandes e independientes</td>
+<td style="text-align: left;"><span class="math inline">\((\hat{p}_X - \hat{p}_Y) \pm z_{1-\alpha/2}\sqrt{\frac{\hat{p}_X(1-\hat{p}_X)}{n_X} + \frac{\hat{p}_Y(1-\hat{p}_Y)}{n_Y}}\)</span></td>
+<td style="text-align: left;"><code>prop.test(c(x, y), c(nx, ny))</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\sigma_X^2/\sigma_Y^2\)</span></td>
+<td style="text-align: left;">Normales independientes</td>
+<td style="text-align: left;"><span class="math inline">\(\left(\frac{s_X^2/s_Y^2}{f_{1-\alpha/2}},\ \frac{s_X^2/s_Y^2}{f_{\alpha/2}}\right)\)</span></td>
+<td style="text-align: left;"><code>var.test(x, y)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+</section>
+<section id="ejercicios-propuestos" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="ejercicios-propuestos"><span class="header-section-number">12</span> Ejercicios propuestos</h2>
+<section id="estimación-puntual-y-propiedades" class="level3" data-number="12.1">
+<h3 data-number="12.1" class="anchored" data-anchor-id="estimación-puntual-y-propiedades"><span class="header-section-number">12.1</span> Estimación puntual y propiedades</h3>
+<ol type="1">
+<li><p>Sea <span class="math inline">\(X_1, X_2, X_3\)</span> una muestra aleatoria de una población con media <span class="math inline">\(\mu\)</span> y varianza <span class="math inline">\(\sigma^2\)</span>. Considere los estimadores <span class="math display">\[
+\hat{\Theta}_1 = \bar{X}, \qquad
+\hat{\Theta}_2 = \frac{X_1 + 2X_2 + X_3}{4}, \qquad
+\hat{\Theta}_3 = \frac{X_1 + X_2}{2} .
+\]</span></p>
+<ol type="a">
+<li>Verifique que los tres son insesgados.</li>
+<li>Calcule la varianza de cada uno. ¿Cuál es el más eficiente?</li>
+</ol></li>
+<li><p>Demuestre que el estimador de <span class="math inline">\(\sigma^2\)</span> dado por <span class="math inline">\(\hat{\Theta} = \frac{1}{n}\sum (X_i - \bar{X})^2\)</span> es sesgado y calcule su sesgo. ¿Qué ocurre con el sesgo cuando <span class="math inline">\(n\)</span> crece? ¿Es un estimador consistente?</p></li>
+<li><p><strong>Simulación en R.</strong> Tome 10 000 muestras de tamaño 10 de una población <span class="math inline">\(N(0, 4)\)</span> y calcule, en cada una, <span class="math inline">\(S^2\)</span> (con <code>var()</code>) y el estimador del ejercicio 2. Compare el promedio de cada estimador con <span class="math inline">\(\sigma^2 = 4\)</span>. ¿Qué concluye?</p></li>
+</ol>
+</section>
+<section id="intervalos-para-una-media" class="level3" data-number="12.2">
+<h3 data-number="12.2" class="anchored" data-anchor-id="intervalos-para-una-media"><span class="header-section-number">12.2</span> Intervalos para una media</h3>
+<ol start="4" type="1">
+<li><p>El tiempo que tardan los usuarios de un banco en ser atendidos tiene distribución normal con desviación estándar de 3 minutos. En una muestra de 36 usuarios, el tiempo promedio fue de 12,4 minutos.</p>
+<ol type="a">
+<li>Construya intervalos del 90 %, 95 % y 99 % para el tiempo promedio.</li>
+<li>¿Cuántos usuarios habría que observar para estimar el tiempo promedio con un margen de error de 0,5 minutos y una confianza del 95 %?</li>
+</ol></li>
+<li><p>Las calificaciones de 15 estudiantes en un examen fueron: 3,2; 4,1; 2,8; 3,5; 4,0; 3,7; 2,9; 3,8; 4,4; 3,1; 3,6; 4,2; 3,3; 3,9; 3,4. Suponiendo normalidad, construya un intervalo del 95 % para la calificación promedio, a mano y con <code>t.test()</code>.</p></li>
+<li><p>Con la base <code>pizza_delivery.xlsx</code>, tome una muestra aleatoria de 30 entregas con <code>sample()</code> y construya un intervalo del 95 % para el tiempo promedio de entrega. ¿Contiene su intervalo la media de las 1266 entregas (34,23 minutos)? Compare su resultado con el de sus compañeros: ¿cuántos intervalos contienen la media?</p></li>
+</ol>
+</section>
+<section id="intervalos-para-una-proporción" class="level3" data-number="12.3">
+<h3 data-number="12.3" class="anchored" data-anchor-id="intervalos-para-una-proporción"><span class="header-section-number">12.3</span> Intervalos para una proporción</h3>
+<ol start="7" type="1">
+<li><p>En una muestra de 250 egresados de una universidad, 185 consiguieron empleo en los seis meses siguientes al grado. Construya un intervalo del 95 % para la proporción de egresados que consiguen empleo en ese plazo, con la fórmula de Wald y con <code>prop.test()</code>.</p></li>
+<li><p>Una empresa quiere estimar la proporción de sus clientes que estarían dispuestos a usar un nuevo servicio digital, con un margen de error de 4 puntos porcentuales y una confianza del 95 %.</p>
+<ol type="a">
+<li>¿Qué tamaño de muestra necesita si no tiene información previa?</li>
+<li>¿Y si un estudio piloto indicó que la proporción está alrededor de 0,2?</li>
+</ol></li>
+</ol>
+</section>
+<section id="intervalos-para-una-varianza" class="level3" data-number="12.4">
+<h3 data-number="12.4" class="anchored" data-anchor-id="intervalos-para-una-varianza"><span class="header-section-number">12.4</span> Intervalos para una varianza</h3>
+<ol start="9" type="1">
+<li><p>Una fábrica produce tornillos con diámetro nominal de 5 mm. En una muestra aleatoria de 10 tornillos se obtuvieron los diámetros (en mm): 5,02; 4,98; 5,05; 5,00; 4,97; 5,03; 5,01; 5,04; 4,99; 5,02. Suponiendo normalidad, construya intervalos del 95 % para la varianza y para la desviación estándar del diámetro.</p></li>
+<li><p>Una planta embotelladora toma una muestra de 15 botellas, cuyos volúmenes (en ml) son: 498, 502, 497, 499, 501, 503, 500, 496, 504, 498, 499, 502, 497, 501, 500. Construya un intervalo del 95 % para la varianza del volumen. ¿Es compatible el intervalo con una varianza de 4 ml²? (En el capítulo 2 responderemos esta pregunta con una prueba de hipótesis).</p></li>
+</ol>
+</section>
+<section id="intervalos-para-dos-poblaciones" class="level3" data-number="12.5">
+<h3 data-number="12.5" class="anchored" data-anchor-id="intervalos-para-dos-poblaciones"><span class="header-section-number">12.5</span> Intervalos para dos poblaciones</h3>
+<ol start="11" type="1">
+<li><p>Se compara el rendimiento de dos métodos de enseñanza. Con el método A, 40 estudiantes obtuvieron una nota media de 3,8; con el método B, 35 estudiantes obtuvieron una media de 3,5. Por experiencias anteriores, las desviaciones estándar poblacionales son 0,5 y 0,6. Construya un intervalo del 95 % para la diferencia de medias e interprételo.</p></li>
+<li><p>Dos máquinas llenan bolsas de café. En una muestra de 12 bolsas de la máquina 1 el peso medio fue 501,2 g con desviación estándar de 3,1 g, y en 10 bolsas de la máquina 2 fue 498,4 g con desviación estándar de 2,8 g. Suponiendo normalidad:</p>
+<ol type="a">
+<li>construya un intervalo del 95 % para el cociente de varianzas. ¿Es razonable suponer varianzas iguales?</li>
+<li>según su respuesta, construya el intervalo del 95 % adecuado para la diferencia de medias.</li>
+</ol></li>
+<li><p>Con la base <code>pizza_delivery.xlsx</code>, construya con R intervalos del 95 % para la diferencia entre la temperatura media de las pizzas entregadas por Domenico y por Bruno, suponiendo varianzas iguales y con el método de Welch. Compare los resultados.</p></li>
+<li><p>Se midió la presión arterial sistólica de 10 pacientes antes y después de un tratamiento: antes 142, 138, 150, 145, 160, 155, 148, 152, 140, 158; después 135, 136, 141, 140, 150, 149, 145, 144, 138, 150.</p>
+<ol type="a">
+<li>Explique por qué las muestras son pareadas.</li>
+<li>Construya un intervalo del 95 % para la reducción media de la presión y verifíquelo con <code>t.test(..., paired = TRUE)</code>.</li>
+<li>¿Qué intervalo se obtendría si se trataran, por error, como muestras independientes?</li>
+</ol></li>
+<li><p>En una encuesta, 280 de 400 habitantes de la zona urbana y 150 de 250 de la zona rural dijeron estar satisfechos con el servicio de salud. Construya un intervalo del 95 % para la diferencia de proporciones. ¿Hay evidencia de una diferencia en la satisfacción?</p></li>
+<li><p>Con la base <code>pizza_delivery.xlsx</code>, construya un intervalo del 95 % para la diferencia entre la proporción de entregas que tardan más de 30 minutos en la sucursal Centre y en la sucursal East.</p></li>
+<li><p>Los tiempos de ensamble, en minutos, de dos operarios fueron: operario 1: 12,1; 11,8; 12,5; 13,0; 11,6; 12,2; 12,8; 11,9; operario 2: 12,0; 14,1; 10,9; 13,5; 11,2; 14,6; 10,8; 13,9; 12,4. Construya un intervalo del 90 % para el cociente de varianzas, a mano y con <code>var.test()</code>. ¿Es uno de los operarios más irregular que el otro?</p></li>
+</ol>
+</section>
+</section>
+<section id="referencias" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referencias">Referencias</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-canavos1988" class="csl-entry" role="listitem">
+Canavos, G. C. (1988). <em>Probabilidad y estadística: Aplicaciones y métodos</em> (E. G. Urbina Medal, Trad.). McGraw-Hill.
+</div>
+<div id="ref-daniel1987" class="csl-entry" role="listitem">
+Daniel, W. W. (1987). <em>Bioestadística: Base para el análisis de las ciencias de la salud</em> (M. Guzmán Ortiz &amp; A. L. Babinsky Epstein, Trads.; 3.ª ed.). Limusa.
+</div>
+<div id="ref-delacre2017" class="csl-entry" role="listitem">
+Delacre, M., Lakens, D., &amp; Leys, C. (2017). Why Psychologists Should by Default Use <span>Welch’s</span> t-test Instead of <span>Student’s</span> t-test. <em>International Review of Social Psychology</em>, <em>30</em>(1), 92-101. <a href="https://doi.org/10.5334/irsp.82">https://doi.org/10.5334/irsp.82</a>
+</div>
+<div id="ref-devore2008" class="csl-entry" role="listitem">
+Devore, J. L. (2008). <em>Probabilidad y estadística para ingeniería y ciencias</em> (7.ª ed.). Cengage Learning.
+</div>
+<div id="ref-fisher1922" class="csl-entry" role="listitem">
+Fisher, R. A. (1922). On the Mathematical Foundations of Theoretical Statistics. <em>Philosophical Transactions of the Royal Society of London. Series A</em>, <em>222</em>, 309-368. <a href="https://doi.org/10.1098/rsta.1922.0009">https://doi.org/10.1098/rsta.1922.0009</a>
+</div>
+<div id="ref-hodges1970" class="csl-entry" role="listitem">
+Hodges, J. L., &amp; Lehmann, E. L. (1970). Deficiency. <em>The Annals of Mathematical Statistics</em>, <em>41</em>(3), 783-801. <a href="https://doi.org/10.1214/aoms/1177696959">https://doi.org/10.1214/aoms/1177696959</a>
+</div>
+<div id="ref-hoekstra2014" class="csl-entry" role="listitem">
+Hoekstra, R., Morey, R. D., Rouder, J. N., &amp; Wagenmakers, E.-J. (2014). Robust Misinterpretation of Confidence Intervals. <em>Psychonomic Bulletin &amp; Review</em>, <em>21</em>(5), 1157-1164. <a href="https://doi.org/10.3758/s13423-013-0572-3">https://doi.org/10.3758/s13423-013-0572-3</a>
+</div>
+<div id="ref-montgomery2018" class="csl-entry" role="listitem">
+Montgomery, D. C., &amp; Runger, G. C. (2018). <em>Applied Statistics and Probability for Engineers</em> (7.ª ed.). Wiley.
+</div>
+<div id="ref-rcore2024" class="csl-entry" role="listitem">
+R Core Team. (2024). <em>R: A Language and Environment for Statistical Computing</em>. R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+</div>
+<div id="ref-walpole2012" class="csl-entry" role="listitem">
+Walpole, R. E., Myers, R. H., Myers, S. L., &amp; Ye, K. (2012). <em>Probabilidad y estadística para ingeniería y ciencias</em> (9.ª ed.). Pearson Educación.
+</div>
+</div>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/fabiosepulveda\.github\.io\/estadistica2\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Estadística II · Escuela de Matemáticas · Universidad Industrial de Santander</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

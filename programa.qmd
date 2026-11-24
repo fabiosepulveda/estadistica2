@@ -1,0 +1,82 @@
+---
+title: "Programa del curso"
+---
+
+**Requisito:** Estadística I.
+
+## Capítulo 1: Estimación
+Inferencia estadística; estimación puntual y propiedades de los estimadores
+(insesgamiento, consistencia, eficiencia y suficiencia); intervalos de
+confianza para una media, una proporción y una varianza; intervalos para la
+diferencia de medias, la diferencia de proporciones y el cociente de
+varianzas; tamaño de muestra.
+
+## Capítulo 2: Pruebas de hipótesis
+Hipótesis estadística, hipótesis nula y alternativa; errores tipo I y tipo
+II; nivel de significancia y valor p; pruebas para una media, una proporción
+y una varianza; pruebas para dos poblaciones.
+
+## Capítulo 3: Regresión lineal simple
+Diagrama de dispersión y correlación; modelo de regresión lineal simple;
+estimación por mínimos cuadrados; inferencia sobre los coeficientes;
+coeficiente de determinación; análisis de residuales; predicción.
+
+## Capítulo 4: Regresión lineal múltiple
+Modelo de regresión lineal múltiple; estimación e interpretación de los
+coeficientes; inferencia; selección de variables; variables indicadoras;
+multicolinealidad; validación de supuestos.
+
+## Capítulo 5: Pruebas chi-cuadrado de bondad de ajuste e independencia
+Frecuencias observadas y esperadas; estadístico chi-cuadrado de Pearson;
+tablas unidimensionales: pruebas de bondad de ajuste para proporciones
+especificadas y para distribuciones discretas y continuas; pruebas de
+Shapiro-Wilk y de Kolmogorov-Smirnov; tablas de doble entrada: pruebas de
+independencia y de homogeneidad; prueba exacta de Fisher.
+
+## Referencias
+
+### Bibliografía básica
+
+::: {.referencias}
+Devore, J. L. (2008). *Probabilidad y estadística para ingeniería y ciencias* (7.ª ed.). Cengage Learning.
+
+Montgomery, D. C., & Runger, G. C. (2018). *Applied statistics and probability for engineers* (7.ª ed.). Wiley.
+
+Newbold, P., Carlson, W. L., & Thorne, B. M. (2013). *Estadística para administración y economía* (8.ª ed.). Pearson Educación.
+
+Walpole, R. E., Myers, R. H., Myers, S. L., & Ye, K. (2012). *Probabilidad y estadística para ingeniería y ciencias* (9.ª ed.). Pearson Educación.
+:::
+
+### Bibliografía complementaria
+
+::: {.referencias}
+Agresti, A. (2019). *An introduction to categorical data analysis* (3.ª ed.). Wiley.
+
+Canavos, G. C. (1988). *Probabilidad y estadística: Aplicaciones y métodos*. McGraw-Hill.
+
+Çetinkaya-Rundel, M., & Hardin, J. (2021). *Introduction to modern statistics*. OpenIntro. <https://www.openintro.org/book/ims/>
+
+Daniel, W. W. (1987). *Bioestadística: Base para el análisis de las ciencias de la salud* (M. Guzmán Ortiz & A. L. Babinsky Epstein, Trads.; 3.ª ed.). Limusa.
+
+Diez, D. M., Çetinkaya-Rundel, M., & Barr, C. D. (2019). *OpenIntro statistics* (4.ª ed.). OpenIntro. <https://www.openintro.org/book/os/>
+
+Faraway, J. J. (2002). *Practical regression and ANOVA using R*. <https://cran.r-project.org/doc/contrib/Faraway-PRA.pdf>
+
+Fox, J., & Weisberg, S. (2019). *An R companion to applied regression* (3.ª ed.). Sage.
+
+Heumann, C., Schomaker, M., & Shalabh. (2022). *Introduction to statistics and data analysis: With exercises, solutions and applications in R* (2.ª ed.). Springer. <https://doi.org/10.1007/978-3-031-11833-3>
+
+James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). *An introduction to statistical learning: With applications in R* (2.ª ed.). Springer. <https://www.statlearning.com>
+
+Montgomery, D. C., Peck, E. A., & Vining, G. G. (2012). *Introduction to linear regression analysis* (5.ª ed.). Wiley.
+
+Ugarte, M. D., Militino, A. F., & Arnholt, A. T. (2016). *Probability and statistics with R* (2.ª ed.). CRC Press. <https://doi.org/10.1201/b18682>
+:::
+
+### Software y recursos en línea
+
+::: {.referencias}
+Posit team. (2025). *RStudio: Integrated development environment for R* [Software]. Posit Software, PBC. <https://posit.co/>
+
+R Core Team. (2024). *R: A language and environment for statistical computing* [Software]. R Foundation for Statistical Computing. <https://www.R-project.org/>
+:::

@@ -1,0 +1,428 @@
+---
+title: "Capítulo 5: Pruebas chi-cuadrado de bondad de ajuste e independencia"
+subtitle: "Estadística II"
+author: "Fabio Humberto Sepúlveda Murillo"
+institute: "Escuela de Matemáticas · Universidad Industrial de Santander"
+format:
+  revealjs:
+    menu:
+      side: left
+    transition: fade
+    code-overflow: wrap
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(ggplot2)
+theme_set(theme_minimal(base_size = 18))
+library(readxl)
+pizza <- read_excel("datos/pizza_delivery.xlsx")
+# el o los valores críticos y el valor observado del estadístico (verde)
+grafica_prueba <- function(f, desde, hasta, criticos, cola, obs,
+                           etq_crit, etq_obs, eje = "z") {
+  ancho <- hasta - desde
+  desde <- min(desde, obs - 0.08 * ancho)
+  hasta <- max(hasta, obs + 0.08 * ancho)
+  x <- seq(desde, hasta, length.out = 800)
+  d <- data.frame(x = x, y = f(x))
+  ymax <- max(d$y)
+  d$rechazo <- switch(cola,
+                      derecha   = d$x >= criticos[1],
+                      izquierda = d$x <= criticos[1],
+                      ambas     = d$x <= criticos[1] | d$x >= criticos[2])
+  d$lado <- d$x > mean(criticos)
+  ggplot(d, aes(x = x, y = y)) +
+    geom_area(data = subset(d, rechazo), aes(group = lado),
+              fill = "firebrick", alpha = 0.55) +
+    geom_line(color = "#29a8e0", linewidth = 1.1) +
+    annotate("segment", x = desde, xend = hasta, y = 0, yend = 0) +
+    annotate("segment", x = criticos, xend = criticos, y = -0.05 * ymax,
+             yend = f(criticos), color = "firebrick", linetype = "dashed") +
+    annotate("text", x = criticos, y = -0.12 * ymax, label = etq_crit,
+             parse = TRUE, color = "firebrick", size = 4) +
+    annotate("segment", x = obs, xend = obs, y = -0.19 * ymax, yend = 0.85 * ymax,
+             color = "darkgreen", linewidth = 1) +
+    annotate("text", x = obs, y = -0.27 * ymax, label = etq_obs,
+             parse = TRUE, color = "darkgreen", size = 4) +
+    annotate("text", x = hasta, y = 0.06 * ymax, label = eje, parse = TRUE,
+             hjust = 1, size = 4.5) +
+    coord_cartesian(ylim = c(-0.32 * ymax, 1.02 * ymax), clip = "off") +
+    theme_void()
+}
+```
+
+## Contenido
+
+1. Frecuencias observadas y esperadas
+2. Bondad de ajuste: proporciones especificadas
+3. Bondad de ajuste: distribuciones discretas (binomial, Poisson)
+4. Bondad de ajuste: distribuciones continuas
+5. Prueba de independencia
+6. Prueba de homogeneidad
+7. Prueba exacta de Fisher
+8. Pruebas chi-cuadrado con R
+
+## Dos preguntas, un método
+
+:::: {.columns}
+::: {.column width="50%"}
+**¿Se ajustan los datos a un modelo?**
+
+¿Es equilibrado un dado? ¿Siguen las llamadas una Poisson?
+
+→ Tablas **unidimensionales**: bondad de ajuste.
+:::
+::: {.column width="50%"}
+**¿Están relacionadas dos variables?**
+
+¿Depende el hábito de fumar del género?
+
+→ Tablas de **doble entrada**: independencia y homogeneidad.
+:::
+::::
+
+. . .
+
+Lo que se analiza son **frecuencias**: las variables pueden ser cualitativas o
+cuantitativas agrupadas en clases.
+
+# Frecuencias observadas y esperadas {background-color="#2c5d8f"}
+
+## El estadístico de Pearson
+
+- $o_i$: frecuencia **observada** en la categoría $i$.
+- $e_i = n\,p_i$: frecuencia **esperada** si $H_0$ es verdadera.
+
+$$
+\chi^2 = \sum_{i=1}^{k} \frac{(o_i - e_i)^2}{e_i}
+$$
+
+Propuesto por Karl Pearson en 1900 [@pearson1900; @daniel1987, p. 461].
+
+. . .
+
+- Si los datos coinciden con lo esperado, $\chi^2 = 0$.
+- Prueba siempre de **cola derecha**.
+
+## Grados de libertad
+
+$$
+\nu = k - 1 - m
+$$
+
+::: {.incremental}
+- Se pierde **1** porque las frecuencias suman $n$ [@daniel1987, p. 470].
+- Se pierde **1 por cada parámetro estimado** ($m$): corrección de Fisher (1924) a Pearson [@fisher1924; @stigler2008].
+- Con parámetros estimados con los datos individuales, la distribución queda entre $\chi^2(k - 1 - m)$ y $\chi^2(k - 1)$ [@chernoff1954; @devore2008, p. 581]: conviene revisar ambos valores p.
+:::
+
+## ¿Qué tan pequeñas pueden ser las esperadas?
+
+Recomendaciones de Cochran [@cochran1954; @daniel1987, pp. 468, 481--482]:
+
+- **Bondad de ajuste** (distribuciones unimodales): mínimo 1.
+- **Tablas de contingencia**: mínimo 1, y no más del 20 % de las celdas con menos de 5.
+
+. . .
+
+**En este curso:** agrupar clases si alguna esperada es menor que 5, como
+recomiendan Walpole et al. [-@walpole2012, p. 372].
+
+. . .
+
+La regla es sobre las frecuencias **esperadas**, no sobre las observadas.
+
+# Bondad de ajuste {background-color="#2c5d8f"}
+
+## ¿Está equilibrado el dado?
+
+| Cara | 1 | 2 | 3 | 4 | 5 | 6 |
+|:--|:--:|:--:|:--:|:--:|:--:|:--:|
+| Observada | 18 | 22 | 16 | 25 | 14 | 25 |
+| Esperada | 20 | 20 | 20 | 20 | 20 | 20 |
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3
+#| fig-align: center
+grafica_prueba(function(x) dchisq(x, 5), 0, 18, 11.07, "derecha", 5.50,
+               'chi["0,95;5"]^2 == "11,07"', 'chi[obs]^2 == "5,50"', eje = "chi^2")
+```
+
+$\chi^2_{\text{obs}} = 5{,}50 < 11{,}07$ → **no se rechaza** $H_0$ (valor p $= 0{,}358$).
+
+## Los guisantes de Mendel
+
+Teoría: proporción $9 : 3 : 3 : 1$ [@mendel1866].
+
+| | Redonda amarilla | Rugosa amarilla | Redonda verde | Rugosa verde |
+|:--|:--:|:--:|:--:|:--:|
+| Observada | 315 | 101 | 108 | 32 |
+| Esperada | 312,75 | 104,25 | 104,25 | 34,75 |
+
+$\chi^2_{\text{obs}} = 0{,}47$, valor p $= 0{,}93$ → los datos se ajustan muy bien a la teoría.
+
+```{r}
+#| echo: true
+chisq.test(c(315, 101, 108, 32), p = c(9, 3, 3, 1) / 16)
+```
+
+## Binomial: el nuevo analgésico
+
+100 médicos, 25 pacientes cada uno; $\hat{p} = 500/2500 = 0{,}20$ [@daniel1987, pp. 468--470].
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 3.6
+#| fig-align: center
+medicos <- c(5, 6, 8, 10, 10, 15, 17, 10, 10, 9, 0)
+esperadas <- 100 * c(dbinom(0:9, 25, 0.2), pbinom(9, 25, 0.2, lower.tail = FALSE))
+comp <- data.frame(x = factor(rep(c(0:9, "10+"), 2), levels = c(0:9, "10+")),
+                   frec = c(medicos, esperadas),
+                   tipo = rep(c("Observada", "Esperada (binomial)"), each = 11))
+ggplot(comp, aes(x = x, y = frec, fill = tipo)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("grey60", "steelblue")) +
+  labs(x = "Pacientes (de 25) que prefieren el nuevo analgésico", y = "Médicos", fill = NULL) +
+  theme(legend.position = "top")
+```
+
+## Binomial: la decisión
+
+Agrupando para que ninguna esperada sea menor que 5: 7 clases, $\nu = 7 - 1 - 1 = 5$.
+
+$$
+\chi^2_{\text{obs}} = 20{,}75 > \chi^2_{0{,}95;\,5} = 11{,}07 \quad (\text{valor p} = 0{,}0009)
+$$
+
+**Se rechaza** $H_0$. Con el criterio de Daniel (Cochran), $\chi^2 = 47{,}6$ con 8 gl: la misma conclusión.
+
+. . .
+
+¿Por qué? Media de 5, como predice la binomial, pero varianza de **6,40**
+frente a **4**. Una explicación posible: la probabilidad de preferirlo no es
+la misma para los pacientes de todos los médicos.
+
+## Poisson: llamadas por minuto
+
+40 minutos, $\hat{\lambda} = 2{,}225$ (ejercicio 8 del capítulo 1 de Estadística I).
+
+| Llamadas | 0 o 1 | 2 | 3 | 4 o más |
+|:--|:--:|:--:|:--:|:--:|
+| Observada | 13 | 12 | 8 | 7 |
+| Esperada (Poisson) | 13,94 | 10,70 | 7,94 | 7,42 |
+
+. . .
+
+$\nu = 4 - 1 - 1 = 2$: $\ \chi^2_{\text{obs}} = 0{,}246$, valor p $= 0{,}88$ (con $\nu = 3$: 0,97).
+
+**No se rechaza** $H_0$: el modelo de Poisson describe bien las llamadas.
+
+## Normal: tiempos de entrega
+
+1266 entregas, $\bar{x} = 34{,}23$, $s = 6{,}46$ ($m = 2$), seis clases:
+
+| Minutos | $< 25$ | $[25, 30)$ | $[30, 35)$ | $[35, 40)$ | $[40, 45)$ | $\ge 45$ |
+|:--|:--:|:--:|:--:|:--:|:--:|:--:|
+| Observada | 98 | 213 | 371 | 350 | 175 | 59 |
+| Esperada | 96,98 | 227,62 | 368,51 | 337,54 | 174,88 | 60,48 |
+
+$\nu = 3$: $\ \chi^2_{\text{obs}} = 1{,}46$, valor p $= 0{,}69$ → la normal es un buen modelo.
+
+. . .
+
+Para variables continuas, la chi-cuadrado **no es la prueba más apropiada**
+[@daniel1987, p. 468]: depende de las clases y pierde información.
+
+## Otras pruebas para continuas
+
+:::: {.columns}
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 6
+#| fig-height: 4.6
+ggplot(pizza, aes(sample = time)) +
+  stat_qq(color = "steelblue", alpha = 0.6) +
+  stat_qq_line(color = "firebrick") +
+  labs(x = "Cuantiles teóricos", y = "Tiempo (min)")
+```
+:::
+::: {.column width="45%"}
+- **Shapiro-Wilk** [@shapiro1965]: la de mayor potencia en estudios de simulación [@razali2011]. Valor p $= 0{,}18$.
+- **Kolmogorov-Smirnov**: cualquier distribución continua. Valor p $= 0{,}77$.
+- **Gráfico Q-Q**: puntos sobre la recta.
+:::
+::::
+
+# Prueba de independencia {background-color="#2c5d8f"}
+
+## Tablas de doble entrada
+
+$H_0$: las dos variables son **independientes**.
+
+Si $H_0$ es cierta, $P(A \cap B) = P(A)\,P(B)$ (capítulo 2 de Estadística I), y [@walpole2012, pp. 374--376]:
+
+$$
+e_{ij} = \frac{(\text{total fila } i)(\text{total columna } j)}{n},
+\qquad
+\nu = (r - 1)(c - 1)
+$$
+
+## Reforma fiscal e ingresos
+
+1000 votantes [@walpole2012, pp. 374--376]:
+
+| | Bajo | Medio | Alto | Total |
+|:--|:--:|:--:|:--:|:--:|
+| A favor | 182 (200,9) | 213 (209,9) | 203 (187,2) | 598 |
+| En contra | 154 (135,1) | 138 (141,1) | 110 (125,8) | 402 |
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 2.8
+#| fig-align: center
+grafica_prueba(function(x) dchisq(x, 2), 0, 12, 5.99, "derecha", 7.88,
+               'chi["0,95;2"]^2 == "5,99"', 'chi[obs]^2 == "7,88"', eje = "chi^2")
+```
+
+$\chi^2_{\text{obs}} = 7{,}88 > 5{,}99$ → la opinión y el ingreso **no son independientes**.
+
+## ¿Fumar y género? La pregunta de Estadística I
+
+| Fuma | Hombre | Mujer | Total |
+|:--|:--:|:--:|:--:|
+| Sí | 65 (57,01) | 58 (65,99) | 123 |
+| No | 43 (50,99) | 67 (59,01) | 110 |
+
+. . .
+
+$\chi^2_{\text{obs}} = 4{,}42 > 3{,}84$ (valor p $= 0{,}036$) → **están asociados**:
+fuma el 60,2 % de los hombres y el 46,4 % de las mujeres.
+
+. . .
+
+En una tabla de 2 × 2 equivale a la prueba $z$ de dos proporciones:
+$z^2 = 2{,}10^2 = 4{,}42$ [@walpole2012, p. 378].
+
+Con la corrección de Yates: 3,88, valor p $= 0{,}049$.
+
+## Pizzería: ¿depende la demora de la sucursal?
+
+```{r}
+#| echo: true
+tabla <- table(sucursal = pizza$branch, demorada = pizza$time > 30)
+round(prop.table(tabla, margin = 1), 3)
+chisq.test(tabla)
+```
+
+# Prueba de homogeneidad {background-color="#2c5d8f"}
+
+## ¿Independencia u homogeneidad?
+
+:::: {.columns}
+::: {.column width="50%"}
+**Independencia**
+
+**Una** muestra; cada unidad se clasifica según dos variables. Totales
+aleatorios.
+:::
+::: {.column width="50%"}
+**Homogeneidad**
+
+**Varias** muestras de tamaños fijados de antemano. ¿Tienen las poblaciones
+la misma distribución?
+:::
+::::
+
+[@daniel1987, pp. 487--488; @walpole2012, p. 376]
+
+. . .
+
+**Los cálculos son idénticos.** Con dos categorías: prueba de que $k$
+proporciones son iguales [@walpole2012, p. 378].
+
+## Defectuosos por turno
+
+[@walpole2012, p. 379]
+
+| | Matutino | Vespertino | Nocturno |
+|:--|:--:|:--:|:--:|
+| Defectuosos | 45 | 55 | 70 |
+| No defectuosos | 905 | 890 | 870 |
+
+. . .
+
+$H_0: p_1 = p_2 = p_3$, $\alpha = 0{,}025$: $\ \chi^2_{\text{obs}} = 6{,}23 < 7{,}38$ (valor p $= 0{,}044$).
+
+No se rechaza con $\alpha = 0{,}025$... pero con ese valor p sería riesgoso
+concluir que son iguales.
+
+```{r}
+#| echo: true
+#| eval: false
+prop.test(c(45, 55, 70), c(950, 945, 940))
+```
+
+# Prueba exacta de Fisher {background-color="#2c5d8f"}
+
+## Cuando las esperadas son pequeñas
+
+Esperadas menores que 5 en una tabla de 2 × 2: prueba exacta de Fisher,
+basada en la **hipergeométrica** [@devore2008, p. 358; @walpole2012, p. 376].
+
+| | Mejoró | No mejoró |
+|:--|:--:|:--:|
+| Tratamiento | 5 | 1 |
+| Placebo | 1 | 5 |
+
+. . .
+
+Bajo $H_0$: $X \sim \text{Hip}(12, 6, 6)$, y $P(X = 5) = 0{,}039$.
+
+$$
+\text{valor p} = P(X = 0) + P(X = 1) + P(X = 5) + P(X = 6) = 0{,}080
+$$
+
+## Exacta frente a aproximada
+
+```{r}
+#| echo: true
+piloto <- matrix(c(5, 1, 1, 5), nrow = 2, byrow = TRUE)
+fisher.test(piloto)$p.value
+suppressWarnings(chisq.test(piloto, correct = FALSE)$p.value)
+```
+
+. . .
+
+Fisher: **no se rechaza** (0,080). Chi-cuadrado, usada indebidamente: se
+rechazaría (0,021). La aproximación falla con esperadas pequeñas.
+
+# Resumen {background-color="#2c5d8f"}
+
+## Pruebas del capítulo
+
+| Prueba | Grados de libertad | En R |
+|:--|:--:|:--|
+| Bondad de ajuste (proporciones dadas) | $k - 1$ | `chisq.test(x, p = )` |
+| Bondad de ajuste ($m$ parámetros) | $k - 1 - m$ | `pchisq()` |
+| Independencia | $(r-1)(c-1)$ | `chisq.test(tabla)` |
+| Homogeneidad | $(r-1)(c-1)$ | `chisq.test()`, `prop.test()` |
+| Exacta de Fisher | — | `fisher.test(tabla)` |
+| Normalidad | — | `shapiro.test()`, `ks.test()` |
+
+Revise siempre `$expected` [@rcore2024].
+
+## Para practicar
+
+- Los **12 ejercicios** del capítulo están en los apuntes.
+- Incluyen datos de la encuesta de Estadística I y de la pizzería.
+
+## Referencias {.smaller .scrollable}
+
+::: {#refs}
+:::

@@ -1,0 +1,9 @@
+number-sections: true
+format:
+  html: default
+  pdf:
+    documentclass: article
+    papersize: letter
+    geometry: margin=2.5cm
+    toc: true
+    colorlinks: true

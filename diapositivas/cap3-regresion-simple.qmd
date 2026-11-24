@@ -1,0 +1,502 @@
+---
+title: "Capítulo 3: Regresión lineal simple"
+subtitle: "Estadística II"
+author: "Fabio Humberto Sepúlveda Murillo"
+institute: "Escuela de Matemáticas · Universidad Industrial de Santander"
+format:
+  revealjs:
+    menu:
+      side: left
+    transition: fade
+    code-overflow: wrap
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(ggplot2)
+
+estatura <- c(68, 64, 62, 65, 66)
+peso     <- c(132, 108, 102, 115, 128)
+theme_set(theme_minimal(base_size = 18))
+```
+
+## Contenido
+
+:::: {.columns}
+::: {.column width="50%"}
+1. ¿Qué es la regresión?
+2. El análisis de regresión paso a paso
+3. Diagramas de dispersión
+4. Coeficiente de correlación
+5. El modelo de regresión lineal simple
+6. Mínimos cuadrados
+:::
+::: {.column width="50%"}
+7. Coeficiente de determinación
+8. Inferencia sobre los coeficientes
+9. Predicción
+10. Análisis residual
+11. Aplicación con R
+:::
+::::
+
+# ¿Qué es la regresión? {background-color="#2c5d8f"}
+
+## Relaciones entre variables
+
+¿Cuánto aumentan las ventas por cada millón invertido en publicidad? ¿Cómo
+cambia el consumo de combustible con la velocidad?
+
+. . .
+
+La **regresión** modela la relación entre una **variable dependiente** $Y$ y
+una o más **variables independientes** $X$, para describirla y para
+**predecir** $Y$.
+
+. . .
+
+| Área | Ejemplo |
+|:--|:--|
+| Economía | Consumo de los hogares según el ingreso |
+| Salud | Dosis de un fármaco y efecto clínico |
+| Ingeniería | Temperatura y resistencia de un material |
+| Ambiente | Contaminantes y enfermedades respiratorias |
+
+## Antes de ajustar un modelo
+
+> "La formulación de un problema es a menudo más importante que su solución." --- Albert Einstein
+
+Es un error iniciar un análisis sin tener claros los objetivos ni saber si
+los datos son apropiados [@faraway2002, p. 8].
+
+::: {.incremental}
+1. **Formular** el problema: contexto, objetivo, variables.
+2. **Recolectar** los datos: ¿experimento u observación? ¿datos perdidos?
+3. **Análisis inicial**: descriptivas y gráficos.
+:::
+
+## Un caso real: datos `pima`
+
+768 mujeres del pueblo Pima; presión diastólica [@faraway2002, p. 9]:
+
+- Mínimo de la presión diastólica: **0**. ¡Imposible en una persona viva!
+- Los ceros codificaban **datos perdidos**.
+
+```{r}
+#| echo: true
+#| eval: false
+library(faraway)
+pima$diastolic[pima$diastolic == 0] <- NA
+```
+
+Sin el análisis inicial, todo lo demás quedaría distorsionado.
+
+# Dispersión y correlación {background-color="#2c5d8f"}
+
+## Diagramas de dispersión
+
+```{r}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 4
+#| fig-align: center
+set.seed(123)
+x1 <- 1:100
+lineal <- data.frame(x = x1, y = 3 * x1 + rnorm(100, 0, 20), tipo = "Lineal")
+set.seed(42)
+x2 <- seq(-10, 10, by = 0.1)
+cuadratica <- data.frame(x = x2, y = x2^2 + rnorm(length(x2), 0, 10), tipo = "Cuadrática")
+set.seed(123)
+cubica <- data.frame(x = x2, y = x2^3 + rnorm(length(x2), 0, 30), tipo = "Cúbica")
+relaciones <- rbind(lineal, cuadratica, cubica)
+relaciones$tipo <- factor(relaciones$tipo, levels = c("Lineal", "Cuadrática", "Cúbica"))
+relaciones$grado <- as.numeric(relaciones$tipo)
+ajustes <- do.call(rbind, lapply(split(relaciones, relaciones$tipo), function(d) {
+  m <- lm(y ~ poly(x, unique(d$grado)), data = d)
+  data.frame(x = d$x, y = fitted(m), tipo = d$tipo)
+}))
+ggplot(relaciones, aes(x = x, y = y)) +
+  geom_point(color = "steelblue", size = 1, alpha = 0.7) +
+  geom_line(data = ajustes, color = "firebrick", linewidth = 1) +
+  facet_wrap(~ tipo, scales = "free") +
+  labs(x = "Variable X", y = "Variable Y")
+```
+
+La regresión lineal simple es adecuada para el primero.
+
+## Coeficiente de correlación de Pearson
+
+$$
+r = \frac{S_{xy}}{\sqrt{S_{xx}\,S_{yy}}},
+\qquad S_{xy} = \sum (x_i - \bar{x})(y_i - \bar{y})
+$$
+
+- Está entre $-1$ y $1$; el signo indica la dirección.
+- Mide la fuerza de la relación **lineal** [@walpole2012, pp. 431--433; @devore2008, p. 487].
+
+## Diferentes valores de $r$
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 5.6
+#| fig-align: center
+set.seed(10)
+n <- 100
+z1 <- rnorm(n); z2 <- rnorm(n)
+gen <- function(rho) data.frame(x = z1, y = rho * z1 + sqrt(1 - rho^2) * z2)
+xs <- seq(-2, 2, length.out = n)   # valores simétricos alrededor de 0
+paneles <- list(gen(0.95), gen(0.6), gen(0), gen(-0.6), gen(-0.95),
+                data.frame(x = xs, y = xs^2 + rnorm(n, 0, 0.3)))
+cors <- lapply(paneles, function(d) data.frame(d, r = cor(d$x, d$y)))
+cor_df <- do.call(rbind, lapply(seq_along(cors), function(i) {
+  d <- cors[[i]]
+  d$panel <- paste0("r = ", formatC(d$r[1], format = "f", digits = 2, decimal.mark = ","))
+  d$orden <- i
+  d
+}))
+cor_df$panel <- factor(cor_df$panel, levels = unique(cor_df$panel[order(cor_df$orden)]))
+ggplot(cor_df, aes(x = x, y = y)) +
+  geom_point(color = "steelblue", size = 1.2, alpha = 0.7) +
+  facet_wrap(~ panel, ncol = 3, scales = "free_y") +
+  labs(x = "x", y = "y") +
+  theme(axis.text = element_blank())
+```
+
+## Dos advertencias
+
+::: {.incremental}
+- **Solo mide relaciones lineales.** En el último panel, $r \approx 0$, pero hay una fuerte relación parabólica.
+- **Correlación no implica causalidad.** Puede que $X$ cause $Y$, que $Y$ cause $X$, o que un tercer factor cause ambas [@daniel1987, p. 403].
+:::
+
+. . .
+
+Helados y ahogamientos en piscinas están correlacionados... porque ambos
+aumentan en verano.
+
+# El modelo {background-color="#2c5d8f"}
+
+## Modelo de regresión lineal simple
+
+$$
+Y = \beta_0 + \beta_1 X + \varepsilon
+$$
+
+- $\beta_1$: cambio promedio en $Y$ por cada unidad de $X$.
+- $\beta_0$: valor promedio de $Y$ cuando $X = 0$ (a menudo sin sentido práctico).
+- $\varepsilon$: lo que $X$ no explica.
+
+. . .
+
+**Supuestos** [@montgomery2012, p. 12; @walpole2012, pp. 390--394]:
+$\varepsilon_i \sim N(0, \sigma^2)$, independientes. Es decir, **media cero**,
+**varianza constante**, **normalidad** e **independencia**.
+
+## ¿Por qué se llama lineal?
+
+Porque es lineal **en los parámetros** $\beta_0, \beta_1$ [@montgomery2012, pp. 4, 69].
+
+- $Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \varepsilon$ → **sí** es lineal (una parábola).
+- $Y = \beta_0\, e^{\beta_1 X} + \varepsilon$ → **no** es lineal.
+
+# Mínimos cuadrados {background-color="#2c5d8f"}
+
+## La mejor recta
+
+Minimizar $\displaystyle S(\beta_0, \beta_1) = \sum \big[y_i - (\beta_0 + \beta_1 x_i)\big]^2$:
+
+$$
+\hat{\beta}_1 = \frac{S_{xy}}{S_{xx}},
+\qquad
+\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x},
+\qquad
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x
+$$
+
+. . .
+
+Residual: $\quad e_i = y_i - \hat{y}_i$
+
+Propiedades: $\sum e_i = 0$ y la recta pasa por $(\bar{x}, \bar{y})$ [@montgomery2012, pp. 19--20].
+
+## Ejemplo: estatura y peso de cinco nadadoras
+
+```{r}
+#| echo: false
+#| fig-width: 7.5
+#| fig-height: 4.6
+#| fig-align: center
+modelo_nad <- lm(peso ~ estatura)
+nad <- data.frame(estatura, peso, ajustado = fitted(modelo_nad))
+ggplot(nad, aes(x = estatura, y = peso)) +
+  geom_abline(intercept = coef(modelo_nad)[1], slope = coef(modelo_nad)[2],
+              color = "firebrick", linewidth = 1) +
+  geom_segment(aes(xend = estatura, yend = ajustado), color = "grey40",
+               linetype = "dashed") +
+  geom_point(size = 3, color = "steelblue") +
+  annotate("point", x = mean(estatura), y = mean(peso), shape = 4, size = 4) +
+  annotate("text", x = mean(estatura) + 0.25, y = mean(peso) - 2.5,
+           label = "(bar(x)*','~bar(y))", parse = TRUE) +
+  labs(x = "Estatura (pulgadas)", y = "Peso (libras)")
+```
+
+$\hat{y} = -240{,}5 + 5{,}5\,x$: cada pulgada adicional, 5,5 libras más en promedio.
+
+## Interpretación y predicción
+
+::: {.incremental}
+- **Pendiente:** cada pulgada adicional de estatura, 5,5 libras más en promedio.
+- **Intercepto:** $-240{,}5$, el "peso" a estatura cero: sin sentido práctico.
+- **Predicción:** para 63 pulgadas, $\hat{y} = 106$ libras.
+- **Correlación:** $r = 0{,}960$.
+:::
+
+. . .
+
+::: {.callout-warning title="Cuidado con extrapolar"}
+Solo dentro del rango observado (62 a 68 pulgadas): para 40 pulgadas, la recta
+"predice" un peso negativo [@montgomery2012, p. 4].
+:::
+
+## En R
+
+```{r}
+#| echo: true
+modelo <- lm(peso ~ estatura)
+coef(modelo)
+predict(modelo, newdata = data.frame(estatura = 63))
+```
+
+# Coeficiente de determinación {background-color="#2c5d8f"}
+
+## Descomposición de la variabilidad
+
+$$
+\underbrace{\sum (y_i - \bar{y})^2}_{STC} = \underbrace{\sum (\hat{y}_i - \bar{y})^2}_{SCR} + \underbrace{\sum (y_i - \hat{y}_i)^2}_{SCE}
+$$
+
+[@walpole2012, p. 414]
+
+. . .
+
+$$
+R^2 = \frac{SCR}{STC} = 1 - \frac{SCE}{STC}
+$$
+
+Nadadoras: $R^2 = 605/656 = 0{,}922$: la estatura explica el **92,2 %** de la
+variabilidad del peso. En regresión simple, $R^2 = r^2$.
+
+## ¿Qué tan grande debe ser el $R^2$?
+
+Depende del área [@faraway2002, p. 22]:
+
+- **Biología y ciencias sociales:** mucho ruido, un $R^2$ de 0,6 puede ser **bueno**.
+- **Física e ingeniería:** experimentos controlados, 0,6 sería **bajo**.
+
+. . .
+
+Un $R^2$ alto no garantiza que el modelo sea adecuado: hay que revisar los
+residuales [@montgomery2012, pp. 36, 129].
+
+# Inferencia {background-color="#2c5d8f"}
+
+## Varianza del error y errores estándar
+
+$$
+s^2 = CME = \frac{SCE}{n - 2}
+\qquad
+s(\hat{\beta}_1) = \frac{s}{\sqrt{S_{xx}}}
+$$
+
+. . .
+
+Intervalo: $\quad \hat{\beta}_1 \pm t_{1-\alpha/2;\,n-2}\; s(\hat{\beta}_1)$
+
+Prueba de $H_0: \beta_1 = 0$: $\quad T = \dfrac{\hat{\beta}_1}{s(\hat{\beta}_1)} \sim t(n - 2)$ [@walpole2012, p. 404]
+
+. . .
+
+**Nadadoras:** $s(\hat{\beta}_1) = 0{,}922$; intervalo del 95 %: $(2{,}57;\ 8{,}43)$;
+$t_{\text{obs}} = 5{,}97$, valor p $= 0{,}009$.
+
+## La tabla ANOVA
+
+| Fuente | SC | gl | CM | $F$ |
+|:--|:--:|:--:|:--:|:--:|
+| Regresión | $SCR$ | 1 | $CMR = SCR/1$ | $CMR/CME$ |
+| Error | $SCE$ | $n - 2$ | $CME$ | |
+| Total | $STC$ | $n - 1$ | | |
+
+. . .
+
+Nadadoras: $f_{\text{obs}} = 605/17 = 35{,}59 = 5{,}97^2$.
+
+En regresión simple, **$F = t^2$**: las dos pruebas son equivalentes.
+
+# Predicción {background-color="#2c5d8f"}
+
+## Dos preguntas, dos intervalos
+
+::: {.incremental}
+- **¿Peso promedio de todas las nadadoras de 63 pulgadas?** Intervalo de confianza: $(97{,}7;\ 114{,}3)$.
+- **¿Peso de una nadadora de 63 pulgadas?** Intervalo de predicción: $(90{,}5;\ 121{,}5)$.
+:::
+
+. . .
+
+El de predicción es **siempre más ancho**: incluye la variabilidad de cada
+observación. Ambos son más angostos cerca de $\bar{x}$ [@montgomery2012, pp. 31--33].
+
+```{r}
+#| echo: true
+#| eval: false
+predict(modelo, data.frame(estatura = 63), interval = "confidence")
+predict(modelo, data.frame(estatura = 63), interval = "prediction")
+```
+
+# Análisis residual {background-color="#2c5d8f"}
+
+## El cuarteto de Anscombe
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 5.4
+#| fig-align: center
+ans <- do.call(rbind, lapply(1:4, function(i) {
+  data.frame(x = anscombe[[paste0("x", i)]], y = anscombe[[paste0("y", i)]],
+             conjunto = paste("Conjunto", i))
+}))
+ggplot(ans, aes(x = x, y = y)) +
+  geom_abline(intercept = 3, slope = 0.5, color = "firebrick", linewidth = 0.9) +
+  geom_point(size = 2.2, color = "steelblue") +
+  facet_wrap(~ conjunto, ncol = 2) +
+  labs(x = "x", y = "y")
+```
+
+Misma recta y mismo $R^2$... ¡**siempre hay que graficar**! [@anscombe1973]
+
+## Patrones en los residuales
+
+```{r}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 4
+#| fig-align: center
+set.seed(8)
+xs <- seq(1, 10, length.out = 80)
+ideal  <- data.frame(ajustado = xs, residual = rnorm(80, 0, 1), patron = "Supuestos adecuados")
+curva  <- data.frame(ajustado = xs, residual = (xs - 5.5)^2 / 4 - 1.7 + rnorm(80, 0, 0.6), patron = "Relación no lineal")
+embudo <- data.frame(ajustado = xs, residual = rnorm(80, 0, 0.25 * xs), patron = "Varianza no constante")
+patrones <- rbind(ideal, curva, embudo)
+patrones$patron <- factor(patrones$patron, levels = unique(patrones$patron))
+ggplot(patrones, aes(x = ajustado, y = residual)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point(color = "steelblue", size = 1.5) +
+  facet_wrap(~ patron, scales = "free_y") +
+  labs(x = "Valores ajustados", y = "Residuales")
+```
+
+Banda horizontal: bien. Curva: no linealidad. Embudo: varianza no constante [@montgomery2012, p. 129].
+
+## Más herramientas
+
+- **Gráfico Q-Q**: normalidad.
+- **Residuales estandarizados** $e_i/s$: mayor que 3 en valor absoluto, posible atípico [@montgomery2012, p. 131].
+- **Pruebas formales**: Shapiro-Wilk (normalidad), Breusch-Pagan (varianza), Durbin-Watson (independencia).
+
+. . .
+
+Con muestras grandes, las pruebas detectan desviaciones sin importancia
+práctica: los gráficos siguen siendo la herramienta principal [@faraway2002, p. 90].
+
+# Aplicación con R {background-color="#2c5d8f"}
+
+## Velocidad y consumo de combustible
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4.6
+#| fig-align: center
+combustible <- read.csv("datos/velocidad_consumo.csv")
+ggplot(combustible, aes(x = velocidad, y = consumo)) +
+  geom_point(color = "steelblue", size = 2) +
+  geom_smooth(method = "lm", se = TRUE, color = "darkred") +
+  labs(x = "Velocidad promedio (km/h)", y = "Consumo (L/100 km)")
+```
+
+$r = -0{,}971$: relación lineal negativa muy fuerte.
+
+## El modelo {.smaller .scrollable}
+
+```{r}
+#| echo: true
+modelo_comb <- lm(consumo ~ velocidad, data = combustible)
+summary(modelo_comb)
+```
+
+## Resultados
+
+::: {.incremental}
+- $\hat{y} = 16{,}712 - 0{,}0713\,x$: cada 10 km/h más, el consumo baja 0,71 L/100 km.
+- $R^2 = 0{,}943$: la velocidad explica el 94,3 % de la variabilidad del consumo.
+- A 90 km/h: consumo estimado de 10,29 L/100 km; para **un** trayecto, entre 9,44 y 11,14.
+:::
+
+## ¿Se cumplen los supuestos?
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 4.2
+#| fig-align: center
+res <- residuals(modelo_comb)
+diag_df <- rbind(
+  data.frame(x = fitted(modelo_comb), y = res,
+             panel = "Residuales contra ajustados"),
+  data.frame(x = qnorm(ppoints(length(res)))[rank(res)], y = res,
+             panel = "Gráfico de probabilidad normal")
+)
+diag_df$panel <- factor(diag_df$panel, levels = unique(diag_df$panel))
+# Recta de referencia del gráfico normal, por los cuartiles
+q_y <- quantile(res, c(0.25, 0.75)); q_x <- qnorm(c(0.25, 0.75))
+pend <- diff(q_y) / diff(q_x); interc <- q_y[1] - pend * q_x[1]
+lineas <- data.frame(
+  panel = factor(levels(diag_df$panel), levels = levels(diag_df$panel)),
+  intercept = c(0, interc), slope = c(0, pend)
+)
+ggplot(diag_df, aes(x = x, y = y)) +
+  geom_abline(data = lineas, aes(intercept = intercept, slope = slope),
+              color = "firebrick", linetype = "dashed") +
+  geom_point(color = "steelblue") +
+  facet_wrap(~ panel, scales = "free_x") +
+  labs(x = "Valores ajustados (izquierda) y cuantiles teóricos (derecha)",
+       y = "Residuales")
+```
+
+Banda sin patrones y puntos sobre la recta; Shapiro-Wilk: valor p $= 0{,}84$.
+Los supuestos son razonables.
+
+## Resumen de funciones
+
+| Tarea | Función |
+|:--|:--|
+| Ajustar el modelo | `lm(y ~ x, data = datos)` |
+| Coeficientes, pruebas, $R^2$ | `summary(modelo)` |
+| Intervalos para $\beta$ | `confint(modelo)` |
+| Tabla ANOVA | `anova(modelo)` |
+| Predicción | `predict(modelo, nuevos, interval = )` |
+| Diagnóstico | `plot(modelo)`, `shapiro.test(residuals(modelo))` |
+
+## Para practicar
+
+- Los **10 ejercicios** del capítulo están en los apuntes.
+- Los datos de velocidad y consumo están en `datos/velocidad_consumo.csv`.
+
+## Referencias {.smaller .scrollable}
+
+::: {#refs}
+:::

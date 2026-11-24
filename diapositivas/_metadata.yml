@@ -1,0 +1,8 @@
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: true        # permite escribir sobre la diapositiva en clase
+    preview-links: auto
+    scrollable: true
+    footer: "Estadística II · UIS"
